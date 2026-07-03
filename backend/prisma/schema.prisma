@@ -1,0 +1,28 @@
+// prisma/schema.prisma
+// Prisma Schema for Gymyamjamsai
+// 
+// To switch database:
+//   SQLite  → provider = "sqlite",     url = "file:./dev.db"
+//   Postgres → provider = "postgresql", url = "postgresql://..."
+//   MongoDB  → provider = "mongodb",    url = "mongodb://..."
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}

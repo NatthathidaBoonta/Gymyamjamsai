@@ -1,0 +1,215 @@
+/* ============================================================
+   theme.css — Cute Pastel Design System 🌸
+   Gymyamjamsai — Light & Lovely Theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ============================================================
+     Colors — Cute Pastel Palette 🎀
+     Primary: Rose Pink | Secondary: Soft Lavender | Accent: Peach
+     ============================================================ */
+  --color-primary: hsl(340, 75%, 62%);
+  --color-primary-dark: hsl(340, 75%, 50%);
+  --color-primary-light: hsl(340, 80%, 75%);
+  --color-secondary: hsl(268, 60%, 72%);
+  --color-accent: hsl(22, 90%, 70%);
+
+  /* ============================================================
+     Background Colors — Soft Light Mode 🌷
+     ============================================================ */
+  --color-bg-base: hsl(340, 50%, 97%);
+  --color-bg-surface: hsl(330, 40%, 95%);
+  --color-bg-card: hsl(0, 0%, 100%);
+  --color-bg-overlay: hsla(340, 50%, 97%, 0.88);
+
+  /* ============================================================
+     Text Colors
+     ============================================================ */
+  --color-text-primary: hsl(340, 25%, 22%);
+  --color-text-secondary: hsl(340, 15%, 42%);
+  --color-text-muted: hsl(340, 10%, 62%);
+  --color-text-inverse: hsl(0, 0%, 100%);
+
+  /* ============================================================
+     Status Colors — Soft & Cute
+     ============================================================ */
+  --color-success: hsl(150, 55%, 45%);
+  --color-warning: hsl(35, 90%, 55%);
+  --color-error: hsl(0, 70%, 58%);
+  --color-info: hsl(200, 75%, 52%);
+
+  /* ============================================================
+     Border
+     ============================================================ */
+  --color-border: hsla(340, 40%, 60%, 0.18);
+  --color-border-focus: hsl(340, 75%, 62%);
+
+  /* ============================================================
+     Spacing Scale
+     ============================================================ */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+
+  /* ============================================================
+     Typography — Nunito (Rounded & Cute)
+     ============================================================ */
+  --font-family-base: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-xxl: 1.5rem;
+  --font-size-display: 2.5rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.3;
+  --line-height-base: 1.65;
+  --line-height-relaxed: 1.85;
+
+  /* ============================================================
+     Border Radius — Rounder = Cuter! 🎀
+     ============================================================ */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* ============================================================
+     Shadows — Soft Pastel Shadows
+     ============================================================ */
+  --shadow-sm: 0 2px 8px hsla(340, 60%, 60%, 0.12), 0 1px 3px hsla(340, 60%, 60%, 0.08);
+  --shadow-md: 0 4px 20px hsla(340, 60%, 60%, 0.15), 0 2px 6px hsla(340, 60%, 60%, 0.10);
+  --shadow-lg: 0 12px 40px hsla(340, 60%, 60%, 0.18), 0 4px 12px hsla(340, 60%, 60%, 0.12);
+  --shadow-glow: 0 0 20px hsla(340, 75%, 62%, 0.28);
+  --shadow-glow-strong: 0 0 36px hsla(340, 75%, 62%, 0.45);
+
+  /* ============================================================
+     Transitions
+     ============================================================ */
+  --transition-fast: 130ms ease;
+  --transition-base: 230ms ease;
+  --transition-slow: 420ms ease;
+
+  /* ============================================================
+     Z-Index Scale
+     ============================================================ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-modal: 300;
+  --z-toast: 500;
+}
+
+/* ============================================================
+   Global Reset & Base Styles
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-base);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+button {
+  font-family: var(--font-family-base);
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: var(--font-family-base);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================================
+   Utility: Cute glass card 🌸
+   ============================================================ */
+.glass-card {
+  background: hsla(0, 0%, 100%, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   Utility: Gradient text
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   Scrollbar — Cute Pink 🎀
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}

@@ -1,0 +1,124 @@
+/* Home.css
+   Styles สำหรับหน้า Home (Dashboard) — Cute Pastel Theme 🌸
+*/
+
+@import '../theme/theme.css';
+
+.home-page {
+  min-height: 100vh;
+  background-color: var(--color-bg-base);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Navbar ---- */
+.home-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: hsla(0, 0%, 100%, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-logo {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-extrabold);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.01em;
+}
+
+.home-nav-user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.home-user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  background: hsla(340, 50%, 95%, 0.8);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+}
+
+.home-logout-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-base);
+  transition: all var(--transition-fast);
+}
+
+.home-logout-btn:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: hsla(0, 70%, 58%, 0.07);
+}
+
+/* ---- Main Content ---- */
+.home-main {
+  flex: 1;
+  padding: var(--spacing-xxl) var(--spacing-xl);
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.home-greeting {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.home-greeting h1 {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-extrabold);
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-sm);
+}
+
+.home-greeting p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.home-section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.home-section-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-border), transparent);
+  margin-left: var(--spacing-sm);
+  border-radius: var(--radius-full);
+}
+
+.home-status-wrapper {
+  max-width: 520px;
+}
