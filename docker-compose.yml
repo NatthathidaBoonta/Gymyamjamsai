@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gymyamjamsai-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - FRONTEND_ORIGIN=http://localhost:5173
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=${JWT_SECRET:-changeme-super-secret-key}
+      - JWT_EXPIRES_IN=24h
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - backend_db:/app/prisma
+    networks:
+      - gymyamjamsai-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gymyamjamsai-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - gymyamjamsai-net
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  gymyamjamsai-net:
+    driver: bridge
+
+volumes:
+  backend_db:
