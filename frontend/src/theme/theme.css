@@ -1,50 +1,50 @@
 /* ============================================================
-   theme.css — Cute Pastel Design System 🌸
-   Gymyamjamsai — Light & Lovely Theme
+   theme.css — Bold Dark Fitness Design System 💪
+   Gymyamjamsai — Dark, High-Energy Theme
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
   /* ============================================================
-     Colors — Cute Pastel Palette 🎀
-     Primary: Rose Pink | Secondary: Soft Lavender | Accent: Peach
+     Colors — Bold Dark Palette ⚡
+     Primary: Neon Lime Green | Secondary: Electric Cyan | Accent: Amber
      ============================================================ */
-  --color-primary: hsl(340, 75%, 62%);
-  --color-primary-dark: hsl(340, 75%, 50%);
-  --color-primary-light: hsl(340, 80%, 75%);
-  --color-secondary: hsl(268, 60%, 72%);
-  --color-accent: hsl(22, 90%, 70%);
+  --color-primary: hsl(140, 80%, 50%);
+  --color-primary-dark: hsl(140, 75%, 38%);
+  --color-primary-light: hsl(140, 85%, 65%);
+  --color-secondary: hsl(190, 85%, 55%);
+  --color-accent: hsl(30, 95%, 58%);
 
   /* ============================================================
-     Background Colors — Soft Light Mode 🌷
+     Background Colors — Deep Dark Mode 🌑
      ============================================================ */
-  --color-bg-base: hsl(340, 50%, 97%);
-  --color-bg-surface: hsl(330, 40%, 95%);
-  --color-bg-card: hsl(0, 0%, 100%);
-  --color-bg-overlay: hsla(340, 50%, 97%, 0.88);
+  --color-bg-base: hsl(220, 22%, 7%);
+  --color-bg-surface: hsl(220, 20%, 11%);
+  --color-bg-card: hsl(220, 18%, 14%);
+  --color-bg-overlay: hsla(220, 22%, 7%, 0.88);
 
   /* ============================================================
      Text Colors
      ============================================================ */
-  --color-text-primary: hsl(340, 25%, 22%);
-  --color-text-secondary: hsl(340, 15%, 42%);
-  --color-text-muted: hsl(340, 10%, 62%);
-  --color-text-inverse: hsl(0, 0%, 100%);
+  --color-text-primary: hsl(210, 25%, 95%);
+  --color-text-secondary: hsl(210, 15%, 72%);
+  --color-text-muted: hsl(210, 10%, 52%);
+  --color-text-inverse: hsl(220, 25%, 10%);
 
   /* ============================================================
-     Status Colors — Soft & Cute
+     Status Colors
      ============================================================ */
-  --color-success: hsl(150, 55%, 45%);
-  --color-warning: hsl(35, 90%, 55%);
-  --color-error: hsl(0, 70%, 58%);
-  --color-info: hsl(200, 75%, 52%);
+  --color-success: hsl(152, 65%, 45%);
+  --color-warning: hsl(38, 92%, 58%);
+  --color-error: hsl(355, 78%, 58%);
+  --color-info: hsl(200, 85%, 58%);
 
   /* ============================================================
      Border
      ============================================================ */
-  --color-border: hsla(340, 40%, 60%, 0.18);
-  --color-border-focus: hsl(340, 75%, 62%);
+  --color-border: hsla(210, 20%, 65%, 0.16);
+  --color-border-focus: hsl(140, 80%, 50%);
 
   /* ============================================================
      Spacing Scale
@@ -57,9 +57,10 @@
   --spacing-xxl: 3rem;
 
   /* ============================================================
-     Typography — Nunito (Rounded & Cute)
+     Typography — Oswald (Bold Display) + Nunito (Body)
      ============================================================ */
   --font-family-base: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-display: 'Oswald', 'Segoe UI', sans-serif;
   --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 
   --font-size-xs: 0.75rem;
@@ -81,22 +82,22 @@
   --line-height-relaxed: 1.85;
 
   /* ============================================================
-     Border Radius — Rounder = Cuter! 🎀
+     Border Radius — Structured & Bold
      ============================================================ */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
   /* ============================================================
-     Shadows — Soft Pastel Shadows
+     Shadows — Deep Shadows + Neon Glow
      ============================================================ */
-  --shadow-sm: 0 2px 8px hsla(340, 60%, 60%, 0.12), 0 1px 3px hsla(340, 60%, 60%, 0.08);
-  --shadow-md: 0 4px 20px hsla(340, 60%, 60%, 0.15), 0 2px 6px hsla(340, 60%, 60%, 0.10);
-  --shadow-lg: 0 12px 40px hsla(340, 60%, 60%, 0.18), 0 4px 12px hsla(340, 60%, 60%, 0.12);
-  --shadow-glow: 0 0 20px hsla(340, 75%, 62%, 0.28);
-  --shadow-glow-strong: 0 0 36px hsla(340, 75%, 62%, 0.45);
+  --shadow-sm: 0 2px 8px hsla(220, 40%, 2%, 0.45), 0 1px 3px hsla(220, 40%, 2%, 0.3);
+  --shadow-md: 0 4px 20px hsla(220, 40%, 2%, 0.5), 0 2px 6px hsla(220, 40%, 2%, 0.35);
+  --shadow-lg: 0 12px 40px hsla(220, 40%, 2%, 0.55), 0 4px 12px hsla(220, 40%, 2%, 0.4);
+  --shadow-glow: 0 0 20px hsla(140, 80%, 50%, 0.35);
+  --shadow-glow-strong: 0 0 40px hsla(140, 80%, 50%, 0.55);
 
   /* ============================================================
      Transitions
@@ -143,9 +144,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   color: var(--color-text-primary);
+  letter-spacing: 0.01em;
 }
 
 a {
@@ -155,7 +158,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--color-primary-light);
 }
 
 button {
@@ -173,10 +176,10 @@ img {
 }
 
 /* ============================================================
-   Utility: Cute glass card 🌸
+   Utility: Dark glass card
    ============================================================ */
 .glass-card {
-  background: hsla(0, 0%, 100%, 0.75);
+  background: hsla(220, 18%, 14%, 0.75);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
@@ -195,7 +198,7 @@ img {
 }
 
 /* ============================================================
-   Scrollbar — Cute Pink 🎀
+   Scrollbar — Neon Green
    ============================================================ */
 ::-webkit-scrollbar {
   width: 6px;
@@ -206,7 +209,7 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary-light);
+  background: var(--color-primary-dark);
   border-radius: var(--radius-full);
 }
 

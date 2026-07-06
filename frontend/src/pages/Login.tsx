@@ -6,15 +6,17 @@
  */
 
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { login, register, saveAuthData } from '../services/auth';
+import { getMyProfile } from '../services/profile';
 import './Login.css';
 
 type TabMode = 'login' | 'register';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<TabMode>('login');
+  const [searchParams] = useSearchParams();
+  const [mode, setMode] = useState<TabMode>(searchParams.get('mode') === 'register' ? 'register' : 'login');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -28,6 +30,16 @@ export default function Login() {
   const resetMessages = () => {
     setError('');
     setSuccess('');
+  };
+
+  /** หลัง Login/Register สำเร็จ — เช็คว่ามี Profile แล้วหรือยัง ถ้ายังให้ไป Onboarding ก่อน */
+  const redirectAfterAuth = async () => {
+    try {
+      const profileRes = await getMyProfile();
+      navigate(profileRes.data ? '/' : '/profile', { replace: true });
+    } catch {
+      navigate('/', { replace: true });
+    }
   };
 
   const handleTabChange = (tab: TabMode) => {
@@ -49,12 +61,12 @@ export default function Login() {
       if (mode === 'login') {
         const res = await login({ email, password });
         saveAuthData(res.data.token, res.data.user);
-        navigate('/', { replace: true });
+        await redirectAfterAuth();
       } else {
         const res = await register({ email, password, name });
         saveAuthData(res.data.token, res.data.user);
         setSuccess('Account created! Redirecting...');
-        setTimeout(() => navigate('/', { replace: true }), 1000);
+        setTimeout(() => redirectAfterAuth(), 1000);
       }
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { message?: string; errors?: string[] } } };

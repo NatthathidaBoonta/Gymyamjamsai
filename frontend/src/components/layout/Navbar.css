@@ -1,0 +1,112 @@
+/* Navbar.css
+   Styles สำหรับ Navbar ที่ใช้ร่วมกันทุกหน้าหลัง Login — Bold Dark Theme ⚡
+*/
+
+@import '../../theme/theme.css';
+
+.app-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: hsla(220, 22%, 9%, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-navbar-logo {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.app-navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex: 1;
+}
+
+.app-navbar-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.app-navbar-link:hover {
+  color: var(--color-primary);
+  background: hsla(140, 80%, 50%, 0.1);
+}
+
+.app-navbar-link.active {
+  color: var(--color-primary);
+  background: hsla(140, 80%, 50%, 0.14);
+}
+
+.app-navbar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.app-navbar-username {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  background: hsla(220, 18%, 16%, 0.8);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.app-navbar-profile-btn,
+.app-navbar-logout-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: transparent;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-base);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.app-navbar-profile-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: hsla(140, 80%, 50%, 0.08);
+}
+
+.app-navbar-logout-btn:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+  background: hsla(355, 78%, 58%, 0.1);
+}
+
+@media (max-width: 720px) {
+  .app-navbar {
+    flex-wrap: wrap;
+  }
+  .app-navbar-links {
+    order: 3;
+    width: 100%;
+  }
+}

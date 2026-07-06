@@ -22,10 +22,10 @@ HTTP Request
  Service         (Business Logic)
      │
      ▼
- Repository      (Database Queries via Prisma)
+ Repository      (Database Queries — raw SQL ผ่าน mysql2)
      │
      ▼
- Prisma ORM      (SQLite → PostgreSQL/MongoDB)
+ mysql2 Pool     (MySQL 8.0)
 ```
 
 ### Layer Responsibilities
@@ -35,7 +35,7 @@ HTTP Request
 | Router      | กำหนด URL path และ HTTP method, ส่งต่อไปยัง Controller |
 | Controller  | รับ req/res, ตรวจ input, เรียก Service, ส่ง response   |
 | Service     | ตรรกะทางธุรกิจ (hash password, generate token, ฯลฯ)  |
-| Repository  | CRUD ผ่าน Prisma (ซ่อน logic DB ไว้ที่นี่เพียงที่เดียว) |
+| Repository  | CRUD ผ่าน mysql2 (ซ่อน SQL query ไว้ที่นี่เพียงที่เดียว) |
 | DTO         | กำหนด schema ของข้อมูลที่รับ/ส่ง (validation)          |
 | Middleware  | ตรวจสอบ JWT, จัดการ Error                              |
 
@@ -58,26 +58,16 @@ App.tsx
 
 ---
 
-## Database Strategy (Prisma)
+## Database Strategy (MySQL)
 
-- **Dev:** SQLite3 — ไม่ต้องตั้งค่าอะไรเพิ่ม
-- **Prod (Scale Up):** เปลี่ยนเพียง `DATABASE_URL` ใน `.env` และ `provider` ใน `schema.prisma`
+- **Schema:** กำหนดไว้ที่ [`mysql/init/01_init.sql`](./mysql/init/01_init.sql) — รันอัตโนมัติครั้งแรกที่ MySQL container ถูกสร้าง (mount ที่ `/docker-entrypoint-initdb.d`)
+- **Connection:** `backend/src/database/index.js` สร้าง connection pool ด้วย `mysql2/promise` โดยอ่านค่าจาก `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+- **Local dev (นอก Docker):** เชื่อมต่อผ่าน host port `3307` (mapped จาก container port `3306`)
+- **ใน Docker Compose:** backend เชื่อมต่อผ่าน service name `mysql` port `3306` (override ผ่าน `environment` ใน `docker-compose.yml`)
 
-```prisma
-// ปัจจุบัน
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
+### Entities หลัก
 
-// เมื่อ Scale ไป PostgreSQL
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-```
-
-โค้ดใน Repository ไม่จำเป็นต้องเปลี่ยนแปลงใดๆ เพราะ Prisma เป็น Abstraction Layer
+`users`, `profiles`, `exercises`, `workout_plans`, `plan_details`, `workout_logs`, `progress_records`, `notifications`
 
 ---
 
@@ -97,6 +87,10 @@ datasource db {
 ```
 docker-compose.yml
   │
-  ├── backend  (port 3000)   → Node.js Express
-  └── frontend (port 5173)   → Vite Dev / Nginx Prod
+  ├── mysql       (host 3307 → container 3306)  → MySQL 8.0 (healthcheck: mysqladmin ping)
+  ├── phpmyadmin  (host 8081 → container 80)    → DB Admin UI (depends_on: mysql healthy)
+  ├── backend     (host 5001 → container 5001)  → Node.js Express (depends_on: mysql healthy)
+  └── frontend    (host 5173 → container 5173)  → Vite Dev Server (depends_on: backend)
 ```
+
+Bind mounts (`./backend:/app`, `./frontend:/app`) ให้แก้โค้ดแล้วเห็นผลทันทีโดยไม่ต้อง rebuild image, ส่วน `node_modules` ใช้ anonymous volume แยกเพื่อไม่ให้ของ host ทับของใน container (สำคัญเพราะ native deps ต้อง build แยกกันคนละ OS)

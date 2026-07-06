@@ -1,5 +1,5 @@
 /* Login.css
-   Styles สำหรับหน้า Login / Register — Cute Pastel Theme 🌸
+   Styles สำหรับหน้า Login / Register — Bold Dark Theme ⚡
 */
 
 @import '../theme/theme.css';
@@ -15,7 +15,7 @@
   overflow: hidden;
 }
 
-/* ---- Decorative Background Orbs 🌸 ---- */
+/* ---- Decorative Background Glows ⚡ ---- */
 .login-page::before,
 .login-page::after {
   content: '';
@@ -27,7 +27,7 @@
 .login-page::before {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, hsla(340, 75%, 62%, 0.14), transparent 70%);
+  background: radial-gradient(circle, hsla(140, 80%, 50%, 0.16), transparent 70%);
   top: -200px;
   right: -200px;
 }
@@ -35,7 +35,7 @@
 .login-page::after {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, hsla(268, 60%, 72%, 0.12), transparent 70%);
+  background: radial-gradient(circle, hsla(190, 85%, 55%, 0.14), transparent 70%);
   bottom: -150px;
   left: -150px;
 }
@@ -45,7 +45,7 @@
   width: 100%;
   max-width: 420px;
   padding: var(--spacing-xxl);
-  background: hsla(0, 0%, 100%, 0.85);
+  background: hsla(220, 18%, 14%, 0.88);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--color-border);
@@ -80,8 +80,10 @@
 }
 
 .login-logo-title {
+  font-family: var(--font-family-display);
   font-size: var(--font-size-xxl);
-  font-weight: var(--font-weight-extrabold);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -97,7 +99,7 @@
 /* ---- Tabs ---- */
 .login-tabs {
   display: flex;
-  background: hsla(340, 40%, 95%, 0.7);
+  background: hsla(220, 20%, 9%, 0.6);
   border-radius: var(--radius-md);
   padding: 4px;
   margin-bottom: var(--spacing-xl);
@@ -118,13 +120,13 @@
 
 .login-tab.active {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: white;
+  color: var(--color-text-inverse);
   box-shadow: var(--shadow-sm);
 }
 
 .login-tab:not(.active):hover {
   color: var(--color-primary);
-  background: hsla(340, 75%, 62%, 0.1);
+  background: hsla(140, 80%, 50%, 0.1);
 }
 
 /* ---- Form ---- */
@@ -149,7 +151,7 @@
 .form-input {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: hsla(340, 40%, 97%, 0.8);
+  background: hsla(220, 20%, 9%, 0.7);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
@@ -165,8 +167,8 @@
 
 .form-input:focus {
   border-color: var(--color-border-focus);
-  box-shadow: 0 0 0 3px hsla(340, 75%, 62%, 0.15);
-  background: white;
+  box-shadow: 0 0 0 3px hsla(140, 80%, 50%, 0.18);
+  background: hsla(220, 20%, 11%, 0.95);
 }
 
 .form-input.error {
@@ -180,7 +182,7 @@
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
   border: none;
   border-radius: var(--radius-md);
-  color: white;
+  color: var(--color-text-inverse);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family-base);
@@ -215,13 +217,13 @@
 }
 
 .login-message.error {
-  background: hsla(0, 70%, 58%, 0.08);
-  border: 1px solid hsla(0, 70%, 58%, 0.22);
+  background: hsla(355, 78%, 58%, 0.1);
+  border: 1px solid hsla(355, 78%, 58%, 0.25);
   color: var(--color-error);
 }
 
 .login-message.success {
-  background: hsla(150, 55%, 45%, 0.08);
-  border: 1px solid hsla(150, 55%, 45%, 0.22);
+  background: hsla(152, 65%, 45%, 0.1);
+  border: 1px solid hsla(152, 65%, 45%, 0.25);
   color: var(--color-success);
 }

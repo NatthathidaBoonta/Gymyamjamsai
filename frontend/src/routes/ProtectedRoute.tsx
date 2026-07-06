@@ -2,7 +2,7 @@
  * src/routes/ProtectedRoute.tsx
  *
  * Protected Route Component
- * ตรวจสอบ Token ก่อน render - ถ้าไม่มี Token redirect ไป /login
+ * ตรวจสอบ Token ก่อน render - ถ้าไม่มี Token redirect ไปหน้า Landing (/welcome)
  */
 
 import { Navigate, Outlet } from 'react-router-dom';
@@ -12,7 +12,7 @@ interface ProtectedRouteProps {
   redirectTo?: string;
 }
 
-export default function ProtectedRoute({ redirectTo = '/login' }: ProtectedRouteProps) {
+export default function ProtectedRoute({ redirectTo = '/welcome' }: ProtectedRouteProps) {
   const token = getToken();
 
   if (!token) {

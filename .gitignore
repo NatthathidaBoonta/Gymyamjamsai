@@ -1,0 +1,13 @@
+# Environment variables (⚠️ ห้าม push ขึ้น Git)
+.env
+.env.local
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/

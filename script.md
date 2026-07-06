@@ -8,13 +8,17 @@
 
 | คำสั่ง | คำอธิบาย |
 |--------|----------|
-| `docker-compose up --build` | Build image และรันทุก service |
-| `docker-compose up -d` | รันแบบ background (detached) |
-| `docker-compose down` | หยุดและลบ Container |
-| `docker-compose logs -f backend` | ดู log ของ backend แบบ real-time |
-| `docker-compose logs -f frontend` | ดู log ของ frontend แบบ real-time |
-| `docker-compose ps` | ดูสถานะ Container ทั้งหมด |
-| `docker-compose restart backend` | Restart เฉพาะ backend |
+| `docker compose up --build` | Build image และรันทุก service |
+| `docker compose up -d` | รันแบบ background (detached) |
+| `docker compose down` | หยุดและลบ Container (เก็บ MySQL data volume ไว้) |
+| `docker compose down -v` | หยุดและลบ Container พร้อม volume (⚠️ ลบข้อมูล MySQL ทั้งหมด) |
+| `docker compose logs -f backend` | ดู log ของ backend แบบ real-time |
+| `docker compose logs -f frontend` | ดู log ของ frontend แบบ real-time |
+| `docker compose logs -f mysql` | ดู log ของ mysql แบบ real-time |
+| `docker compose ps` | ดูสถานะ Container ทั้งหมด |
+| `docker compose restart backend` | Restart เฉพาะ backend |
+| `docker compose exec backend npm run seed` | รัน seed script ในคอนเทนเนอร์ backend |
+| `docker compose exec mysql mysql -u root -p` | เข้า MySQL CLI ในคอนเทนเนอร์ |
 
 ---
 
@@ -33,20 +37,8 @@ npm run dev
 # รันในโหมด Production
 npm start
 
-# Prisma: สร้าง Client จาก Schema
-npx prisma generate
-
-# Prisma: รัน Migration (dev)
-npx prisma migrate dev --name init
-
-# Prisma: รัน Migration (production)
-npx prisma migrate deploy
-
-# Prisma: เปิด Database GUI
-npx prisma studio
-
-# Prisma: Reset Database (⚠️ ลบข้อมูลทั้งหมด)
-npx prisma migrate reset
+# สร้างข้อมูลผู้ใช้ตั้งต้น (admin/user) สำหรับทดสอบ
+npm run seed
 ```
 
 ---
@@ -77,33 +69,45 @@ npm run lint
 
 ## 🔐 Environment Setup
 
+**Root `.env`** (ใช้โดย `docker-compose.yml`)
+```env
+MYSQL_ROOT_PASSWORD=changeme-root-password
+MYSQL_DATABASE=gymyamjamsai
+MYSQL_USER=gymyam_user
+MYSQL_PASSWORD=gymyam_password
+```
+
 **Backend `.env`**
 ```env
-PORT=3000
+PORT=5001
+NODE_ENV=development
 FRONTEND_ORIGIN=http://localhost:5173
-DATABASE_URL="file:./dev.db"
+
+DB_HOST=localhost
+DB_PORT=3307
+DB_USER=gymyam_user
+DB_PASSWORD=gymyam_password
+DB_NAME=gymyamjamsai
+
 JWT_SECRET=your-super-secret-key-here
 JWT_EXPIRES_IN=24h
-NODE_ENV=development
 ```
 
 **Frontend `.env`**
 ```env
-VITE_API_URL=http://localhost:3000
+VITE_API_URL=http://localhost:5001
 ```
 
 ---
 
-## 🗄️ Prisma Migration Workflow
+## 🗄️ MySQL Schema Workflow
 
 ```bash
-# 1. แก้ schema.prisma
-# 2. รัน migrate
-npx prisma migrate dev --name <ชื่อ migration>
-# 3. Prisma จะ generate client ให้อัตโนมัติ
-
-# ถ้าแก้ schema แล้วต้องการ generate client ใหม่โดยไม่ migrate
-npx prisma generate
+# 1. แก้ไข/เพิ่มตารางที่ mysql/init/01_init.sql (หรือเพิ่มไฟล์ 02_xxx.sql ใหม่)
+# 2. ไฟล์ .sql ใน mysql/init/ จะรันอัตโนมัติ "ครั้งแรก" ที่สร้าง container เท่านั้น
+#    ถ้าแก้ schema หลัง container มีข้อมูลแล้ว ต้อง reset volume ก่อน:
+docker compose down -v
+docker compose up -d --build
 ```
 
 ---
@@ -116,12 +120,10 @@ cd frontend && npm run build
 
 # 2. ตรวจสอบ Environment Variables
 # - ตั้ง NODE_ENV=production
-# - ตั้ง DATABASE_URL ให้ชี้ไปยัง production DB
+# - ตั้ง DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME ให้ชี้ไปยัง production MySQL
 # - ตั้ง JWT_SECRET ที่แข็งแกร่ง
+# - ตั้ง MYSQL_ROOT_PASSWORD ที่แข็งแกร่งใน root .env
 
-# 3. รัน Migration บน Production
-cd backend && npx prisma migrate deploy
-
-# 4. Start Backend
-npm start
+# 3. Start Backend
+cd backend && npm start
 ```

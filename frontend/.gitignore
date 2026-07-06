@@ -1,3 +1,7 @@
+# Environment Variables (⚠️ ห้าม push ขึ้น GitHub เด็ดขาด)
+.env
+.env.local
+
 # Logs
 logs
 *.log

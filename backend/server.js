@@ -2,7 +2,7 @@
  * server.js
  * 
  * Entry Point — Gymyamjamsai Backend API
- * Node.js + Express + Prisma (Modular Monolith)
+ * Node.js + Express + MySQL (Modular Monolith)
  */
 
 require('dotenv').config();
@@ -12,6 +12,9 @@ const cors = require('cors');
 // Routers
 const statusRouter = require('./src/modules/status/status.router');
 const authRouter = require('./src/modules/auth/auth.router');
+const profileRouter = require('./src/modules/profile/profile.router');
+const exerciseRouter = require('./src/modules/exercise/exercise.router');
+const workoutPlanRouter = require('./src/modules/workout-plan/workout-plan.router');
 
 // Middleware
 const { errorMiddleware, notFoundMiddleware } = require('./src/middleware/error.middleware');
@@ -20,7 +23,7 @@ const { errorMiddleware, notFoundMiddleware } = require('./src/middleware/error.
 // App Setup
 // ============================================================
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 // ============================================================
 // Global Middleware
@@ -51,6 +54,23 @@ app.get('/', (req, res) => {
         register: 'POST /api/auth/register',
         login: 'POST /api/auth/login',
       },
+      profile: {
+        get: 'GET /api/profile/me',
+        save: 'PUT /api/profile/me',
+      },
+      exercises: {
+        list: 'GET /api/exercises',
+        detail: 'GET /api/exercises/:id',
+        create: 'POST /api/exercises (admin)',
+        update: 'PUT /api/exercises/:id (admin)',
+        remove: 'DELETE /api/exercises/:id (admin)',
+      },
+      workoutPlan: {
+        get: 'GET /api/workout-plan',
+        addExercise: 'POST /api/workout-plan/exercises',
+        updateExercise: 'PUT /api/workout-plan/exercises/:detailId',
+        removeExercise: 'DELETE /api/workout-plan/exercises/:detailId',
+      },
     },
   });
 });
@@ -58,6 +78,9 @@ app.get('/', (req, res) => {
 // Module Routers
 app.use('/api/status', statusRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/exercises', exerciseRouter);
+app.use('/api/workout-plan', workoutPlanRouter);
 
 // ============================================================
 // Error Handling (ต้องอยู่หลัง Routes เสมอ)

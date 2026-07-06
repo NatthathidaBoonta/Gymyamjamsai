@@ -23,7 +23,7 @@ const getSystemStatus = async () => {
     uptime: Math.floor(process.uptime()),
     database: {
       connected: dbStatus.connected,
-      provider: 'sqlite (Prisma)',
+      provider: 'mysql',
       error: dbStatus.error || null,
     },
   };

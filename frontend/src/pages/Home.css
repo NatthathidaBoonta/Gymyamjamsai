@@ -1,5 +1,5 @@
 /* Home.css
-   Styles สำหรับหน้า Home (Dashboard) — Cute Pastel Theme 🌸
+   Styles สำหรับหน้า Home (Dashboard) — Bold Dark Theme ⚡
 */
 
 @import '../theme/theme.css';
@@ -9,65 +9,6 @@
   background-color: var(--color-bg-base);
   display: flex;
   flex-direction: column;
-}
-
-/* ---- Navbar ---- */
-.home-navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-md) var(--spacing-xl);
-  background: hsla(0, 0%, 100%, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: var(--z-dropdown);
-  box-shadow: var(--shadow-sm);
-}
-
-.home-logo {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-extrabold);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.01em;
-}
-
-.home-nav-user {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.home-user-name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  background: hsla(340, 50%, 95%, 0.8);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-full);
-  border: 1px solid var(--color-border);
-}
-
-.home-logout-btn {
-  padding: var(--spacing-xs) var(--spacing-md);
-  background: transparent;
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-full);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  font-family: var(--font-family-base);
-  transition: all var(--transition-fast);
-}
-
-.home-logout-btn:hover {
-  border-color: var(--color-error);
-  color: var(--color-error);
-  background: hsla(0, 70%, 58%, 0.07);
 }
 
 /* ---- Main Content ---- */
@@ -119,6 +60,174 @@
   border-radius: var(--radius-full);
 }
 
+.home-section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.home-section-header-row .home-section-title {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.home-section-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.home-section-link:hover {
+  color: var(--color-primary-light);
+}
+
 .home-status-wrapper {
   max-width: 520px;
+  margin-bottom: var(--spacing-xxl);
+}
+
+/* ---- Profile Summary ---- */
+.home-profile-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xxl);
+  max-width: 960px;
+}
+
+.home-bmi-tag {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-secondary);
+  background: hsla(190, 85%, 55%, 0.14);
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-full);
+  margin-left: var(--spacing-xs);
+  vertical-align: middle;
+}
+
+.home-profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: hsla(220, 18%, 14%, 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-profile-item-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.home-profile-item-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* ---- Recommended Exercises ---- */
+.home-recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xxl);
+}
+
+.home-recommended-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: hsla(220, 18%, 14%, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.home-recommended-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+}
+
+.home-recommended-media {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: hsla(220, 20%, 9%, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+.home-recommended-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-recommended-info h3 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-md);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.home-recommended-muscle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.home-empty-note {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xxl);
+}
+
+/* ---- Coming Soon Card ---- */
+.home-coming-soon-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background: hsla(220, 18%, 14%, 0.6);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-xxl);
+}
+
+.home-coming-soon-icon {
+  font-size: 2rem;
+}
+
+.home-coming-soon-card h3 {
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.home-coming-soon-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .home-profile-summary {
+    grid-template-columns: 1fr;
+  }
 }

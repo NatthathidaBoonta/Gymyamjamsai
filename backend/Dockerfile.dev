@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files first for Docker layer caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code (overridden by bind mount in docker-compose for live-reload)
+COPY . .
+
+# Expose backend API port
+EXPOSE 5001
+
+# Run in development mode (nodemon auto-restart)
+CMD ["npm", "run", "dev"]

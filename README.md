@@ -1,6 +1,6 @@
 # 🏋️ Gymyamjamsai
 
-Full-Stack Web Application สำหรับระบบจัดการยิม  
+Full-Stack Web Application สำหรับระบบติดตามพัฒนาการการออกกำลังกายออนไลน์
 สร้างด้วย **Node.js + Express** (Backend) และ **React + Vite + TypeScript** (Frontend)
 
 ---
@@ -11,9 +11,10 @@ Full-Stack Web Application สำหรับระบบจัดการย�
 |--------------|---------------------------------------------|
 | Frontend     | React 19, Vite, TypeScript, Vanilla CSS     |
 | Backend      | Node.js, Express.js (JavaScript)            |
-| ORM          | Prisma ORM                                  |
-| Database     | SQLite3 (dev) → PostgreSQL / MongoDB (prod) |
-| Auth         | JWT + bcrypt + UUID                         |
+| DB Driver    | mysql2 (raw SQL, connection pool)           |
+| Database     | MySQL 8.0                                   |
+| DB Admin     | phpMyAdmin                                  |
+| Auth         | JWT + bcryptjs + UUID                       |
 | Container    | Docker + Docker Compose                     |
 
 ---
@@ -24,7 +25,9 @@ Full-Stack Web Application สำหรับระบบจัดการย�
 Gymyamjamsai/
 ├── backend/        # Node.js Express REST API
 ├── frontend/       # React Vite Application
+├── mysql/init/     # SQL init script (รันอัตโนมัติตอน MySQL container สร้างครั้งแรก)
 ├── docker-compose.yml
+├── .env             # ตัวแปร MySQL สำหรับ docker-compose (ห้าม push ขึ้น Git)
 ├── README.md
 ├── architecture.md
 ├── project_map.md
@@ -37,17 +40,15 @@ Gymyamjamsai/
 
 ### 1. ด้วย Docker (แนะนำ)
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 ### 2. รันแยก (Development)
 
-**Backend:**
+**Backend:** (ต้องมี MySQL รันอยู่ก่อน เช่นผ่าน `docker compose up mysql -d`)
 ```bash
 cd backend
 npm install
-npx prisma generate
-npx prisma migrate dev
 npm run dev
 ```
 
@@ -62,11 +63,13 @@ npm run dev
 
 ## 🌐 Endpoints
 
-| URL                         | Description            |
-|-----------------------------|------------------------|
-| http://localhost:3000       | Backend API            |
-| http://localhost:3000/api/status | Status Check API  |
-| http://localhost:5173       | Frontend Dev Server    |
+| URL                                | Description            |
+|-------------------------------------|------------------------|
+| http://localhost:5001               | Backend API            |
+| http://localhost:5001/api/status    | Status Check API       |
+| http://localhost:5173               | Frontend Dev Server    |
+| http://localhost:8081               | phpMyAdmin             |
+| localhost:3307 (จาก host)           | MySQL (container: 3306)|
 
 ---
 
