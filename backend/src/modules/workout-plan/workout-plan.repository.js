@@ -1,109 +1,89 @@
 /**
- * src/modules/workout-plan/workout-plan.repository.js
- *
- * Repository สำหรับโมดูล Workout Plan (ตารางออกกำลังกาย)
- * จัดการ Database Operations ผ่าน mysql2 (raw SQL)
- *
- * แต่ละ user มีตารางออกกำลังกายเดียว (auto-create ตอนใช้งานครั้งแรก)
- * ประกอบด้วยรายการท่าออกกำลังกาย (plan_details) ที่กำหนดวันในสัปดาห์ให้แต่ละท่า
+ * workout-plan.repository.js — Data access layer สำหรับแผนออกกำลังกาย
  */
 
-const { v4: uuidv4 } = require('uuid');
-const pool = require('../../database');
-
-const PLAN_FIELDS = `id, user_id AS userId, name, start_date AS startDate, status,
-                     created_at AS createdAt, updated_at AS updatedAt`;
-
-const DETAIL_FIELDS = `pd.id, pd.plan_id AS planId, pd.exercise_id AS exerciseId, pd.sets, pd.reps,
-                        pd.weight_kg AS weightKg, pd.day_of_week AS dayOfWeek, pd.created_at AS createdAt,
-                        e.name AS exerciseName, e.target_muscle AS targetMuscle, e.equipment,
-                        e.category, e.difficulty, e.media_url AS mediaUrl`;
-
-const DAY_ORDER = "FIELD(pd.day_of_week, 'monday','tuesday','wednesday','thursday','friday','saturday','sunday')";
+const crypto = require('crypto');
+const { pool } = require('../../database');
 
 /**
- * ดึงตารางออกกำลังกายของ user ถ้ายังไม่มีจะสร้างให้ใหม่
- * @param {string} userId
- * @returns {Promise<Object>} plan
+ * ดึงท่าทั้งหมด (ใช้ประกอบ Static Template)
  */
-const findOrCreatePlan = async (userId) => {
-  const [rows] = await pool.query(`SELECT ${PLAN_FIELDS} FROM workout_plans WHERE user_id = ? LIMIT 1`, [userId]);
-  if (rows[0]) return rows[0];
-
-  const id = uuidv4();
-  await pool.query(
-    `INSERT INTO workout_plans (id, user_id, name, start_date, status) VALUES (?, ?, ?, CURDATE(), 'active')`,
-    [id, userId, 'ตารางของฉัน']
-  );
-  const [created] = await pool.query(`SELECT ${PLAN_FIELDS} FROM workout_plans WHERE id = ?`, [id]);
-  return created[0];
-};
-
-/**
- * ดึงรายการท่าออกกำลังกายทั้งหมดในตาราง เรียงตามวันในสัปดาห์
- * @param {string} planId
- * @returns {Promise<Object[]>}
- */
-const findDetailsByPlanId = async (planId) => {
-  const [rows] = await pool.query(
-    `SELECT ${DETAIL_FIELDS} FROM plan_details pd
-     JOIN exercises e ON e.id = pd.exercise_id
-     WHERE pd.plan_id = ?
-     ORDER BY ${DAY_ORDER}, pd.created_at ASC`,
-    [planId]
-  );
+async function listExercises() {
+  const [rows] = await pool.query('SELECT id, name, category FROM exercises ORDER BY name');
   return rows;
-};
+}
 
 /**
- * ค้นหาท่าในตารางด้วย ID
- * @param {string} detailId
- * @returns {Promise<Object|null>}
+ * สร้างแผน + รายละเอียดแบบ Transaction (atomic)
+ * - ตั้งแผน active เดิมของ user เป็น 'adjusted' ก่อน (ให้ current คืนแผนล่าสุด)
+ * - ใช้ getConnection + try/finally release กัน connection ค้าง (ความเสี่ยง Phase 3)
+ * @returns {string} planId ที่สร้าง
  */
-const findDetailById = async (detailId) => {
-  const [rows] = await pool.query(
-    `SELECT ${DETAIL_FIELDS} FROM plan_details pd
-     JOIN exercises e ON e.id = pd.exercise_id
-     WHERE pd.id = ? LIMIT 1`,
-    [detailId]
+async function createPlanWithDetails(userId, plan, details) {
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    await conn.query(
+      "UPDATE workout_plans SET status = 'adjusted' WHERE user_id = ? AND status = 'active'",
+      [userId],
+    );
+
+    const planId = crypto.randomUUID();
+    await conn.query(
+      'INSERT INTO workout_plans (id, user_id, status, start_date, end_date) VALUES (?, ?, ?, ?, ?)',
+      [planId, userId, 'active', plan.start_date, plan.end_date],
+    );
+
+    for (const d of details) {
+      await conn.query(
+        `INSERT INTO workout_plan_details
+           (id, plan_id, exercise_id, target_sets, target_reps, target_weight, day_of_week)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          crypto.randomUUID(),
+          planId,
+          d.exercise_id,
+          d.target_sets,
+          d.target_reps,
+          null,
+          d.day_of_week,
+        ],
+      );
+    }
+
+    await conn.commit();
+    return planId;
+  } catch (err) {
+    await conn.rollback();
+    throw err;
+  } finally {
+    conn.release();
+  }
+}
+
+/**
+ * ดึงแผนที่ active ล่าสุดของ user พร้อมรายละเอียดท่า (join ชื่อท่า)
+ */
+async function getCurrentPlan(userId) {
+  const [plans] = await pool.query(
+    `SELECT id, status, start_date, end_date, created_at
+     FROM workout_plans WHERE user_id = ? AND status = 'active'
+     ORDER BY created_at DESC LIMIT 1`,
+    [userId],
   );
-  return rows[0] || null;
-};
+  if (!plans.length) return null;
 
-/**
- * เพิ่มท่าออกกำลังกายลงในตาราง
- * @param {string} planId
- * @param {{ exerciseId: string, dayOfWeek: string, sets?: number, reps?: number, weightKg?: number }} data
- * @returns {Promise<string>} detailId ที่สร้างขึ้น
- */
-const addDetail = async (planId, { exerciseId, dayOfWeek, sets, reps, weightKg }) => {
-  const id = uuidv4();
-  await pool.query(
-    `INSERT INTO plan_details (id, plan_id, exercise_id, sets, reps, weight_kg, day_of_week)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [id, planId, exerciseId, sets || null, reps || null, weightKg || null, dayOfWeek]
+  const plan = plans[0];
+  const [details] = await pool.query(
+    `SELECT d.id, d.exercise_id, e.name AS exercise_name, e.category,
+            d.target_sets, d.target_reps, d.target_weight, d.day_of_week
+     FROM workout_plan_details d
+     JOIN exercises e ON e.id = d.exercise_id
+     WHERE d.plan_id = ? ORDER BY d.created_at`,
+    [plan.id],
   );
-  return id;
-};
+  return { ...plan, details };
+}
 
-/**
- * แก้ไขท่าออกกำลังกายในตาราง (วัน/เซต/ครั้ง/น้ำหนัก)
- * @param {string} detailId
- * @param {{ dayOfWeek: string, sets?: number, reps?: number, weightKg?: number }} data
- */
-const updateDetail = async (detailId, { dayOfWeek, sets, reps, weightKg }) => {
-  await pool.query(
-    `UPDATE plan_details SET day_of_week = ?, sets = ?, reps = ?, weight_kg = ? WHERE id = ?`,
-    [dayOfWeek, sets || null, reps || null, weightKg || null, detailId]
-  );
-};
-
-/**
- * ลบท่าออกกำลังกายออกจากตาราง
- * @param {string} detailId
- */
-const removeDetail = async (detailId) => {
-  await pool.query('DELETE FROM plan_details WHERE id = ?', [detailId]);
-};
-
-module.exports = { findOrCreatePlan, findDetailsByPlanId, findDetailById, addDetail, updateDetail, removeDetail };
+module.exports = { listExercises, createPlanWithDetails, getCurrentPlan };

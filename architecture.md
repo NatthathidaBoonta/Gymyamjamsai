@@ -60,14 +60,15 @@ App.tsx
 
 ## Database Strategy (MySQL)
 
-- **Schema:** กำหนดไว้ที่ [`mysql/init/01_init.sql`](./mysql/init/01_init.sql) — รันอัตโนมัติครั้งแรกที่ MySQL container ถูกสร้าง (mount ที่ `/docker-entrypoint-initdb.d`)
-- **Connection:** `backend/src/database/index.js` สร้าง connection pool ด้วย `mysql2/promise` โดยอ่านค่าจาก `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+- **Schema (DDL):** กำหนดไว้ที่ [`mysql/init/01-schema.sql`](./mysql/init/01-schema.sql) — รันอัตโนมัติครั้งแรกที่ MySQL container ถูกสร้าง (mount ที่ `/docker-entrypoint-initdb.d`)
+- **Seed (DML):** ข้อมูลจำลองสำหรับทดสอบอยู่ที่ [`mysql/init/02-seed.sql`](./mysql/init/02-seed.sql) — รันต่อจาก schema โดยอัตโนมัติ (เรียงตามชื่อไฟล์)
+- **Connection:** `backend/src/database/index.js` สร้าง connection pool ด้วย `mysql2/promise` โดยอ่านค่าจาก `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` *(สร้างแล้วใน Phase 3 — มี `GET /api/health` ตรวจการเชื่อมต่อ)*
 - **Local dev (นอก Docker):** เชื่อมต่อผ่าน host port `3307` (mapped จาก container port `3306`)
 - **ใน Docker Compose:** backend เชื่อมต่อผ่าน service name `mysql` port `3306` (override ผ่าน `environment` ใน `docker-compose.yml`)
 
-### Entities หลัก
+### Entities หลัก (ตาม ERD ใน docs/planning/05-database-design.md — 10 ตาราง)
 
-`users`, `profiles`, `exercises`, `workout_plans`, `plan_details`, `workout_logs`, `progress_records`, `notifications`
+`users`, `user_profiles`, `exercises`, `user_metrics`, `workout_plans`, `workout_plan_details`, `workout_logs`, `activities`, `activity_registrations`, `status_audit_logs`
 
 ---
 

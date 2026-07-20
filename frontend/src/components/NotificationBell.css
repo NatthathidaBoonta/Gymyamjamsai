@@ -1,0 +1,209 @@
+/* NotificationBell.css */
+
+.notification-bell {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-bell__button {
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.notification-bell__button:hover {
+  transform: scale(1.1);
+}
+
+.notification-bell__badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--color-error, #ef4444);
+  color: white;
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.notification-bell__dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  width: 360px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 400px) {
+  .notification-bell__dropdown {
+    width: calc(100vw - 2rem);
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.notification-bell__header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-bell__header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.notification-bell__mark-all {
+  background: none;
+  border: none;
+  color: var(--color-primary, #2563eb);
+  cursor: pointer;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.notification-bell__mark-all:hover {
+  opacity: 0.8;
+}
+
+.notification-bell__list {
+  overflow-y: auto;
+  flex: 1;
+  max-height: 400px;
+}
+
+.notification-bell__item {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--color-border, #f3f4f6);
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background-color: var(--color-background, #f9fafb);
+  transition: background-color 0.2s;
+}
+
+.notification-bell__item--read {
+  background-color: white;
+  opacity: 0.7;
+}
+
+.notification-bell__item:hover {
+  background-color: var(--color-background, #f3f4f6);
+}
+
+.notification-bell__content {
+  flex: 1;
+}
+
+.notification-bell__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text, #1f2937);
+}
+
+.notification-bell__message {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #6b7280);
+  line-height: 1.4;
+}
+
+.notification-bell__time {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #9ca3af);
+}
+
+.notification-bell__check,
+.notification-bell__delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #6b7280);
+  transition: color 0.2s;
+}
+
+.notification-bell__check:hover {
+  color: var(--color-success, #10b981);
+}
+
+.notification-bell__delete:hover {
+  color: var(--color-error, #ef4444);
+}
+
+.notification-bell__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-muted, #6b7280);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.notification-bell__footer {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  text-decoration: none;
+  color: var(--color-primary, #2563eb);
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.notification-bell__footer:hover {
+  background-color: var(--color-background, #f9fafb);
+}
+
+@media (prefers-color-scheme: dark) {
+  .notification-bell__dropdown {
+    background: var(--color-surface, #1f2937);
+    border-color: var(--color-border-dark, #374151);
+    color: var(--color-text-dark, #f3f4f6);
+  }
+
+  .notification-bell__header {
+    border-bottom-color: var(--color-border-dark, #374151);
+  }
+
+  .notification-bell__item {
+    background-color: var(--color-surface-dark, #111827);
+    border-bottom-color: var(--color-border-dark, #374151);
+  }
+
+  .notification-bell__item:hover {
+    background-color: var(--color-surface-light, #1f2937);
+  }
+
+  .notification-bell__footer {
+    border-top-color: var(--color-border-dark, #374151);
+  }
+
+  .notification-bell__footer:hover {
+    background-color: var(--color-surface-dark, #111827);
+  }
+}

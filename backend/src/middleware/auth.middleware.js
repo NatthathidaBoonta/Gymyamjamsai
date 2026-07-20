@@ -1,84 +1,50 @@
 /**
- * src/middleware/auth.middleware.js
- * 
- * Middleware สำหรับการยืนยันตัวตนด้วย JWT
- * ใช้กับ Route ที่ต้องการ Authorization
+ * auth.middleware.js — JWT Authentication & Role-based Authorization
+ *
+ * authenticate  : ตรวจ JWT จาก header `Authorization: Bearer <token>` → set req.user
+ * requireRole   : ใช้ต่อจาก authenticate เพื่อจำกัดสิทธิ์ตาม role (คืน 403 ถ้าไม่ผ่าน)
  */
 
 const jwt = require('jsonwebtoken');
-const { findUserById } = require('../modules/auth/auth.repository');
+
+function httpError(message, status) {
+  const err = new Error(message);
+  err.status = status;
+  return err;
+}
 
 /**
- * ตรวจสอบ JWT Token ใน Authorization header
- * ใช้แนบกับ Route ที่ต้อง Login ก่อนเข้า
- * 
- * @example
- * router.get('/protected', authMiddleware, controller)
+ * ตรวจสอบ JWT — ถ้าไม่มี token หรือ token ไม่ถูกต้อง → 401
  */
-const authMiddleware = async (req, res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
+function authenticate(req, res, next) {
+  const header = req.headers.authorization || '';
+  const [scheme, token] = header.split(' ');
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Authorization token is required',
-      });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    // Verify JWT
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // ดึงข้อมูล User ปัจจุบัน
-    const user = await findUserById(decoded.userId);
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'User not found or token is invalid',
-      });
-    }
-
-    // แนบข้อมูล User เข้าไปใน request
-    req.user = user;
-    next();
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({
-        success: false,
-        message: 'Token has expired',
-      });
-    }
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid token',
-      });
-    }
-    next(error);
+  if (scheme !== 'Bearer' || !token) {
+    return next(httpError('ไม่พบ token หรือรูปแบบไม่ถูกต้อง', 401));
   }
-};
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = { id: payload.sub, role: payload.role };
+    next();
+  } catch {
+    next(httpError('token ไม่ถูกต้องหรือหมดอายุ', 401));
+  }
+}
 
 /**
- * Middleware สำหรับตรวจสอบ Role
- * @param {...string} roles - roles ที่อนุญาต เช่น 'admin', 'user'
+ * จำกัดสิทธิ์ตาม role — เช่น requireRole('trainer'), requireRole('admin', 'trainer')
+ * ต้องใช้ต่อจาก authenticate เสมอ
  */
-const requireRole = (...roles) => {
+function requireRole(...allowedRoles) {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    if (!req.user) return next(httpError('ต้องเข้าสู่ระบบก่อน', 401));
+    if (!allowedRoles.includes(req.user.role)) {
+      return next(httpError('ไม่มีสิทธิ์เข้าถึงทรัพยากรนี้', 403));
     }
-
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Forbidden: insufficient permissions',
-      });
-    }
-
     next();
   };
-};
+}
 
-module.exports = { authMiddleware, requireRole };
+module.exports = { authenticate, requireRole };

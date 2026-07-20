@@ -1,57 +1,40 @@
 /**
- * src/modules/auth/auth.controller.js
- * 
- * Controller สำหรับโมดูล Auth
- * รับ HTTP Request, เรียกใช้ Service, ส่ง Response
+ * auth.controller.js — รับ req/res, เรียก service, ตอบกลับตาม standard envelope
+ * (โครงสร้าง { status, message, data } ตาม docs/planning/06-api-contract.md)
  */
 
-const { register, login } = require('./auth.service');
-const { validateRegisterDto, validateLoginDto, authResponseDto } = require('./auth.dto');
+const dto = require('./auth.dto');
+const service = require('./auth.service');
 
-/**
- * POST /api/auth/register
- * @desc  สมัครสมาชิกใหม่
- * @access Public
- */
-const registerController = async (req, res, next) => {
+// POST /api/auth/register
+async function register(req, res, next) {
   try {
-    // Validate Input
-    const { valid, errors } = validateRegisterDto(req.body);
-    if (!valid) {
-      return res.status(400).json({ success: false, errors });
-    }
-
-    const { email, password, name } = req.body;
-    const { user, token } = await register({ email, password, name });
-
-    const response = authResponseDto(user, token);
-    res.status(201).json(response);
-  } catch (error) {
-    next(error);
+    const creds = dto.validateRegister(req.body);
+    const data = await service.register(creds);
+    res.status(201).json({ status: 'success', message: 'สมัครสมาชิกสำเร็จ', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-/**
- * POST /api/auth/login
- * @desc  เข้าสู่ระบบ
- * @access Public
- */
-const loginController = async (req, res, next) => {
+// POST /api/auth/login
+async function login(req, res, next) {
   try {
-    // Validate Input
-    const { valid, errors } = validateLoginDto(req.body);
-    if (!valid) {
-      return res.status(400).json({ success: false, errors });
-    }
-
-    const { email, password } = req.body;
-    const { user, token } = await login({ email, password });
-
-    const response = authResponseDto(user, token);
-    res.status(200).json(response);
-  } catch (error) {
-    next(error);
+    const creds = dto.validateLogin(req.body);
+    const data = await service.login(creds);
+    res.status(200).json({ status: 'success', message: 'เข้าสู่ระบบสำเร็จ', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-module.exports = { registerController, loginController };
+// GET /api/auth/me — คืนข้อมูลผู้ใช้จาก token (ต้องผ่าน authenticate ก่อน)
+function me(req, res) {
+  res.status(200).json({
+    status: 'success',
+    message: 'ข้อมูลผู้ใช้ปัจจุบัน',
+    data: { user_id: req.user.id, role: req.user.role },
+  });
+}
+
+module.exports = { register, login, me };

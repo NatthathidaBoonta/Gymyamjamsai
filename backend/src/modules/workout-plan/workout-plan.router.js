@@ -1,19 +1,14 @@
 /**
- * src/modules/workout-plan/workout-plan.router.js
- *
- * Router สำหรับโมดูล Workout Plan
- * กำหนด Endpoint ทั้งหมดของ /api/workout-plan
+ * workout-plan.router.js — เส้นทาง URL ของ Workout Plan module (เฉพาะ Member)
  */
 
 const express = require('express');
-const { authMiddleware } = require('../../middleware/auth.middleware');
 const controller = require('./workout-plan.controller');
+const { authenticate, requireRole } = require('../../middleware/auth.middleware');
 
 const router = express.Router();
 
-router.get('/', authMiddleware, controller.getMyPlanController);
-router.post('/exercises', authMiddleware, controller.addExerciseController);
-router.put('/exercises/:detailId', authMiddleware, controller.updateExerciseController);
-router.delete('/exercises/:detailId', authMiddleware, controller.removeExerciseController);
+router.post('/generate', authenticate, requireRole('member'), controller.generate);
+router.get('/current', authenticate, requireRole('member'), controller.current);
 
 module.exports = router;

@@ -1,92 +1,56 @@
 /**
- * src/modules/exercise/exercise.controller.js
- *
- * Controller สำหรับโมดูล Exercise
- * รับ HTTP Request, เรียกใช้ Service, ส่ง Response
+ * exercise.controller.js — รับ req/res, เรียก service, ตอบตาม standard envelope
  */
 
-const {
-  listExercises,
-  getExerciseById,
-  createExercise,
-  updateExercise,
-  deleteExercise,
-} = require('./exercise.service');
-const { validateExerciseDto, exerciseResponseDto, exerciseListResponseDto } = require('./exercise.dto');
+const dto = require('./exercise.dto');
+const service = require('./exercise.service');
 
-/**
- * GET /api/exercises
- * @desc  แสดงรายการท่าออกกำลังกายทั้งหมด (รองรับ query: targetMuscle, difficulty, search)
- * @access Private
- */
-const listController = async (req, res, next) => {
+async function list(req, res, next) {
   try {
-    const { targetMuscle, equipment, category, difficulty, search } = req.query;
-    const exercises = await listExercises({ targetMuscle, equipment, category, difficulty, search });
-    res.status(200).json(exerciseListResponseDto(exercises));
-  } catch (error) {
-    next(error);
+    const { limit, offset, page } = dto.parsePagination(req.query);
+    const data = await service.list({ limit, offset, page });
+    res.status(200).json({ status: 'success', message: 'รายการท่าออกกำลังกาย', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-/**
- * GET /api/exercises/:id
- * @access Private
- */
-const getByIdController = async (req, res, next) => {
+async function getOne(req, res, next) {
   try {
-    const exercise = await getExerciseById(req.params.id);
-    res.status(200).json(exerciseResponseDto(exercise));
-  } catch (error) {
-    next(error);
+    const data = await service.getById(req.params.id);
+    res.status(200).json({ status: 'success', message: 'รายละเอียดท่าออกกำลังกาย', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-/**
- * POST /api/exercises
- * @access Private (admin)
- */
-const createController = async (req, res, next) => {
+async function create(req, res, next) {
   try {
-    const { valid, errors } = validateExerciseDto(req.body);
-    if (!valid) {
-      return res.status(400).json({ success: false, errors });
-    }
-    const exercise = await createExercise(req.body);
-    res.status(201).json(exerciseResponseDto(exercise));
-  } catch (error) {
-    next(error);
+    const payload = dto.validateCreate(req.body);
+    const data = await service.create(payload);
+    res.status(201).json({ status: 'success', message: 'เพิ่มท่าออกกำลังกายสำเร็จ', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-/**
- * PUT /api/exercises/:id
- * @access Private (admin)
- */
-const updateController = async (req, res, next) => {
+async function update(req, res, next) {
   try {
-    const { valid, errors } = validateExerciseDto(req.body);
-    if (!valid) {
-      return res.status(400).json({ success: false, errors });
-    }
-    const exercise = await updateExercise(req.params.id, req.body);
-    res.status(200).json(exerciseResponseDto(exercise));
-  } catch (error) {
-    next(error);
+    const fields = dto.validateUpdate(req.body);
+    const data = await service.update(req.params.id, fields);
+    res.status(200).json({ status: 'success', message: 'แก้ไขท่าออกกำลังกายสำเร็จ', data });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-/**
- * DELETE /api/exercises/:id
- * @access Private (admin)
- */
-const deleteController = async (req, res, next) => {
+async function remove(req, res, next) {
   try {
-    await deleteExercise(req.params.id);
-    res.status(204).send();
-  } catch (error) {
-    next(error);
+    await service.remove(req.params.id);
+    res.status(200).json({ status: 'success', message: 'ลบท่าออกกำลังกายสำเร็จ', data: null });
+  } catch (err) {
+    next(err);
   }
-};
+}
 
-module.exports = { listController, getByIdController, createController, updateController, deleteController };
+module.exports = { list, getOne, create, update, remove };

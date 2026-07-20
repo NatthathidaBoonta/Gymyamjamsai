@@ -19,8 +19,9 @@ export interface CreateExerciseInput {
 }
 
 /** GET /api/exercises — ดึงรายการท่าออกกำลังกาย */
-export function listExercises(limit = 100, offset = 0): Promise<Exercise[]> {
-  return apiFetch<Exercise[]>(`/api/exercises?limit=${limit}&offset=${offset}`);
+export async function listExercises(limit = 100, offset = 0): Promise<Exercise[]> {
+  const response = await apiFetch<any>(`/api/exercises?limit=${limit}&offset=${offset}`);
+  return response.items || response || [];
 }
 
 /** POST /api/exercises — สร้างท่าใหม่ */

@@ -19,6 +19,7 @@ import Register from '../pages/public/Register';
 import MemberDashboard from '../pages/member/MemberDashboard';
 import Workout from '../pages/member/Workout';
 import Activities from '../pages/member/Activities';
+import Notifications from '../pages/member/Notifications';
 
 import TrainerDashboard from '../pages/trainer/TrainerDashboard';
 import TrainerActivities from '../pages/trainer/TrainerActivities';
@@ -48,6 +49,7 @@ function AppRouter() {
           <Route path="/member/dashboard" element={<MemberDashboard />} />
           <Route path="/member/workout" element={<Workout />} />
           <Route path="/member/activities" element={<Activities />} />
+          <Route path="/member/notifications" element={<Notifications />} />
         </Route>
 
         {/* Trainer */}

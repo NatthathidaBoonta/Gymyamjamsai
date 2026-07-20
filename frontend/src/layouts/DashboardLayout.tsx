@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { NAV_BY_ROLE, ROLE_LABEL } from '../routes/navConfig';
+import ErrorBoundary from '../components/ErrorBoundary';
+import NotificationBell from '../components/NotificationBell';
 import './DashboardLayout.css';
 
 function DashboardLayout() {
@@ -41,9 +43,7 @@ function DashboardLayout() {
         <span className="dash__brand">Gymyamjamsai</span>
 
         <div className="dash__topbar-actions">
-          <button type="button" className="dash__icon-btn" aria-label="การแจ้งเตือน">
-            🔔
-          </button>
+          <NotificationBell />
           <span className="dash__profile">
             <span className="dash__avatar" aria-hidden="true">
               👤
@@ -87,7 +87,9 @@ function DashboardLayout() {
       </aside>
 
       <main className="dash__main">
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </div>
   );

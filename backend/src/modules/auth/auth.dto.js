@@ -1,76 +1,43 @@
 /**
- * src/modules/auth/auth.dto.js
- * 
- * DTO (Data Transfer Object) สำหรับโมดูล Auth
- * กำหนดรูปแบบข้อมูลขาเข้าและขาออก พร้อม Validation
+ * auth.dto.js — Input validation สำหรับ Auth
+ * โยน Error พร้อม status 400 เมื่อ input ไม่ถูกต้อง (central error handler จะจัดรูปแบบ response)
  */
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function badRequest(message) {
+  const err = new Error(message);
+  err.status = 400;
+  return err;
+}
+
+function extract(body) {
+  const email = (body && body.email ? String(body.email) : '').trim();
+  const password = body && body.password ? String(body.password) : '';
+  return { email, password };
+}
 
 /**
- * Validate ข้อมูล Register
- * @param {Object} body
- * @returns {{ valid: boolean, errors: string[] }}
+ * ตรวจสอบ input ตอน register — บังคับ email ถูกรูปแบบ + password นโยบายความยาว
+ * @returns {{ email: string, password: string }}
  */
-const validateRegisterDto = (body) => {
-  const errors = [];
-  const { email, password, name } = body;
-
-  if (!email || typeof email !== 'string') {
-    errors.push('email is required');
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push('email format is invalid');
-  }
-
-  if (!password || typeof password !== 'string') {
-    errors.push('password is required');
-  } else if (password.length < 8) {
-    errors.push('password must be at least 8 characters');
-  }
-
-  if (name && typeof name !== 'string') {
-    errors.push('name must be a string');
-  }
-
-  return { valid: errors.length === 0, errors };
-};
+function validateRegister(body) {
+  const { email, password } = extract(body);
+  if (!email || !password) throw badRequest('email และ password จำเป็นต้องระบุ');
+  if (!EMAIL_RE.test(email)) throw badRequest('รูปแบบ email ไม่ถูกต้อง');
+  if (password.length < 6) throw badRequest('password ต้องมีอย่างน้อย 6 ตัวอักษร');
+  return { email, password };
+}
 
 /**
- * Validate ข้อมูล Login
- * @param {Object} body
- * @returns {{ valid: boolean, errors: string[] }}
+ * ตรวจสอบ input ตอน login — เช็คแค่ว่ามีค่าครบ
+ * ไม่บังคับ password policy เพื่อให้ credential ที่ผิดตกไปที่ 401 (ไม่ใช่ 400)
+ * @returns {{ email: string, password: string }}
  */
-const validateLoginDto = (body) => {
-  const errors = [];
-  const { email, password } = body;
+function validateLogin(body) {
+  const { email, password } = extract(body);
+  if (!email || !password) throw badRequest('email และ password จำเป็นต้องระบุ');
+  return { email, password };
+}
 
-  if (!email || typeof email !== 'string') {
-    errors.push('email is required');
-  }
-
-  if (!password || typeof password !== 'string') {
-    errors.push('password is required');
-  }
-
-  return { valid: errors.length === 0, errors };
-};
-
-/**
- * สร้าง Response object สำหรับ Auth (ไม่ส่ง password กลับ)
- * @param {Object} user
- * @param {string} token
- * @returns {Object}
- */
-const authResponseDto = (user, token) => ({
-  success: true,
-  data: {
-    token,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      createdAt: user.createdAt,
-    },
-  },
-});
-
-module.exports = { validateRegisterDto, validateLoginDto, authResponseDto };
+module.exports = { validateRegister, validateLogin };

@@ -1,44 +1,35 @@
 /**
  * src/middleware/error.middleware.js
- * 
- * Global Error Handler Middleware
- * รวบรวม Error จากทุก Route ไว้ที่จุดเดียว
+ *
+ * Central Error Handling — Phase 3
+ * รวมการจัดการ error ไว้ที่เดียว เพื่อให้ทุก route คืน response รูปแบบเดียวกัน
  */
 
 /**
- * Global error handler - ต้องเป็น middleware ตัวสุดท้ายใน Express
- * @param {Error} err
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- * @param {import('express').NextFunction} next
+ * 404 handler — ทำงานเมื่อไม่มี route ใดตรงกับ request
  */
-const errorMiddleware = (err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
-
-  // Log error ใน development
-  if (process.env.NODE_ENV !== 'production') {
-    console.error(`[ERROR] ${req.method} ${req.path} - ${statusCode}: ${message}`);
-    if (err.stack) {
-      console.error(err.stack);
-    }
-  }
-
-  res.status(statusCode).json({
-    success: false,
-    message,
-    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
-  });
-};
-
-/**
- * 404 Not Found handler
- */
-const notFoundMiddleware = (req, res) => {
+function notFoundHandler(req, res) {
   res.status(404).json({
-    success: false,
-    message: `Route ${req.method} ${req.path} not found`,
+    status: 'error',
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+    code: 404,
   });
-};
+}
 
-module.exports = { errorMiddleware, notFoundMiddleware };
+/**
+ * Central error handler — ต้องมี 4 พารามิเตอร์ Express ถึงจะรู้ว่าเป็น error middleware
+ * (_next ไม่ได้ใช้ แต่ต้องคงไว้ให้ครบ signature)
+ * รูปแบบ response ตาม standard error structure ใน docs/planning/06-api-contract.md
+ */
+// eslint-disable-next-line no-unused-vars
+function errorHandler(err, req, res, _next) {
+  const status = err.status || 500;
+  console.error(`[Error] ${status} ${req.method} ${req.originalUrl}: ${err.message}`);
+  res.status(status).json({
+    status: 'error',
+    message: err.message || 'Internal Server Error',
+    code: status,
+  });
+}
+
+module.exports = { notFoundHandler, errorHandler };

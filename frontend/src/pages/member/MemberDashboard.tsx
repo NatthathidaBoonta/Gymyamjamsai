@@ -127,8 +127,8 @@ function MemberDashboard() {
                 />
                 <YAxis />
                 <Tooltip
-                  formatter={(value) => (typeof value === 'number' ? value.toFixed(1) : value)}
-                  labelFormatter={(label) => new Date(label as string).toLocaleDateString('th-TH')}
+                  formatter={(value: any) => (typeof value === 'number' ? value.toFixed(1) : value)}
+                  labelFormatter={(label: any) => new Date(label as string).toLocaleDateString('th-TH')}
                 />
                 <Legend />
                 <Line type="monotone" dataKey="weight" stroke="#2563eb" dot={{ r: 4 }} name="น้ำหนัก (กก.)" />

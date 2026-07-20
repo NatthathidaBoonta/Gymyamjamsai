@@ -1,27 +1,15 @@
 /**
- * src/modules/auth/auth.router.js
- * 
- * Router สำหรับโมดูล Auth
- * กำหนด Endpoint ทั้งหมดของ /api/auth
+ * auth.router.js — เส้นทาง URL ของ Auth module
  */
 
 const express = require('express');
-const { registerController, loginController } = require('./auth.controller');
+const controller = require('./auth.controller');
+const { authenticate } = require('../../middleware/auth.middleware');
 
 const router = express.Router();
 
-/**
- * POST /api/auth/register
- * @desc  สมัครสมาชิกใหม่
- * @access Public
- */
-router.post('/register', registerController);
-
-/**
- * POST /api/auth/login
- * @desc  เข้าสู่ระบบและรับ JWT Token
- * @access Public
- */
-router.post('/login', loginController);
+router.post('/register', controller.register); // สมัครสมาชิก (Guest)
+router.post('/login', controller.login); // เข้าสู่ระบบ (Guest)
+router.get('/me', authenticate, controller.me); // ข้อมูลผู้ใช้ปัจจุบัน (ต้องมี token)
 
 module.exports = router;

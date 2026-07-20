@@ -106,7 +106,9 @@ function AdminDashboard() {
 
         <div className="admin-dashboard__card">
           <p className="admin-dashboard__card-label">อัตราเข้าร่วมเฉลี่ย</p>
-          <p className="admin-dashboard__card-value">{data?.avg_attendance_rate.toFixed(1) ?? '-'}%</p>
+          <p className="admin-dashboard__card-value">
+            {typeof (data as any)?.average_attendance_rate === 'number' ? (data as any).average_attendance_rate.toFixed(1) : '-'}%
+          </p>
           <p className="admin-dashboard__card-sub">ทั่วระบบ</p>
         </div>
       </div>

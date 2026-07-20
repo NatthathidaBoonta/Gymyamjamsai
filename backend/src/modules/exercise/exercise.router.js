@@ -1,21 +1,18 @@
 /**
- * src/modules/exercise/exercise.router.js
- *
- * Router สำหรับโมดูล Exercise
- * กำหนด Endpoint ทั้งหมดของ /api/exercises
- * การอ่าน (GET) เปิดให้ user ทุกคนที่ login แล้ว, การแก้ไข (POST/PUT/DELETE) จำกัดเฉพาะ admin
+ * exercise.router.js — เส้นทาง URL ของ Exercise module
+ * ทุก role ที่ login แล้วดูได้ / เฉพาะ admin จัดการ (สร้าง/แก้/ลบ)
  */
 
 const express = require('express');
-const { authMiddleware, requireRole } = require('../../middleware/auth.middleware');
 const controller = require('./exercise.controller');
+const { authenticate, requireRole } = require('../../middleware/auth.middleware');
 
 const router = express.Router();
 
-router.get('/', authMiddleware, controller.listController);
-router.get('/:id', authMiddleware, controller.getByIdController);
-router.post('/', authMiddleware, requireRole('admin'), controller.createController);
-router.put('/:id', authMiddleware, requireRole('admin'), controller.updateController);
-router.delete('/:id', authMiddleware, requireRole('admin'), controller.deleteController);
+router.get('/', authenticate, controller.list);
+router.get('/:id', authenticate, controller.getOne);
+router.post('/', authenticate, requireRole('admin'), controller.create);
+router.put('/:id', authenticate, requireRole('admin'), controller.update);
+router.delete('/:id', authenticate, requireRole('admin'), controller.remove);
 
 module.exports = router;

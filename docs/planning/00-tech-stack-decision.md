@@ -21,13 +21,17 @@
 
 ## 3. Selected Tech Stack
 
+> **หมายเหตุ (อัปเดต 2026-07-18):** เวอร์ชัน Frontend และเครื่องมือ Lint ด้านล่างถูกปรับให้ตรงกับผลลัพธ์จริงจากการรัน `npm create vite@latest` ใน Phase 1 (ดู [10-implementation-plan.md](10-implementation-plan.md) Phase 1) ณ เวลาที่ implement เนื่องจากเป็นค่า default ปัจจุบันของเครื่องมือ ไม่ใช่การตัดสินใจเปลี่ยน Architecture
+
 | Layer | Technology | Version |
 |---|---|---|
-| Frontend | React | 18 |
-| Frontend Build Tool | Vite | 5 |
+| Frontend | React | 19 |
+| Frontend Build Tool | Vite | 8 |
 | Frontend Styling | CSS (Vanilla) | — |
-| Backend Runtime | Node.js LTS | 20 |
-| Backend Framework | Express | 4 |
+| Frontend Linter | oxlint | Latest (ติดตั้งมาพร้อม Vite template) |
+| Backend Runtime | Node.js LTS | 20 (ทดสอบแล้วรองรับ v24 เช่นกัน) |
+| Backend Framework | Express | 4 (ตรึงเวอร์ชันไว้ ไม่ใช้ Express 5 ที่เป็น default ใหม่ของ npm) |
+| Backend Linter/Formatter | ESLint 8 + Prettier | Latest |
 | Database | MySQL | 8 |
 | Dev Infrastructure | Docker Compose | Latest |
 | Dev DB Tool | phpMyAdmin | Latest |

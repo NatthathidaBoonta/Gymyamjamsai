@@ -1,97 +1,60 @@
 /**
- * src/modules/exercise/exercise.repository.js
- *
- * Repository สำหรับโมดูล Exercise (คลังท่าออกกำลังกาย)
- * จัดการ Database Operations ผ่าน mysql2 (raw SQL)
+ * exercise.repository.js — Data access layer สำหรับคลังท่าออกกำลังกาย (exercises)
  */
 
-const { v4: uuidv4 } = require('uuid');
-const pool = require('../../database');
-
-const SELECT_FIELDS = `id, name, target_muscle AS targetMuscle, equipment, category, difficulty, media_url AS mediaUrl, description,
-                       created_at AS createdAt, updated_at AS updatedAt`;
+const crypto = require('crypto');
+const { pool } = require('../../database');
 
 /**
- * ดึงรายการท่าออกกำลังกายทั้งหมด รองรับ filter
- * @param {{ targetMuscle?: string, equipment?: string, category?: string, difficulty?: string, search?: string }} filters
- * @returns {Promise<Object[]>}
+ * ดึงรายการท่าแบบแบ่งหน้า
+ * หมายเหตุ: limit/offset ถูก validate เป็น integer มาแล้วจาก DTO จึง interpolate
+ * ตรงๆ ได้ (เลี่ยงปัญหา placeholder ของ LIMIT ใน mysql2) — ปลอดภัยจาก injection
  */
-const findAll = async ({ targetMuscle, equipment, category, difficulty, search } = {}) => {
-  let sql = `SELECT ${SELECT_FIELDS} FROM exercises WHERE 1=1`;
-  const params = [];
+async function findAll({ limit, offset }) {
+  const [items] = await pool.query(
+    `SELECT id, name, category, media_url, instructions
+     FROM exercises ORDER BY name LIMIT ${limit} OFFSET ${offset}`,
+  );
+  const [[{ total }]] = await pool.query('SELECT COUNT(*) AS total FROM exercises');
+  return { items, total };
+}
 
-  if (targetMuscle) {
-    sql += ' AND target_muscle = ?';
-    params.push(targetMuscle);
-  }
-  if (equipment) {
-    sql += ' AND equipment = ?';
-    params.push(equipment);
-  }
-  if (category) {
-    sql += ' AND category = ?';
-    params.push(category);
-  }
-  if (difficulty) {
-    sql += ' AND difficulty = ?';
-    params.push(difficulty);
-  }
-  if (search) {
-    sql += ' AND name LIKE ?';
-    params.push(`%${search}%`);
-  }
-  sql += ' ORDER BY name ASC';
-
-  const [rows] = await pool.query(sql, params);
-  return rows;
-};
-
-/**
- * ค้นหาท่าออกกำลังกายด้วย ID
- * @param {string} id
- * @returns {Promise<Object|null>}
- */
-const findById = async (id) => {
-  const [rows] = await pool.query(`SELECT ${SELECT_FIELDS} FROM exercises WHERE id = ? LIMIT 1`, [id]);
+async function findById(id) {
+  const [rows] = await pool.query(
+    'SELECT id, name, category, media_url, instructions FROM exercises WHERE id = ? LIMIT 1',
+    [id],
+  );
   return rows[0] || null;
-};
+}
 
-/**
- * สร้างท่าออกกำลังกายใหม่
- * @param {{ name: string, targetMuscle?: string, equipment?: string, category?: string, difficulty?: string, mediaUrl?: string, description?: string }} data
- * @returns {Promise<Object>}
- */
-const create = async ({ name, targetMuscle, equipment, category, difficulty, mediaUrl, description }) => {
-  const id = uuidv4();
+async function create({ name, category, media_url, instructions }) {
+  const id = crypto.randomUUID();
   await pool.query(
-    `INSERT INTO exercises (id, name, target_muscle, equipment, category, difficulty, media_url, description)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [id, name, targetMuscle || null, equipment || null, category || null, difficulty || null, mediaUrl || null, description || null]
+    'INSERT INTO exercises (id, name, category, media_url, instructions) VALUES (?, ?, ?, ?, ?)',
+    [id, name, category, media_url, instructions],
   );
   return findById(id);
-};
+}
 
 /**
- * แก้ไขท่าออกกำลังกาย
- * @param {string} id
- * @param {{ name: string, targetMuscle?: string, equipment?: string, category?: string, difficulty?: string, mediaUrl?: string, description?: string }} data
- * @returns {Promise<Object>}
+ * อัปเดตเฉพาะฟิลด์ที่ส่งมา (partial update)
+ * @returns {number} จำนวนแถวที่ถูกแก้ (0 = ไม่พบ id)
  */
-const update = async (id, { name, targetMuscle, equipment, category, difficulty, mediaUrl, description }) => {
-  await pool.query(
-    `UPDATE exercises SET name = ?, target_muscle = ?, equipment = ?, category = ?, difficulty = ?, media_url = ?, description = ?
-     WHERE id = ?`,
-    [name, targetMuscle || null, equipment || null, category || null, difficulty || null, mediaUrl || null, description || null, id]
-  );
-  return findById(id);
-};
+async function update(id, fields) {
+  const columns = Object.keys(fields);
+  if (columns.length === 0) return 0;
+  const setClause = columns.map((c) => `${c} = ?`).join(', ');
+  const values = columns.map((c) => fields[c]);
+  const [result] = await pool.query(`UPDATE exercises SET ${setClause} WHERE id = ?`, [
+    ...values,
+    id,
+  ]);
+  return result.affectedRows;
+}
 
-/**
- * ลบท่าออกกำลังกาย
- * @param {string} id
- */
-const remove = async (id) => {
-  await pool.query('DELETE FROM exercises WHERE id = ?', [id]);
-};
+async function remove(id) {
+  const [result] = await pool.query('DELETE FROM exercises WHERE id = ?', [id]);
+  return result.affectedRows;
+}
 
 module.exports = { findAll, findById, create, update, remove };

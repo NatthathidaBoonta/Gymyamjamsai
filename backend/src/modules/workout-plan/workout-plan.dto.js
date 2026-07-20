@@ -1,73 +1,22 @@
 /**
- * src/modules/workout-plan/workout-plan.dto.js
- *
- * DTO (Data Transfer Object) สำหรับโมดูล Workout Plan
- * กำหนดรูปแบบข้อมูลขาเข้าและขาออก พร้อม Validation
+ * workout-plan.dto.js — Validation สำหรับ Workout Plan module
  */
 
-const DAYS_OF_WEEK = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
-const validateNumericFields = (body, errors) => {
-  const { sets, reps, weightKg } = body;
-  if (sets !== undefined && sets !== null && (isNaN(Number(sets)) || Number(sets) <= 0)) {
-    errors.push('sets must be a positive number');
-  }
-  if (reps !== undefined && reps !== null && (isNaN(Number(reps)) || Number(reps) <= 0)) {
-    errors.push('reps must be a positive number');
-  }
-  if (weightKg !== undefined && weightKg !== null && isNaN(Number(weightKg))) {
-    errors.push('weightKg must be a number');
-  }
-};
+// เป้าหมายที่ระบบรองรับ (ตรงกับ Static Template ใน service)
+const VALID_GOALS = ['lose_weight', 'build_muscle', 'general'];
 
 /**
- * Validate ข้อมูลเพิ่มท่าออกกำลังกายลงในตาราง
- * @param {Object} body
- * @returns {{ valid: boolean, errors: string[] }}
+ * รับ goal จาก body (optional) — ถ้าไม่ส่งหรือไม่รู้จัก จะให้ service ตัดสิน (fallback)
+ * ถ้าส่งมาแต่ไม่อยู่ในรายการที่รองรับ → โยน 400
  */
-const validateAddPlanExerciseDto = (body) => {
-  const errors = [];
-  const { exerciseId, dayOfWeek } = body;
-
-  if (!exerciseId || typeof exerciseId !== 'string') {
-    errors.push('exerciseId is required');
+function parseGenerateInput(body) {
+  const goal = body && body.goal ? String(body.goal).trim() : null;
+  if (goal && !VALID_GOALS.includes(goal)) {
+    const err = new Error(`goal ไม่ถูกต้อง (รองรับ: ${VALID_GOALS.join(', ')})`);
+    err.status = 400;
+    throw err;
   }
+  return { goal };
+}
 
-  if (!dayOfWeek || !DAYS_OF_WEEK.includes(dayOfWeek)) {
-    errors.push(`dayOfWeek must be one of: ${DAYS_OF_WEEK.join(', ')}`);
-  }
-
-  validateNumericFields(body, errors);
-
-  return { valid: errors.length === 0, errors };
-};
-
-/**
- * Validate ข้อมูลแก้ไขท่าออกกำลังกายในตาราง
- * @param {Object} body
- * @returns {{ valid: boolean, errors: string[] }}
- */
-const validateUpdatePlanExerciseDto = (body) => {
-  const errors = [];
-  const { dayOfWeek } = body;
-
-  if (!dayOfWeek || !DAYS_OF_WEEK.includes(dayOfWeek)) {
-    errors.push(`dayOfWeek must be one of: ${DAYS_OF_WEEK.join(', ')}`);
-  }
-
-  validateNumericFields(body, errors);
-
-  return { valid: errors.length === 0, errors };
-};
-
-const planResponseDto = (plan) => ({ success: true, data: plan });
-
-const planExerciseResponseDto = (detail) => ({ success: true, data: detail });
-
-module.exports = {
-  validateAddPlanExerciseDto,
-  validateUpdatePlanExerciseDto,
-  planResponseDto,
-  planExerciseResponseDto,
-  DAYS_OF_WEEK,
-};
+module.exports = { parseGenerateInput, VALID_GOALS };
