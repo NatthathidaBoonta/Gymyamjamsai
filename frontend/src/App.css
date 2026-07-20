@@ -1,9 +1,0 @@
-/* App.css — Root Layout */
-@import './theme/theme.css';
-
-#app-root {
-  min-height: 100vh;
-  background-color: var(--color-bg-base);
-  color: var(--color-text-primary);
-  font-family: var(--font-family-base);
-}

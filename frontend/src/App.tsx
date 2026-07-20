@@ -1,19 +1,7 @@
-/**
- * src/App.tsx
- *
- * Root Application Component
- * ทำหน้าที่เป็น Layout wrapper สำหรับ React Router
- */
-
-import { Outlet } from 'react-router-dom';
-import './App.css';
+import AppRouter from './routes/AppRouter';
 
 function App() {
-  return (
-    <div id="app-root">
-      <Outlet />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;

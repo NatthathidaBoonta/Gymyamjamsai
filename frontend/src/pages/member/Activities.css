@@ -1,0 +1,116 @@
+/* Activities.css — กระดานกิจกรรม (Responsive) */
+
+.activities {
+  max-width: 1200px;
+}
+
+.activities__subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+/* Grid ของการ์ด */
+.activities__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-lg);
+}
+
+.activities__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+
+.activities__card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.activities__card--full {
+  opacity: 0.7;
+}
+
+.activities__card-header {
+  margin-bottom: var(--space-sm);
+}
+
+.activities__title {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.activities__trainer {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.activities__description {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* Meta information */
+.activities__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.activities__meta-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.activities__meta-label {
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* Progress bar */
+.activities__progress {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.activities__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-soft));
+  transition: width 0.3s ease;
+}
+
+.activities__available {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.activities__full-text {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+.activities__btn {
+  width: 100%;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .activities__grid {
+    grid-template-columns: 1fr;
+  }
+}

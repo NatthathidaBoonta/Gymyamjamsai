@@ -1,0 +1,177 @@
+/* ============================================================
+   DashboardLayout.css
+   Mobile-first: เริ่มจากจอเล็ก แล้วขยายด้วย media query ที่ >= 900px
+   ============================================================ */
+
+.dash {
+  min-height: 100%;
+}
+
+/* ---------- Topbar ---------- */
+.dash__topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dash__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 1.25rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.dash__brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.dash__topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.dash__icon-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+}
+
+.dash__icon-btn:hover {
+  background: var(--color-primary-soft);
+}
+
+.dash__profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.dash__avatar {
+  font-size: 1.2rem;
+}
+
+/* ซ่อนข้อความบางส่วนบนจอเล็กเพื่อไม่ให้ topbar ล้น */
+.dash__role,
+.dash__logout {
+  display: none;
+}
+
+/* ---------- Sidebar (มือถือ = drawer เลื่อนเข้า) ---------- */
+.dash__sidebar {
+  position: fixed;
+  top: var(--topbar-height);
+  bottom: 0;
+  left: 0;
+  z-index: 25;
+  width: var(--sidebar-width);
+  max-width: 80vw;
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+}
+
+.dash__sidebar--open {
+  transform: translateX(0);
+}
+
+.dash__backdrop {
+  position: fixed;
+  inset: var(--topbar-height) 0 0 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dash__nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dash__nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.65rem var(--space-sm);
+  border-radius: var(--radius);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.dash__nav-link:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+}
+
+.dash__nav-link--active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ปุ่มออกจากระบบใน sidebar — แสดงเฉพาะจอเล็ก (จอใหญ่ใช้ปุ่มบน topbar) */
+.dash__logout-mobile {
+  width: 100%;
+  margin-top: var(--space-lg);
+}
+
+/* ---------- Main content ---------- */
+.dash__main {
+  padding: calc(var(--topbar-height) + var(--space-md)) var(--space-md) var(--space-xl);
+}
+
+/* ============================================================
+   Desktop (>= 900px): Sidebar แสดงถาวร, ซ่อนปุ่ม ☰
+   ============================================================ */
+@media (min-width: 900px) {
+  .dash__menu-btn,
+  .dash__backdrop {
+    display: none;
+  }
+
+  .dash__role,
+  .dash__logout {
+    display: inline-flex;
+  }
+
+  .dash__logout-mobile {
+    display: none;
+  }
+
+  .dash__sidebar {
+    transform: none;
+    max-width: none;
+  }
+
+  .dash__main {
+    margin-left: var(--sidebar-width);
+    padding: calc(var(--topbar-height) + var(--space-lg)) var(--space-xl) var(--space-xl);
+  }
+}

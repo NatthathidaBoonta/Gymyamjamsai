@@ -1,0 +1,45 @@
+/* PagePlaceholder.css — โครงหน้าเปล่า (Responsive) */
+
+.placeholder__title {
+  font-size: 1.5rem;
+}
+
+.placeholder__desc {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.placeholder__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-md);
+}
+
+.placeholder__card-title {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.placeholder__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 900px) {
+  .placeholder__title {
+    font-size: 1.85rem;
+  }
+
+  .placeholder__card {
+    padding: var(--space-lg);
+    max-width: 640px;
+  }
+}

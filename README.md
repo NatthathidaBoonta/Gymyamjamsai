@@ -5,7 +5,49 @@ Full-Stack Web Application สำหรับระบบติดตามพ�
 
 ---
 
-## 📦 Tech Stack
+## 🚧 Development Status
+
+โปรเจกต์กำลังพัฒนาตาม [Implementation Plan](docs/planning/10-implementation-plan.md) แบบทีละ Phase
+
+- ✅ **Phase 0** — Requirement and Architecture (เอกสาร Planning ครบถ้วน)
+- ✅ **Phase 1** — Project Setup (โครงสร้าง backend/frontend เปล่าพร้อมเขียนโค้ด, Linter ตั้งค่าแล้ว) — ผ่าน QA Review
+- ✅ **Phase 2** — Database Schema & Seed Data (10 ตารางตาม ERD + seed accounts, utf8mb4) — ผ่าน QA Review
+- ✅ **Phase 3** — Backend Core & MySQL Connection (mysql2 pool, CORS, `GET /api/health`, central error handler) — ผ่าน QA Review
+- ✅ **Phase 4** — Authentication & Authorization (JWT login/register, bcrypt, `authenticate` + `requireRole`) — ผ่าน QA Review
+- ✅ **Phase 5** — Workout Plan & Exercise CRUD API (Exercise CRUD, generate ตารางแบบ Static Template, current) — ผ่าน QA Review
+- ✅ **Phase 6** — Activity Registration API (สร้างคลาส, จองที่นั่งกัน Race Condition, เช็คชื่อ) — ผ่าน QA Review
+- ✅ **Phase 7** — Dashboard & Report API (สถิติพัฒนาการ, ภาพรวมระบบ, Export CSV) — ผ่าน QA Review
+- ✅ **Phase 8** — Frontend Layout & Routing (2 layouts, 12 routes, Responsive CSS Vanilla) — ผ่าน QA Review
+- ⬜ **Phase 9 เป็นต้นไป** — ยังไม่เริ่ม (Frontend Authentication, UI หน้าจอจริง ฯลฯ)
+
+> Backend API ครบตามแผน Phase 3-7 แล้ว ส่วน Frontend มีโครง Layout + Router (Sidebar/Topbar responsive) แต่หน้าต่างๆ ยังเป็นโครงเปล่า — เนื้อหาจริงและการเชื่อม API จะเริ่มที่ Phase 9-11
+
+### 🖥️ Frontend Routes (Phase 8)
+
+| Path | หน้า | Layout |
+|---|---|---|
+| `/` · `/login` · `/register` | Landing, เข้าสู่ระบบ, สมัครสมาชิก | Public |
+| `/member/dashboard` · `/member/workout` · `/member/activities` | สมาชิก | Dashboard |
+| `/trainer/dashboard` · `/trainer/activities` · `/trainer/activities/:id/attendance` | ผู้ฝึกสอน | Dashboard |
+| `/admin/dashboard` · `/admin/users` · `/admin/exercises` | ผู้ดูแลระบบ | Dashboard |
+
+> Responsive: จอ ≥ 900px แสดง Sidebar ถาวร · จอเล็กกว่านั้น Sidebar ยุบเป็น drawer เปิดด้วยปุ่ม ☰
+
+### 🗄️ Database (Phase 2)
+
+Schema + seed อยู่ที่ [`mysql/init/`](mysql/init/) รันอัตโนมัติเมื่อ MySQL container ถูกสร้างครั้งแรก บัญชีทดสอบ (dev):
+
+| Email | Password | Role |
+|---|---|---|
+| admin@gymyam.com | Admin@123 | admin |
+| trainer@gymyam.com | Trainer@123 | trainer |
+| member@gymyam.com | Member@123 | member |
+
+> ℹ️ MySQL รัน init script เฉพาะตอนสร้าง volume ครั้งแรก หากเคยรัน stack มาก่อน ต้อง `docker compose down -v && docker compose up` เพื่อให้ schema ใหม่มีผล (ลบ test data เดิมใน dev)
+
+---
+
+## 📦 Tech Stack (เป้าหมายของโปรเจกต์)
 
 | Layer        | Technology                                  |
 |--------------|---------------------------------------------|
@@ -65,11 +107,18 @@ npm run dev
 
 | URL                                | Description            |
 |-------------------------------------|------------------------|
-| http://localhost:5001               | Backend API            |
-| http://localhost:5001/api/status    | Status Check API       |
+| http://localhost:5000 (local) / :5001 (Docker) ⚠️ | Backend API (root `/`) |
+| http://localhost:5000/api/health    | Health check + สถานะ DB (Phase 3) |
+| POST /api/auth/register · /api/auth/login · GET /api/auth/me | Auth (JWT) — Phase 4 |
+| GET/POST/PUT/DELETE /api/exercises  | คลังท่าออกกำลังกาย (GET ทุก role, จัดการ = admin) — Phase 5 |
+| POST /api/workout-plans/generate · GET /api/workout-plans/current | ตารางออกกำลังกาย (member) — Phase 5 |
+| GET/POST /api/activities · POST /:id/register · GET /:id/participants · PATCH /:id/attendance | กิจกรรม/จองคลาส/เช็คชื่อ — Phase 6 |
+| GET /api/dashboard/personal · /api/dashboard/admin · /api/reports/activities/export | สถิติ/รายงาน CSV — Phase 7 |
 | http://localhost:5173               | Frontend Dev Server    |
 | http://localhost:8081               | phpMyAdmin             |
 | localhost:3307 (จาก host)           | MySQL (container: 3306)|
+
+> ⚠️ พบว่าพอร์ต Backend ไม่ตรงกันระหว่างไฟล์ config ปัจจุบัน (`.env` จริง = 5000, แต่ `.env.example`/`docker-compose.yml` = 5001) — ต้องแก้ไขให้ตรงกันก่อนเข้า Phase 13 (Docker Integration) ดูรายละเอียดใน [10-implementation-plan.md](docs/planning/10-implementation-plan.md#-ผลการทดสอบ-phase-1-qa-review--2026-07-19)
 
 ---
 

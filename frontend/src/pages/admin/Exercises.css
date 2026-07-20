@@ -1,0 +1,166 @@
+/* Exercises.css — คลังท่าออกกำลังกาย (Responsive) */
+
+.exercises {
+  max-width: 1200px;
+}
+
+/* ฟอร์ม */
+.exercises__form-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.exercises__form-section h2 {
+  margin: 0 0 var(--space-md);
+}
+
+.exercises__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.exercises__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.exercises__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.exercises__input {
+  width: 100%;
+  padding: 0.6rem;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.exercises__textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.exercises__input:focus,
+.exercises__textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+.exercises__form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.exercises__form-actions button {
+  flex-shrink: 0;
+}
+
+/* ตาราง */
+.exercises__list-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+}
+
+.exercises__list-section h2 {
+  margin: 0 0 var(--space-md);
+}
+
+.exercises__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.exercises__table thead {
+  background: var(--color-primary-soft);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.exercises__table th {
+  padding: var(--space-sm);
+  text-align: left;
+  font-weight: 600;
+}
+
+.exercises__table td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.exercises__table tbody tr:hover {
+  background: var(--color-primary-soft);
+}
+
+.exercises__name {
+  font-weight: 500;
+}
+
+.exercises__desc {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-text-muted);
+}
+
+.exercises__actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.exercises__btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.25rem;
+}
+
+.exercises__btn:hover:not(:disabled) {
+  opacity: 0.7;
+}
+
+.exercises__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.exercises__btn--edit:focus,
+.exercises__btn--delete:focus {
+  outline: 2px solid var(--color-primary);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .exercises__form {
+    grid-template-columns: 1fr;
+  }
+
+  .exercises__table {
+    font-size: 0.85rem;
+  }
+
+  .exercises__table th,
+  .exercises__table td {
+    padding: 0.5rem;
+  }
+
+  .exercises__desc {
+    max-width: 150px;
+  }
+}

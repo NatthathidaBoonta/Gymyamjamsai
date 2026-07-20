@@ -1,0 +1,68 @@
+/* Landing.css — หน้าแรก (Responsive) */
+
+.landing__hero {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.landing__title {
+  font-size: 1.75rem;
+  max-width: 20ch;
+  margin-inline: auto;
+}
+
+.landing__subtitle {
+  margin: 0 auto var(--space-lg);
+  max-width: 46ch;
+  color: var(--color-text-muted);
+}
+
+.landing__cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+/* มือถือ: การ์ดเรียงลงมา 1 คอลัมน์ */
+.landing__features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.landing__feature {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+.landing__feature-icon {
+  font-size: 2rem;
+}
+
+.landing__feature-title {
+  font-size: 1.05rem;
+  margin-top: var(--space-xs);
+}
+
+.landing__feature-desc {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+/* เดสก์ท็อป: 3 คอลัมน์ */
+@media (min-width: 768px) {
+  .landing__title {
+    font-size: 2.5rem;
+  }
+
+  .landing__features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

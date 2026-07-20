@@ -1,0 +1,142 @@
+/* Workout.css — ตารางออกกำลังกาย (Responsive) */
+
+.workout {
+  max-width: 1200px;
+}
+
+.workout__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.workout__header h1 {
+  margin: 0;
+}
+
+.workout__plan-info {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.workout__plan-info p {
+  margin: 0.5rem 0;
+  color: var(--color-text-muted);
+}
+
+/* ตาราง */
+.workout__exercises {
+  margin-bottom: var(--space-lg);
+  overflow-x: auto;
+}
+
+.workout__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.workout__table thead {
+  background: var(--color-primary-soft);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.workout__table th {
+  padding: var(--space-sm);
+  text-align: left;
+  font-weight: 600;
+}
+
+.workout__table td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.workout__table tbody tr:hover {
+  background: var(--color-primary-soft);
+}
+
+.workout__exercise-name {
+  font-weight: 500;
+}
+
+/* ฟอร์มบันทึกผล */
+.workout__log {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+}
+
+.workout__log h2 {
+  margin: 0 0 var(--space-md);
+}
+
+.workout__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.workout__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.workout__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.workout__input {
+  width: 100%;
+  padding: 0.6rem;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.workout__input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+.workout__submit {
+  grid-column: 1 / -1;
+}
+
+.workout__hint {
+  margin: 0;
+  padding: var(--space-sm);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border-left: 3px solid var(--color-primary);
+  padding-left: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+  .workout__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workout__header button {
+    width: 100%;
+  }
+
+  .workout__form {
+    grid-template-columns: 1fr;
+  }
+}
