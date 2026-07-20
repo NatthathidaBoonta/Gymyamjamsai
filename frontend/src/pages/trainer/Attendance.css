@@ -1,0 +1,135 @@
+/* Attendance.css — เช็คชื่อผู้เข้าร่วม (Responsive) */
+
+.attendance {
+  max-width: 900px;
+}
+
+.attendance__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.attendance__header h1 {
+  margin: 0;
+}
+
+.attendance__summary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+
+.attendance__summary p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.attendance__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.attendance__table thead {
+  background: var(--color-primary-soft);
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.attendance__table th {
+  padding: var(--space-sm);
+  text-align: left;
+  font-weight: 600;
+}
+
+.attendance__table td {
+  padding: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.attendance__table tbody tr:hover {
+  background: var(--color-bg);
+}
+
+.attendance__row--checked {
+  background: #f0fdf4;
+}
+
+.attendance__row--checked:hover {
+  background: #e7fce4;
+}
+
+.attendance__checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.attendance__checkbox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.attendance__name {
+  font-weight: 500;
+  min-width: 200px;
+}
+
+.attendance__badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.attendance__badge--attended {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.attendance__badge--absent {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.attendance__loading {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+  .attendance__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .attendance__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance__table {
+    font-size: 0.85rem;
+  }
+
+  .attendance__table th,
+  .attendance__table td {
+    padding: 0.5rem;
+  }
+
+  .attendance__name {
+    min-width: auto;
+  }
+}

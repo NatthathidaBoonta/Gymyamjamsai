@@ -382,7 +382,22 @@
 | **Responsive layout** | ✅ PASS | Workout/Activities cards stack บนมือถือ, table horizontal scroll |
 | **TypeScript / lint / build** | ✅ PASS | tsc, oxlint ผ่าน, npm run build 306ms, bundle 264KB (gzip 81KB) |
 
-**สถานะ:** ✅ **Phase 10 PASS** — Member + Admin UI complete
+**Trainer Pages (added):**
+- **Trainer/Activities** — list trainer's activities + create/edit/delete form
+- **Trainer/Activities/:id/Attendance** — mark participant attendance with real-time checkbox + summary
+
+| ทดสอบ Trainer | ผล | หมายเหตุ |
+|---|---|---|
+| **List trainer activities** | ✅ PASS | GET /api/activities (backend filters trainer_id) |
+| **Create activity** | ✅ PASS | POST /api/activities (title, datetime, seats, description) |
+| **Edit activity** | ✅ PASS | PUT /api/activities/:id + form populate |
+| **Delete activity** | ✅ PASS | DELETE /api/activities/:id with confirmation |
+| **Load participants** | ✅ PASS | GET /api/activities/:id/participants (รายชื่อ + attendance status) |
+| **Mark attendance** | ✅ PASS | PATCH /api/activities/:id/attendance (toggle checkbox) + live update |
+| **Attendance summary** | ✅ PASS | Count + percentage calculation |
+| **Responsive** | ✅ PASS | Table scrollable on mobile, checkboxes accessible |
+
+**สถานะ:** ✅ **Phase 10 COMPLETE** — Member + Admin + Trainer UI ทั้งหมด
 
 ## Phase 9: Frontend Authentication
 - **เป้าหมาย:** เชื่อมระบบเข้าสู่ระบบให้หน้าจอ และล็อกการเข้าถึง
