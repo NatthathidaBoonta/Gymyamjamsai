@@ -1,0 +1,114 @@
+/* AdminDashboard.css — ภาพรวมระบบ (Responsive) */
+
+.admin-dashboard {
+  max-width: 1200px;
+}
+
+.admin-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.admin-dashboard__header h1 {
+  margin: 0;
+}
+
+/* Summary Cards Grid */
+.admin-dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.admin-dashboard__card {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  text-align: center;
+}
+
+.admin-dashboard__card:nth-child(2) {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.admin-dashboard__card:nth-child(3) {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.admin-dashboard__card:nth-child(4) {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.admin-dashboard__card-label {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.admin-dashboard__card-value {
+  margin: 0 0 0.25rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-dashboard__card-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.admin-dashboard__info {
+  background: var(--color-bg);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.admin-dashboard__info p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-dashboard__header button {
+    width: 100%;
+  }
+
+  .admin-dashboard__cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .admin-dashboard__card {
+    padding: var(--space-md);
+  }
+
+  .admin-dashboard__card-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard__cards {
+    grid-template-columns: 1fr;
+  }
+}

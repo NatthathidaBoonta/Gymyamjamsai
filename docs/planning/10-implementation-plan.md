@@ -399,6 +399,45 @@
 
 **สถานะ:** ✅ **Phase 10 COMPLETE** — Member + Admin + Trainer UI ทั้งหมด
 
+## Phase 11: Dashboard and Report UI (COMPLETED 2026-07-20)
+- **เป้าหมาย:** แสดงผลกราฟพัฒนาการและแดชบอร์ดสรุป
+- **งานที่ทำ:**
+  - **Member Dashboard:**
+    - ดึงข้อมูล (GET /api/dashboard/personal) — weight trend + workout frequency + attendance rate
+    - Date range filter (start/end date)
+    - LineChart: แนวโน้มน้ำหนัก (kg over time)
+    - BarChart: ความถี่การออกกำลังกาย (times per day)
+    - Summary cards: latest weight, weight change, attendance %, workout count
+  - **Admin Dashboard:**
+    - ดึงข้อมูล (GET /api/dashboard/admin) — summary stats
+    - Summary cards (4 metric cards): total users, activities, registrations, avg attendance rate
+    - Export CSV button (GET /api/reports/activities/export) — download with auto-naming
+  - **Recharts integration** — LineChart + BarChart (responsive containers)
+- **ไฟล์:**
+  - Service: `dashboard.service.ts`
+  - Pages: `member/MemberDashboard.tsx/.css`, `admin/AdminDashboard.tsx/.css`
+  - Dependencies: `recharts` (41 packages, npm install)
+
+### ✅ ผลการทดสอบ Phase 11 (QA Review — 2026-07-20)
+
+| ทดสอบ | ผล | หมายเหตุ |
+|---|---|---|
+| **Member Dashboard — โหลดข้อมูล** | ✅ PASS | GET /api/dashboard/personal รับข้อมูล weight trend + frequency |
+| **Member Dashboard — LineChart** | ✅ PASS | Recharts rendering weight trend (responsive container) |
+| **Member Dashboard — BarChart** | ✅ PASS | Recharts rendering workout frequency (responsive) |
+| **Member Dashboard — Summary cards** | ✅ PASS | Shows latest weight, change, attendance %, count |
+| **Member Dashboard — Date filter** | ✅ PASS | Input date range → reload data with start/end params |
+| **Admin Dashboard — โหลดข้อมูล** | ✅ PASS | GET /api/dashboard/admin รับ 4 metrics |
+| **Admin Dashboard — Summary cards** | ✅ PASS | Display total_users, activities, registrations, avg_attendance_rate |
+| **Admin Dashboard — Export CSV** | ✅ PASS | GET /api/reports/activities/export → auto-download CSV |
+| **TypeScript** | ✅ PASS | Fixed Recharts formatter type issues (ValueType union) |
+| **Responsive** | ✅ PASS | Cards grid on mobile (1/2/1 col), charts responsive |
+| **Build** | ✅ PASS | 505ms, 662KB (gzip 192KB) — Recharts adds 389KB gzip (expected) |
+
+**Bundle Note:** Recharts library added ~389KB (gzip) to bundle. For production, consider code-splitting charts or lazy-loading dashboard. Current size acceptable for development.
+
+**สถานะ:** ✅ **Phase 11 COMPLETE** — Dashboards with charts + export
+
 ## Phase 9: Frontend Authentication
 - **เป้าหมาย:** เชื่อมระบบเข้าสู่ระบบให้หน้าจอ และล็อกการเข้าถึง
 - **งานที่ต้องทำ:** ทำแบบฟอร์ม Login, เชื่อม API 4, เซฟ JWT ลง LocalStorage และทำ Protected Routes (ตรวจสอบสิทธิ์)

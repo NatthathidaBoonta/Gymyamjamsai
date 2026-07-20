@@ -1,0 +1,139 @@
+/* MemberDashboard.css — ภาพรวมสุขภาพ (Responsive) */
+
+.member-dashboard {
+  max-width: 1400px;
+}
+
+/* Filters */
+.member-dashboard__filters {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  background: var(--color-surface);
+  padding: var(--space-md);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+.member-dashboard__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.member-dashboard__filter-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.member-dashboard__input {
+  padding: 0.5rem;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  min-width: 150px;
+}
+
+.member-dashboard__input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  border-color: var(--color-primary);
+}
+
+/* Summary Cards */
+.member-dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.member-dashboard__card {
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-surface));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow);
+}
+
+.member-dashboard__card h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.member-dashboard__card-value {
+  margin: 0 0 0.35rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.member-dashboard__card-sub {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Charts */
+.member-dashboard__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: var(--space-lg);
+}
+
+.member-dashboard__chart-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow);
+}
+
+.member-dashboard__chart-section h2 {
+  margin: 0 0 var(--space-md);
+  font-size: 1.1rem;
+}
+
+/* Recharts overrides */
+.member-dashboard__chart-section .recharts-text {
+  font-size: 12px !important;
+  fill: var(--color-text-muted) !important;
+}
+
+.member-dashboard__chart-section .recharts-cartesian-axis-line {
+  stroke: var(--color-border) !important;
+}
+
+.member-dashboard__chart-section .recharts-surface {
+  background: transparent !important;
+}
+
+@media (max-width: 768px) {
+  .member-dashboard__filters {
+    flex-direction: column;
+  }
+
+  .member-dashboard__filter-group {
+    width: 100%;
+  }
+
+  .member-dashboard__input {
+    width: 100%;
+  }
+
+  .member-dashboard__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .member-dashboard__charts {
+    grid-template-columns: 1fr;
+  }
+
+  .member-dashboard__chart-section {
+    padding: var(--space-md);
+  }
+}
