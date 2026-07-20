@@ -18,7 +18,11 @@ Full-Stack Web Application สำหรับระบบติดตามพ�
 - ✅ **Phase 6** — Activity Registration API (สร้างคลาส, จองที่นั่งกัน Race Condition, เช็คชื่อ) — ผ่าน QA Review
 - ✅ **Phase 7** — Dashboard & Report API (สถิติพัฒนาการ, ภาพรวมระบบ, Export CSV) — ผ่าน QA Review
 - ✅ **Phase 8** — Frontend Layout & Routing (2 layouts, 12 routes, Responsive CSS Vanilla) — ผ่าน QA Review
-- ⬜ **Phase 9 เป็นต้นไป** — ยังไม่เริ่ม (Frontend Authentication, UI หน้าจอจริง ฯลฯ)
+- ✅ **Phase 9** — Frontend Authentication (Login/Register forms, Protected Routes, 401 interceptor) — ผ่าน QA Review
+- ✅ **Phase 10** — Workout & Activity Management UI (Member/Admin/Trainer CRUD pages) — ผ่าน QA Review
+- ✅ **Phase 11** — Dashboard & Report UI (Recharts charts, export CSV) — ผ่าน QA Review
+- ✅ **Phase 13** — Docker Integration (docker-compose, responsive dev environment) — ผ่าน QA Review
+- ⬜ **Phase 12, 14-15** — ยังไม่เริ่ม (Notifications, Testing, Deployment)
 
 > Backend API ครบตามแผน Phase 3-7 แล้ว ส่วน Frontend มีโครง Layout + Router (Sidebar/Topbar responsive) แต่หน้าต่างๆ ยังเป็นโครงเปล่า — เนื้อหาจริงและการเชื่อม API จะเริ่มที่ Phase 9-11
 
@@ -105,20 +109,20 @@ npm run dev
 
 ## 🌐 Endpoints
 
-| URL                                | Description            |
-|-------------------------------------|------------------------|
-| http://localhost:5000 (local) / :5001 (Docker) ⚠️ | Backend API (root `/`) |
-| http://localhost:5000/api/health    | Health check + สถานะ DB (Phase 3) |
-| POST /api/auth/register · /api/auth/login · GET /api/auth/me | Auth (JWT) — Phase 4 |
-| GET/POST/PUT/DELETE /api/exercises  | คลังท่าออกกำลังกาย (GET ทุก role, จัดการ = admin) — Phase 5 |
-| POST /api/workout-plans/generate · GET /api/workout-plans/current | ตารางออกกำลังกาย (member) — Phase 5 |
-| GET/POST /api/activities · POST /:id/register · GET /:id/participants · PATCH /:id/attendance | กิจกรรม/จองคลาส/เช็คชื่อ — Phase 6 |
-| GET /api/dashboard/personal · /api/dashboard/admin · /api/reports/activities/export | สถิติ/รายงาน CSV — Phase 7 |
-| http://localhost:5173               | Frontend Dev Server    |
-| http://localhost:8081               | phpMyAdmin             |
-| localhost:3307 (จาก host)           | MySQL (container: 3306)|
+| URL | Description |
+|-----|-------------|
+| http://localhost:5000 | Backend API (local) / Docker |
+| http://localhost:5000/api/health | Health check + สถานะ DB (Phase 3) |
+| POST /api/auth/register · /api/auth/login · GET /api/auth/me | Auth (JWT) — Phase 4-9 |
+| GET/POST/PUT/DELETE /api/exercises | คลังท่าออกกำลังกาย — Phase 5, 10 |
+| POST /api/workout-plans/generate · GET /api/workout-plans/current | ตารางออกกำลังกาย — Phase 5, 10 |
+| GET/POST /api/activities · POST /:id/register · PATCH /:id/attendance | กิจกรรม/จองคลาส/เช็คชื่อ — Phase 6, 10 |
+| GET /api/dashboard/personal · /api/dashboard/admin · /api/reports/activities/export | สถิติ/รายงาน — Phase 7, 11 |
+| http://localhost:5173 | Frontend Dev Server (Vite + HMR) |
+| http://localhost:8081 | phpMyAdmin (DB management) |
+| localhost:3306 | MySQL (host port varies) |
 
-> ⚠️ พบว่าพอร์ต Backend ไม่ตรงกันระหว่างไฟล์ config ปัจจุบัน (`.env` จริง = 5000, แต่ `.env.example`/`docker-compose.yml` = 5001) — ต้องแก้ไขให้ตรงกันก่อนเข้า Phase 13 (Docker Integration) ดูรายละเอียดใน [10-implementation-plan.md](docs/planning/10-implementation-plan.md#-ผลการทดสอบ-phase-1-qa-review--2026-07-19)
+**📖 Docker Setup:** See [DOCKER.md](./DOCKER.md) for full setup guide.
 
 ---
 
