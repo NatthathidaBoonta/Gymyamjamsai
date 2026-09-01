@@ -1,0 +1,283 @@
+﻿/* ExerciseDetailDialog.css — Modern Dialog Design */
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dialog-content {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 212, 255, 0.2);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  color: #67e8f9;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.dialog-close:hover {
+  background: rgba(0, 212, 255, 0.4);
+  border-color: #00d4ff;
+  transform: scale(1.1);
+}
+
+.dialog-image {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.dialog-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dialog-image__placeholder {
+  font-size: 4rem;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.dialog-body {
+  padding: 2rem;
+}
+
+.dialog-header {
+  margin-bottom: 2rem;
+}
+
+.dialog-header h2 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.dialog-category {
+  display: inline-block;
+  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  color: #0b0d0f;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Instructions Section */
+.dialog-instructions {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+}
+
+.dialog-instructions h3,
+.dialog-tips h3,
+.dialog-recommendations h3 {
+  font-size: 1.3rem;
+  color: #67e8f9;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.instructions-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.instructions-text li {
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #00d4ff;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.instructions-text strong {
+  color: #67e8f9;
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+
+/* Tips Section */
+.dialog-tips {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+}
+
+.dialog-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dialog-tips li {
+  padding: 0.8rem;
+  margin-bottom: 0.6rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+/* Recommendations */
+.dialog-recommendations {
+  margin-bottom: 2rem;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.recommendation-item {
+  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  color: #0b0d0f;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.recommendation-item strong {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.recommendation-item p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Action Button */
+.dialog-action {
+  width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  color: #0b0d0f;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dialog-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.dialog-action:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .dialog-content {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .dialog-body {
+    padding: 1.5rem;
+  }
+
+  .dialog-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .dialog-image {
+    height: 200px;
+  }
+
+  .recommendation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dialog-close {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+/* Scrollbar Styling */
+.dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dialog-content::-webkit-scrollbar-track {
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.dialog-content::-webkit-scrollbar-thumb {
+  background: #00d4ff;
+  border-radius: 4px;
+}
+
+.dialog-content::-webkit-scrollbar-thumb:hover {
+  background: #00a3c4;
+}

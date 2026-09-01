@@ -4,11 +4,8 @@
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: var(--space-lg);
+  background: transparent;
+  padding: var(--space-lg) 0;
 }
 
 .auth__title {
@@ -61,9 +58,9 @@
   margin: 0 0 var(--space-md);
   padding: var(--space-sm);
   border-radius: var(--radius);
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
   font-size: 0.9rem;
 }
 
@@ -95,7 +92,7 @@
 
 @media (min-width: 768px) {
   .auth {
-    padding: var(--space-xl);
-    margin-top: var(--space-lg);
+    padding: var(--space-xl) 0;
+    margin-top: 0;
   }
 }

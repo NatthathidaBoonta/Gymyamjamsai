@@ -21,8 +21,10 @@ Full-Stack Web Application สำหรับระบบติดตามพ�
 - ✅ **Phase 9** — Frontend Authentication (Login/Register forms, Protected Routes, 401 interceptor) — ผ่าน QA Review
 - ✅ **Phase 10** — Workout & Activity Management UI (Member/Admin/Trainer CRUD pages) — ผ่าน QA Review
 - ✅ **Phase 11** — Dashboard & Report UI (Recharts charts, export CSV) — ผ่าน QA Review
+- ✅ **Phase 12** — Notifications System (Real-time bell, notifications page, API) — ผ่าน QA Review
 - ✅ **Phase 13** — Docker Integration (docker-compose, responsive dev environment) — ผ่าน QA Review
-- ⬜ **Phase 12, 14-15** — ยังไม่เริ่ม (Notifications, Testing, Deployment)
+- ✅ **Phase 14** — Bug Fixes & API Contracts (Type safety, error boundaries, field mappings) — ผ่าน QA Review
+- ✅ **Phase 15** — Production Deployment (Dockerfiles.prod, docker-compose.prod, DEPLOYMENT_GUIDE) — ผ่าน QA Review
 
 > Backend API ครบตามแผน Phase 3-7 แล้ว ส่วน Frontend มีโครง Layout + Router (Sidebar/Topbar responsive) แต่หน้าต่างๆ ยังเป็นโครงเปล่า — เนื้อหาจริงและการเชื่อม API จะเริ่มที่ Phase 9-11
 

@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import Toast from '../../components/Toast';
+import ExerciseDetailDialog from '../../components/ExerciseDetailDialog';
 import { ApiError } from '../../services/api';
 import * as workoutService from '../../services/workout.service';
 import './Workout.css';
@@ -20,6 +21,15 @@ function Workout() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [toast, setToast] = useState<ToastState>({ show: false, message: '', type: 'success' });
+  const [selectedExercise, setSelectedExercise] = useState<any | null>(null);
+
+  const [logForm, setLogForm] = useState({
+    exerciseId: '',
+    sets: '',
+    reps: '',
+    weightKg: '',
+  });
+  const [logging, setLogging] = useState(false);
 
   // Load current plan on mount
   useEffect(() => {
@@ -53,6 +63,26 @@ function Workout() {
 
   function showToast(message: string, type: 'success' | 'error') {
     setToast({ show: true, message, type });
+  }
+
+  async function handleLogWorkout(e: React.FormEvent) {
+    e.preventDefault();
+    if (!plan) return;
+    setLogging(true);
+    try {
+      await workoutService.logWorkout(plan.id, {
+        exerciseId: logForm.exerciseId,
+        sets: parseInt(logForm.sets, 10),
+        reps: parseInt(logForm.reps, 10),
+        weightKg: logForm.weightKg ? parseFloat(logForm.weightKg) : undefined,
+      });
+      showToast('บันทึกผลสำเร็จ!', 'success');
+      setLogForm({ exerciseId: '', sets: '', reps: '', weightKg: '' });
+    } catch (err) {
+      showToast(err instanceof ApiError ? err.message : 'ไม่สามารถบันทึกผลได้', 'error');
+    } finally {
+      setLogging(false);
+    }
   }
 
   if (loading) {
@@ -99,7 +129,13 @@ function Workout() {
                   {plan.details.map((detail) => (
                     <tr key={detail.id}>
                       <td>วันที่ {detail.day}</td>
-                      <td className="workout__exercise-name">{detail.exercise.name}</td>
+                      <td 
+                        className="workout__exercise-name" 
+                        onClick={() => setSelectedExercise(detail.exercise)}
+                        style={{ cursor: 'pointer', color: '#00d4ff', textDecoration: 'underline' }}
+                      >
+                        {detail.exercise.name}
+                      </td>
                       <td>{detail.exercise.category}</td>
                       <td>{detail.notes ?? '-'}</td>
                     </tr>
@@ -115,12 +151,18 @@ function Workout() {
 
           <section className="workout__log">
             <h2>บันทึกผลวันนี้</h2>
-            <form className="workout__form">
+            <form className="workout__form" onSubmit={handleLogWorkout}>
               <div className="workout__field">
                 <label className="workout__label" htmlFor="exercise">
                   เลือกท่า
                 </label>
-                <select id="exercise" className="workout__input" required>
+                <select 
+                  id="exercise" 
+                  className="workout__input" 
+                  required
+                  value={logForm.exerciseId}
+                  onChange={(e) => setLogForm({ ...logForm, exerciseId: e.target.value })}
+                >
                   <option value="">-- เลือกท่า --</option>
                   {plan.details?.map((detail) => (
                     <option key={detail.id} value={detail.exercise.id}>
@@ -141,6 +183,8 @@ function Workout() {
                   min="1"
                   placeholder="เช่น 3"
                   required
+                  value={logForm.sets}
+                  onChange={(e) => setLogForm({ ...logForm, sets: e.target.value })}
                 />
               </div>
 
@@ -155,6 +199,8 @@ function Workout() {
                   min="1"
                   placeholder="เช่น 10"
                   required
+                  value={logForm.reps}
+                  onChange={(e) => setLogForm({ ...logForm, reps: e.target.value })}
                 />
               </div>
 
@@ -169,16 +215,15 @@ function Workout() {
                   min="0"
                   step="0.5"
                   placeholder="เช่น 20.5"
+                  value={logForm.weightKg}
+                  onChange={(e) => setLogForm({ ...logForm, weightKg: e.target.value })}
                 />
               </div>
 
-              <button type="submit" className="btn btn--primary workout__submit">
-                บันทึกผล
+              <button type="submit" className="btn btn--primary workout__submit" disabled={logging}>
+                {logging ? 'กำลังบันทึก...' : 'บันทึกผล'}
               </button>
             </form>
-            <p className="workout__hint">
-              💡 ระบบบันทึก workout ถูกพัฒนาแล้ว จะตัวเต็ม เมื่อ backend มี endpoint เพิ่มข้อมูล
-            </p>
           </section>
         </>
       )}
@@ -188,6 +233,13 @@ function Workout() {
           message={toast.message}
           type={toast.type}
           onDismiss={() => setToast({ ...toast, show: false })}
+        />
+      )}
+
+      {selectedExercise && (
+        <ExerciseDetailDialog
+          exercise={selectedExercise}
+          onClose={() => setSelectedExercise(null)}
         />
       )}
     </div>

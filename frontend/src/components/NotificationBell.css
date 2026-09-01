@@ -40,10 +40,11 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
-  border: 1px solid var(--color-border, #e5e7eb);
-  border-radius: 8px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  background: rgba(26, 26, 26, 0.98);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
   width: 360px;
   max-height: 500px;
   display: flex;
@@ -97,21 +98,21 @@
 
 .notification-bell__item {
   padding: 0.875rem 1rem;
-  border-bottom: 1px solid var(--color-border, #f3f4f6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
-  background-color: var(--color-background, #f9fafb);
+  background-color: transparent;
   transition: background-color 0.2s;
 }
 
 .notification-bell__item--read {
-  background-color: white;
-  opacity: 0.7;
+  background-color: transparent;
+  opacity: 0.55;
 }
 
 .notification-bell__item:hover {
-  background-color: var(--color-background, #f3f4f6);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .notification-bell__content {
@@ -176,34 +177,5 @@
 }
 
 .notification-bell__footer:hover {
-  background-color: var(--color-background, #f9fafb);
-}
-
-@media (prefers-color-scheme: dark) {
-  .notification-bell__dropdown {
-    background: var(--color-surface, #1f2937);
-    border-color: var(--color-border-dark, #374151);
-    color: var(--color-text-dark, #f3f4f6);
-  }
-
-  .notification-bell__header {
-    border-bottom-color: var(--color-border-dark, #374151);
-  }
-
-  .notification-bell__item {
-    background-color: var(--color-surface-dark, #111827);
-    border-bottom-color: var(--color-border-dark, #374151);
-  }
-
-  .notification-bell__item:hover {
-    background-color: var(--color-surface-light, #1f2937);
-  }
-
-  .notification-bell__footer {
-    border-top-color: var(--color-border-dark, #374151);
-  }
-
-  .notification-bell__footer:hover {
-    background-color: var(--color-surface-dark, #111827);
-  }
+  background-color: rgba(255, 255, 255, 0.05);
 }

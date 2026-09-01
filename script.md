@@ -79,7 +79,7 @@ MYSQL_PASSWORD=gymyam_password
 
 **Backend `.env`**
 ```env
-PORT=5001
+PORT=5000
 NODE_ENV=development
 FRONTEND_ORIGIN=http://localhost:5173
 
@@ -95,7 +95,7 @@ JWT_EXPIRES_IN=24h
 
 **Frontend `.env`**
 ```env
-VITE_API_URL=http://localhost:5001
+VITE_API_URL=http://localhost:5000
 ```
 
 ---

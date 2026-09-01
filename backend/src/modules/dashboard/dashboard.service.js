@@ -16,7 +16,11 @@ async function personal(userId, { start, end }) {
   ]);
   return {
     range: { start, end },
-    weight_trend: weightTrend,
+    weight_trend: weightTrend.map(w => ({
+      date: w.recorded_at,
+      weight: w.weight_kg,
+      bmi: w.bmi,
+    })),
     workout_frequency: workoutFreq,
     attendance_rate: attendance,
   };

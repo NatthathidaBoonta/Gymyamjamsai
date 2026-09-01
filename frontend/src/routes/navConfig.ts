@@ -8,23 +8,26 @@ export type Role = 'member' | 'trainer' | 'admin';
 export interface NavItem {
   label: string;
   path: string;
-  icon: string; // ใช้ emoji แทน icon library (CSS Vanilla ไม่พึ่ง dependency ภายนอก)
+  icon?: string; // ใช้ emoji แทน icon library (CSS Vanilla ไม่พึ่ง dependency ภายนอก)
 }
 
 export const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   member: [
-    { label: 'ภาพรวมสุขภาพ', path: '/member/dashboard', icon: '📊' },
-    { label: 'ตารางออกกำลังกาย', path: '/member/workout', icon: '🏋️' },
-    { label: 'กระดานกิจกรรม', path: '/member/activities', icon: '📅' },
+    { label: 'ภาพรวมสุขภาพ', path: '/member/dashboard', icon: 'ri-dashboard-line' },
+    { label: 'โปรไฟล์ของฉัน', path: '/member/profile', icon: 'ri-user-line' },
+    { label: 'ตารางออกกำลังกาย', path: '/member/workout', icon: 'ri-calendar-line' },
+    { label: 'กระดานกิจกรรม', path: '/member/activities', icon: 'ri-discuss-line' },
   ],
   trainer: [
-    { label: 'ภาพรวมผู้สอน', path: '/trainer/dashboard', icon: '📊' },
-    { label: 'จัดการกิจกรรม', path: '/trainer/activities', icon: '📋' },
+    { label: 'ภาพรวมผู้สอน', path: '/trainer/dashboard', icon: 'ri-dashboard-line' },
+    { label: 'จัดการกิจกรรม', path: '/trainer/activities', icon: 'ri-calendar-event-line' },
+    { label: 'เช็คชื่อ', path: '/trainer/attendance', icon: 'ri-check-double-line' },
   ],
   admin: [
-    { label: 'ภาพรวมระบบ', path: '/admin/dashboard', icon: '📊' },
-    { label: 'จัดการผู้ใช้งาน', path: '/admin/users', icon: '👥' },
-    { label: 'คลังท่าออกกำลังกาย', path: '/admin/exercises', icon: '💪' },
+    { label: 'ภาพรวมระบบ', path: '/admin/dashboard', icon: 'ri-dashboard-line' },
+    { label: 'จัดการผู้ใช้งาน', path: '/admin/users', icon: 'ri-group-line' },
+    { label: 'จัดการท่า', path: '/admin/exercises', icon: 'ri-settings-4-line' },
+    { label: 'ไลบรารีท่า', path: '/admin/exercise-library', icon: 'ri-book-read-line' },
   ],
 };
 

@@ -38,16 +38,14 @@ function DashboardLayout() {
           aria-expanded={isSidebarOpen}
           onClick={() => setSidebarOpen((open) => !open)}
         >
-          ☰
+          <i className="ri-menu-line"></i>
         </button>
         <span className="dash__brand">Gymyamjamsai</span>
 
         <div className="dash__topbar-actions">
           <NotificationBell />
           <span className="dash__profile">
-            <span className="dash__avatar" aria-hidden="true">
-              👤
-            </span>
+            <i className="ri-user-line" style={{ fontSize: '1.1rem' }}></i>
             <span className="dash__role">{role ? ROLE_LABEL[role] : ''}</span>
           </span>
           <button type="button" className="btn btn--ghost dash__logout" onClick={logout}>
@@ -72,7 +70,7 @@ function DashboardLayout() {
                     `dash__nav-link ${isActive ? 'dash__nav-link--active' : ''}`
                   }
                 >
-                  <span aria-hidden="true">{item.icon}</span>
+                  <i className={item.icon} aria-hidden="true"></i>
                   <span>{item.label}</span>
                 </NavLink>
               </li>

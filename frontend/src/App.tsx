@@ -1,3 +1,4 @@
+import './styles/theme.css';
 import AppRouter from './routes/AppRouter';
 
 function App() {

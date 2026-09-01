@@ -270,16 +270,18 @@ function TrainerActivities() {
                       className="trainer-activities__btn trainer-activities__btn--edit"
                       onClick={() => handleEdit(activity)}
                       title="แก้ไข"
+                      aria-label="แก้ไข"
                     >
-                      ✏️
+                      <i className="ri-edit-line"></i>
                     </button>
                     <button
                       className="trainer-activities__btn trainer-activities__btn--delete"
                       onClick={() => handleDelete(activity.id)}
                       disabled={deleting === activity.id}
                       title="ยกเลิก"
+                      aria-label="ยกเลิก"
                     >
-                      {deleting === activity.id ? '...' : '🗑️'}
+                      {deleting === activity.id ? <i className="ri-loader-4-line ri-spin"></i> : <i className="ri-delete-bin-line"></i>}
                     </button>
                   </td>
                 </tr>

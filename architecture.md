@@ -90,7 +90,7 @@ docker-compose.yml
   │
   ├── mysql       (host 3307 → container 3306)  → MySQL 8.0 (healthcheck: mysqladmin ping)
   ├── phpmyadmin  (host 8081 → container 80)    → DB Admin UI (depends_on: mysql healthy)
-  ├── backend     (host 5001 → container 5001)  → Node.js Express (depends_on: mysql healthy)
+  ├── backend     (host 5000 → container 5000)  → Node.js Express (depends_on: mysql healthy)
   └── frontend    (host 5173 → container 5173)  → Vite Dev Server (depends_on: backend)
 ```
 

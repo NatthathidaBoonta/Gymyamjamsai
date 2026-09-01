@@ -175,3 +175,21 @@ CREATE TABLE IF NOT EXISTS status_audit_logs (
     FOREIGN KEY (changed_by_user_id) REFERENCES users(id) ON DELETE SET NULL,
   INDEX idx_audit_entity (entity_type, entity_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ------------------------------------------------------------
+-- 11. notifications — การแจ้งเตือน (Phase 12: Notification & SLA)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS notifications (
+  id          VARCHAR(36)  PRIMARY KEY,
+  user_id     VARCHAR(36)  NOT NULL,
+  title       VARCHAR(255) NOT NULL,
+  message     TEXT         NOT NULL,
+  type        VARCHAR(50)  NOT NULL,          -- เช่น 'activity', 'sla_warning'
+  related_id  VARCHAR(36)  NULL,              -- อ้างอิง activity_id หรืออื่นๆ
+  is_read     BOOLEAN      NOT NULL DEFAULT FALSE,
+  created_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notifications_user
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_notifications_user_read (user_id, is_read)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

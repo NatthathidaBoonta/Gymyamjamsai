@@ -1,0 +1,116 @@
+/* PublicNav.css — GymKaK Style Black/Cyan-Green Theme (ใช้ร่วมกันทุกหน้า Guest) */
+
+.public-nav {
+  --pn-bg: rgba(31, 33, 37, 0.8);
+  --pn-text-white: #ffffff;
+  --pn-text-light: #e5e7eb;
+  --pn-accent: #00d4ff;
+  --pn-accent-light: #67e8f9;
+  --pn-accent-dark: #00a3c4;
+  --pn-accent-2: #00ff88;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 2rem;
+  background: var(--pn-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.public-nav__logo {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.public-nav__logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--pn-accent);
+  margin: 0;
+}
+
+.public-nav__links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  flex: 1;
+  margin: 0 0 0 3rem;
+  padding: 0;
+}
+
+.public-nav__links a {
+  color: var(--pn-text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.public-nav__links a:hover {
+  color: var(--pn-accent);
+}
+
+.public-nav__cta {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.public-nav__btn {
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.public-nav__btn--ghost {
+  background: transparent;
+  color: var(--pn-text-white);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.public-nav__btn--ghost:hover {
+  border-color: var(--pn-text-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.public-nav__btn--primary {
+  background: linear-gradient(135deg, var(--pn-accent) 0%, var(--pn-accent-2) 100%);
+  color: #0b0d0f;
+  border: 2px solid transparent;
+}
+
+.public-nav__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .public-nav {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .public-nav__links {
+    display: none;
+  }
+
+  .public-nav__cta {
+    gap: 0.5rem;
+  }
+
+  .public-nav__btn {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+  }
+}

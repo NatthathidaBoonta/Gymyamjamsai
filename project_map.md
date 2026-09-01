@@ -18,7 +18,7 @@ Gymyamjamsai/
 │       └── 📄 01_init.sql              ← SQL Schema เริ่มต้น รันอัตโนมัติตอน MySQL container สร้างครั้งแรก
 │
 ├── 📁 backend/
-│   ├── 📄 server.js                    ← Entry point ของ Express App (PORT 5001)
+│   ├── 📄 server.js                    ← Entry point ของ Express App (PORT 5000)
 │   ├── 📄 .env                         ← Environment Variables (PORT, DB_*, JWT_SECRET, ฯลฯ)
 │   ├── 📄 .env.example                 ← ตัวอย่าง .env สำหรับทีม
 │   ├── 📄 package.json
@@ -66,7 +66,7 @@ Gymyamjamsai/
 │
 └── 📁 frontend/
     ├── 📄 index.html
-    ├── 📄 .env                          ← VITE_API_URL (http://localhost:5001)
+    ├── 📄 .env                          ← VITE_API_URL (http://localhost:5000)
     ├── 📄 .env.example
     ├── 📄 package.json
     ├── 📄 vite.config.ts

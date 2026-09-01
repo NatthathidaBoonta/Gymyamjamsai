@@ -8,34 +8,20 @@
   flex-direction: column;
 }
 
-.pub__topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-  padding: var(--space-sm) var(--space-md);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.pub__brand {
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: var(--color-primary);
-}
-
-.pub__actions {
-  display: flex;
-  gap: var(--space-xs);
-}
-
 .pub__main {
   flex: 1;
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   padding: var(--space-lg) var(--space-md) var(--space-xl);
+}
+
+/* หน้า Landing และไลบรารีท่าเต็มความกว้างจอ (ไม่ถูกจำกัดเหมือนหน้า Login/Register) */
+.pub__main:has(.landing),
+.pub__main:has(.exercise-library) {
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
 .pub__footer {

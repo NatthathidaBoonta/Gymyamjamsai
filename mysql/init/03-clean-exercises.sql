@@ -1,0 +1,46 @@
+﻿-- Clean exercises: Only exercises with media files that actually exist in
+-- frontend/public/exercises/<Category>/ (files organized into category subfolders).
+-- Every media_url below matches a real file on disk — no broken images.
+
+DELETE FROM exercises WHERE 1=1;
+
+INSERT INTO exercises (id, name, category, media_url, instructions) VALUES
+('ex001', 'Arnold Press', 'strength', '/exercises/Strength/Arnold-Press.gif', 'Arnold Press: Shoulder strengthening exercise. Sit on bench, hold dumbbells at shoulder height, press upward while rotating arms outward.'),
+('ex002', 'Barbell Curl', 'strength', '/exercises/Strength/Barbell Curl.gif', 'Barbell Curl: Biceps exercise. Stand with feet shoulder-width apart, curl barbell toward shoulders, control the descent.'),
+('ex003', 'Bench Press', 'strength', '/exercises/Strength/Bench Press.gif', 'Bench Press: Chest and triceps. Lie on bench, push barbell upward from chest, lower with control.'),
+('ex004', 'Bulgarian Split Squat', 'strength', '/exercises/Strength/Bulgarian Split Squat.gif', 'Bulgarian Split Squat: Leg exercise. Place back foot on bench, lunge forward with front leg.'),
+('ex005', 'Calf Raise', 'strength', '/exercises/Strength/Calf Raise.gif', 'Calf Raise: Calf strengthening. Stand and raise up on toes, lower heels back down.'),
+('ex006', 'Chest Fly', 'strength', '/exercises/Strength/Chest Fly.gif', 'Chest Fly: Chest isolation. Lie on bench, move dumbbells in arc motion across chest.'),
+('ex007', 'Chin-Up', 'strength', '/exercises/Strength/Chin-Up.gif', 'Chin-Up: Back and biceps. Hang from bar with underhand grip, pull body upward.'),
+('ex008', 'Deadlift', 'strength', '/exercises/Strength/Deadlift.gif', 'Deadlift: Full body power. Stand with barbell, lift from ground to hip level, lower with control.'),
+('ex009', 'Diamond Push-Up', 'strength', '/exercises/Strength/Diamond Push-Up.gif', 'Diamond Push-Up: Triceps focus. Push-up with hands in diamond shape, elbows close to body.'),
+('ex010', 'Dips', 'strength', '/exercises/Strength/Dips.gif', 'Dips: Chest and triceps. Use dip bars, lower body by bending elbows, push back up.'),
+('ex011', 'Dragon Flag', 'strength', '/exercises/Strength/Dragon Flag.gif', 'Dragon Flag: Core and chest. Lie on bench, raise and lower body in straight line.'),
+('ex012', 'Dumbbell Row', 'strength', '/exercises/Strength/Dumbbell Row.gif', 'Dumbbell Row: Back strength. Bend over, row dumbbell to hip, control descent.'),
+('ex013', 'Hammer Curl', 'strength', '/exercises/Strength/Hammer Curl.gif', 'Hammer Curl: Biceps and forearms. Curl dumbbells with neutral grip toward shoulders.'),
+('ex014', 'Incline Dumbbell Bench Press', 'strength', '/exercises/Strength/Incline Dumbbell Bench Press.gif', 'Incline Dumbbell Press: Upper chest. Press dumbbells on incline bench.'),
+('ex015', 'Lat Pulldown', 'strength', '/exercises/Strength/Lat Pulldown.gif', 'Lat Pulldown: Back strengthening. Pull lat bar down toward chest, control the ascent.'),
+('ex016', 'Lateral Raise', 'strength', '/exercises/Strength/Lateral Raise.gif', 'Lateral Raise: Shoulder isolation. Raise dumbbells out to sides to shoulder height.'),
+('ex017', 'Leg Curl', 'strength', '/exercises/Strength/Leg Curl.gif', 'Leg Curl: Hamstring exercise. Curl legs upward using leg curl machine.'),
+('ex018', 'Leg Raise', 'strength', '/exercises/Strength/Leg Raise.gif', 'Leg Raise: Core strengthening. Raise legs while lying down, control descent.'),
+('ex019', 'Lunges', 'strength', '/exercises/Strength/Lunges.gif', 'Lunges: Leg exercise. Step forward, lower body until both knees bent at 90 degrees.'),
+('ex020', 'Muscle Up', 'strength', '/exercises/Strength/Muscle Up.gif', 'Muscle Up: Advanced pull-up. Pull up and push over bar in one fluid motion.'),
+('ex021', 'Nordic Hamstring Curl', 'strength', '/exercises/Strength/Nordic Hamstring Curl.gif', 'Nordic Hamstring Curl: Hamstring strength. Kneel with ankles anchored, lower torso forward with control, pull back up.'),
+('ex022', 'One Arm Pull-Up', 'strength', '/exercises/Strength/One Arm Pull-Up.gif', 'One Arm Pull-Up: Advanced back and grip strength. Hang from bar with one arm, pull body upward.'),
+('ex023', 'Plank', 'strength', '/exercises/Strength/Plank.gif', 'Plank: Core stability. Hold straight-line position on forearms and toes, brace core throughout.'),
+('ex024', 'Pull-ups', 'strength', '/exercises/Strength/Pull-ups.gif', 'Pull-ups: Back and biceps. Hang from bar with overhand grip, pull body upward.'),
+('ex025', 'Push-up', 'strength', '/exercises/Strength/Push-ups.gif', 'Push-up: Chest and triceps. Lower body by bending elbows, push back to starting position.'),
+('ex026', 'Rear Delt Machine Fly', 'strength', '/exercises/Strength/Rear Delt Machine Fly.gif', 'Rear Delt Machine Fly: Rear shoulders. Push handles outward and back using rear delt machine.'),
+('ex027', 'Reverse Barbell Curl', 'strength', '/exercises/Strength/Reverse Barbell Curl.gif', 'Reverse Barbell Curl: Forearms and biceps. Curl barbell with overhand grip toward shoulders.'),
+('ex028', 'Russian Twist', 'strength', '/exercises/Strength/Russian Twist.gif', 'Russian Twist: Core rotation. Sit with feet raised, rotate torso side to side.'),
+('ex029', 'Seated Cable Row', 'strength', '/exercises/Strength/Seated Cable Row.gif', 'Seated Cable Row: Back strengthening. Pull cable toward torso while seated, squeeze shoulder blades.'),
+('ex030', 'Shoulder Press', 'strength', '/exercises/Strength/Shoulder Press.gif', 'Shoulder Press: Shoulder strength. Press dumbbells or barbell overhead.'),
+('ex031', 'Shrimp Squat', 'strength', '/exercises/Strength/Shrimp Squat.gif', 'Shrimp Squat: Advanced single-leg squat. Hold rear foot, lower into deep squat on one leg.'),
+('ex032', 'Skullcrusher', 'strength', '/exercises/Strength/Skullcrusher.gif', 'Skullcrusher: Triceps isolation. Lie on bench, lower barbell toward forehead, extend back up.'),
+('ex033', 'Squat', 'strength', '/exercises/Strength/Squats.gif', 'Squat: Full leg exercise. Lower body by bending knees, keep chest up.'),
+('ex034', 'Sumo Deadlift', 'strength', '/exercises/Strength/Sumo Deadlift.gif', 'Sumo Deadlift: Leg and back. Wide stance deadlift, emphasizes legs and inner thighs.'),
+('ex035', 'Toes to Bar', 'strength', '/exercises/Strength/Toes to Bar.gif', 'Toes to Bar: Core strength. Hang from bar, raise legs to touch bar with toes.'),
+('ex036', 'Triceps Dips', 'strength', '/exercises/Strength/Triceps Dips.gif', 'Triceps Dips: Triceps focus. Bench dips with feet elevated.'),
+('ex037', 'Triceps Pushdown', 'strength', '/exercises/Strength/Triceps Pushdown.gif', 'Triceps Pushdown: Triceps isolation. Push cable bar downward.'),
+('ex038', 'Wrist Curl', 'strength', '/exercises/Strength/Wrist Curl.gif', 'Wrist Curl: Forearm strength. Curl wrists upward with light weights.'),
+('ex039', 'Jumping Jack', 'cardio', '/exercises/Cardio/jumping-jack.webp', 'Jumping Jack: Full body cardio warm-up. Jump feet apart while raising arms overhead, jump back to start.');

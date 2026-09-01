@@ -8,6 +8,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { HOME_BY_ROLE } from '../../routes/navConfig';
 import { ApiError } from '../../services/api';
+import AuthWrapper from './AuthWrapper';
 import './AuthForm.css';
 
 function Login() {
@@ -41,56 +42,58 @@ function Login() {
   }
 
   return (
-    <section className="auth">
-      <h1 className="auth__title">เข้าสู่ระบบ</h1>
-      <p className="auth__subtitle">เข้าใช้งานระบบติดตามพัฒนาการการออกกำลังกาย</p>
+    <AuthWrapper>
+      <section className="auth">
+        <h1 className="auth__title">เข้าสู่ระบบ</h1>
+        <p className="auth__subtitle">เข้าใช้งานระบบติดตามพัฒนาการการออกกำลังกาย</p>
 
-      {error && (
-        <p className="auth__error" role="alert">
-          {error}
+        {error && (
+          <p className="auth__error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="auth__field">
+            <label className="auth__label" htmlFor="email">
+              อีเมล
+            </label>
+            <input
+              id="email"
+              className="auth__input"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="auth__field">
+            <label className="auth__label" htmlFor="password">
+              รหัสผ่าน
+            </label>
+            <input
+              id="password"
+              className="auth__input"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn btn--primary auth__submit" disabled={submitting}>
+            {submitting ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+          </button>
+        </form>
+
+        <p className="auth__switch">
+          ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
         </p>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="auth__field">
-          <label className="auth__label" htmlFor="email">
-            อีเมล
-          </label>
-          <input
-            id="email"
-            className="auth__input"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="auth__field">
-          <label className="auth__label" htmlFor="password">
-            รหัสผ่าน
-          </label>
-          <input
-            id="password"
-            className="auth__input"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" className="btn btn--primary auth__submit" disabled={submitting}>
-          {submitting ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
-        </button>
-      </form>
-
-      <p className="auth__switch">
-        ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
-      </p>
-    </section>
+      </section>
+    </AuthWrapper>
   );
 }
 

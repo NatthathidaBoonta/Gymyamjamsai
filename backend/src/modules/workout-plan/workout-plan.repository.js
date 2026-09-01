@@ -86,4 +86,14 @@ async function getCurrentPlan(userId) {
   return { ...plan, details };
 }
 
-module.exports = { listExercises, createPlanWithDetails, getCurrentPlan };
+async function insertWorkoutLog(userId, planId, exerciseId, sets, reps, weightKg) {
+  const logId = crypto.randomUUID();
+  await pool.query(
+    `INSERT INTO workout_logs (id, user_id, plan_id, exercise_id, sets, reps, weight_kg)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [logId, userId, planId, exerciseId, sets, reps, weightKg]
+  );
+  return logId;
+}
+
+module.exports = { listExercises, createPlanWithDetails, getCurrentPlan, insertWorkoutLog };

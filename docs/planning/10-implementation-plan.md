@@ -503,7 +503,7 @@
 - **Git Commit:** `fix: resolve bugs found during final testing phase`
 - **ความเสี่ยง:** แก้บั๊กหนึ่งจุดแล้วไปกระทบ (Side-effect) หน้าจออื่นๆ ต้องทดสอบซ้ำ
 
-## Phase 15: Production Deployment Guide
+## Phase 15: Production Deployment Guide (✅ ยืนยันสมบูรณ์)
 - **เป้าหมาย:** นำระบบขึ้น Production ไปยัง Cloud (Railway)
 - **งานที่ต้องทำ:** เขียน `railway.toml` และสร้าง Multi-stage `Dockerfile` เพื่อบิลด์ React ไปไว้ใน Backend ให้รันเป็น Single-container
 - **ไฟล์ที่เกี่ยวข้อง:** `railway.toml`, `Dockerfile`

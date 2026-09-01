@@ -1,68 +1,420 @@
-/* Landing.css — หน้าแรก (Responsive) */
+/* Landing.css — GymKaK Style Black/Cyan-Green Theme */
 
-.landing__hero {
-  text-align: center;
-  padding: var(--space-xl) 0;
+.landing {
+  --primary: #0a0a0a;
+  --primary-light: #1a1a1a;
+  --primary-extra-light: #2a2a2a;
+  --accent: #00d4ff;
+  --accent-light: #67e8f9;
+  --accent-dark: #00a3c4;
+  --accent-2: #00ff88;
+  --text-white: #ffffff;
+  --text-light: #e5e7eb;
+  --text-muted: #a3a3a3;
 }
 
-.landing__title {
-  font-size: 1.75rem;
-  max-width: 20ch;
-  margin-inline: auto;
-}
-
-.landing__subtitle {
-  margin: 0 auto var(--space-lg);
-  max-width: 46ch;
-  color: var(--color-text-muted);
-}
-
-.landing__cta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-sm);
-}
-
-/* มือถือ: การ์ดเรียงลงมา 1 คอลัมน์ */
-.landing__features {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-md);
-  margin-top: var(--space-lg);
-}
-
-.landing__feature {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: var(--space-lg);
-  text-align: center;
-}
-
-.landing__feature-icon {
-  font-size: 2rem;
-}
-
-.landing__feature-title {
-  font-size: 1.05rem;
-  margin-top: var(--space-xs);
-}
-
-.landing__feature-desc {
+* {
   margin: 0;
-  color: var(--color-text-muted);
-  font-size: 0.92rem;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* เดสก์ท็อป: 3 คอลัมน์ */
-@media (min-width: 768px) {
-  .landing__title {
+.landing {
+  background: var(--primary);
+  color: var(--text-white);
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero__content h2 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero__subtitle {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero__image {
+  font-size: 6rem;
+  text-align: center;
+  animation: bounce 3s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Buttons — scoped to .landing เพื่อไม่ให้ทับ .btn ของหน้าอื่น (index.css เป็น global) */
+.landing .btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.landing .btn--primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #0b0d0f;
+}
+
+.landing .btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+}
+
+.landing .btn--secondary {
+  background: transparent;
+  color: var(--text-white);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.landing .btn--secondary:hover {
+  border-color: var(--text-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.landing .btn--outline {
+  background: transparent;
+  color: var(--text-white);
+  border: 2px solid var(--text-white);
+}
+
+.landing .btn--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.landing .btn--large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Features Section */
+.features {
+  padding: 4rem 2rem;
+  background: var(--primary-light);
+  text-align: center;
+}
+
+.features h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--primary-extra-light);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+}
+
+.feature__icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Programs Section */
+.programs {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.programs h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.programs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.program-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  padding: 2rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.program-card:hover {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+  transform: translateY(-8px);
+}
+
+.program__icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.program-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.program-card p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* How It Works */
+.how-it-works {
+  padding: 4rem 2rem;
+  background: var(--primary-light);
+  text-align: center;
+}
+
+.how-it-works h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.step {
+  flex: 1;
+  min-width: 200px;
+}
+
+.step__number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto 1rem;
+}
+
+.step h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.step p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.step__arrow {
+  display: none;
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+/* Exercises Showcase */
+.exercises-showcase {
+  padding: 4rem 2rem;
+  background: var(--primary-light);
+  text-align: center;
+}
+
+.exercises-showcase h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-white);
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.exercises-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+.exercise-card {
+  background: var(--primary-extra-light);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.exercise-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
+  background: var(--primary-extra-light);
+}
+
+.exercise-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.exercise-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-light);
+}
+
+.exercise-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.showcase-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Footer */
+.landing__footer {
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+  }
+
+  .hero__content h2 {
     font-size: 2.5rem;
   }
 
-  .landing__features {
-    grid-template-columns: repeat(3, 1fr);
+  .nav__links {
+    display: none;
+  }
+
+  .step__arrow {
+    display: none !important;
+  }
+
+  .steps {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .features h2,
+  .programs h2,
+  .how-it-works h2,
+  .cta-section h2 {
+    font-size: 2rem;
   }
 }

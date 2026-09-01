@@ -27,4 +27,14 @@ async function current(req, res, next) {
   }
 }
 
-module.exports = { generate, current };
+// POST /api/workout-plans/:planId/log
+async function logWorkout(req, res, next) {
+  try {
+    const data = await service.logWorkout(req.user.id, req.params.planId, req.body);
+    res.status(201).json({ status: 'success', message: 'บันทึกการออกกำลังกายสำเร็จ', data });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { generate, current, logWorkout };

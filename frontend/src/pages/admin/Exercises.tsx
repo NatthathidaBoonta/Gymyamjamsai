@@ -216,16 +216,18 @@ function Exercises() {
                       className="exercises__btn exercises__btn--edit"
                       onClick={() => handleEdit(ex)}
                       title="แก้ไข"
+                      aria-label="แก้ไข"
                     >
-                      ✏️
+                      <i className="ri-edit-line"></i>
                     </button>
                     <button
                       className="exercises__btn exercises__btn--delete"
                       onClick={() => handleDelete(ex.id)}
                       disabled={deleting === ex.id}
                       title="ลบ"
+                      aria-label="ลบ"
                     >
-                      {deleting === ex.id ? '...' : '🗑️'}
+                      {deleting === ex.id ? <i className="ri-loader-4-line ri-spin"></i> : <i className="ri-delete-bin-line"></i>}
                     </button>
                   </td>
                 </tr>

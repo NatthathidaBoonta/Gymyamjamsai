@@ -1,18 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 /* ============================================================
    index.css — Global styles + Design tokens (CSS Vanilla)
    Responsive: รองรับทั้ง Desktop และ Mobile
+   Theme: GYMKaK (Dark Theme)
    ============================================================ */
 
 :root {
-  /* สี */
-  --color-bg: #f5f7fa;
-  --color-surface: #ffffff;
-  --color-border: #e2e8f0;
-  --color-text: #1a202c;
-  --color-text-muted: #64748b;
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-primary-soft: #eff6ff;
+  /* สี (GymKaK Dark Theme — ดำ/ม่วง) */
+  --color-bg: #0a0a0b;
+  --color-surface: #1a1a1a;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-text: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-primary: #00d4ff;
+  --color-primary-dark: #00a3c4;
+  --color-primary-soft: rgba(0, 212, 255, 0.15);
+  --color-secondary: #00ff88;
 
   /* ระยะห่าง */
   --space-xs: 0.5rem;
@@ -24,12 +28,11 @@
   /* โครงสร้าง */
   --sidebar-width: 240px;
   --topbar-height: 60px;
-  --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', sans-serif;
+  /* font-family and color moved to body to prevent overriding */
   line-height: 1.6;
-  color: var(--color-text);
 }
 
 * {
@@ -44,7 +47,12 @@ body,
 
 body {
   margin: 0;
-  background: var(--color-bg);
+  font-family: "Poppins", system-ui, -apple-system, 'Segoe UI', 'Noto Sans Thai', sans-serif;
+  background: radial-gradient(circle at 20% 25%, rgba(0, 212, 255, 0.08), transparent 35%),
+    radial-gradient(circle at 45% 75%, rgba(0, 255, 136, 0.06), transparent 35%),
+    linear-gradient(135deg, #0a0a0b 0%, #121315 45%, #17191c 100%);
+  background-attachment: fixed;
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
 }
 

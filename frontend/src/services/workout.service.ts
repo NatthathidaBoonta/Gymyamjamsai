@@ -64,3 +64,11 @@ function transformPlan(data: any, goal: string): WorkoutPlan {
     })),
   };
 }
+
+/** POST /api/workout-plans/:planId/log — บันทึกผลการออกกำลังกาย */
+export async function logWorkout(planId: string, data: { exerciseId: string; sets: number; reps: number; weightKg?: number }): Promise<void> {
+  await apiFetch(`/api/workout-plans/${planId}/log`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}

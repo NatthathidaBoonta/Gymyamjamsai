@@ -48,7 +48,7 @@ Gymyamjamsai/
 ```
 
 ## 2. คำอธิบายแต่ละโฟลเดอร์ (Folder Descriptions)
-- **`backend/`**: รวบรวมโค้ดฝั่งเซิร์ฟเวอร์ โดยมีไฟล์หลักที่ `backend/src/server.js` ซึ่งใน Production จะทำหน้าที่ Serve API (พอร์ต 5001) และทำหน้าที่เสิร์ฟไฟล์เว็บของ Frontend ไปพร้อมกัน
+- **`backend/`**: รวบรวมโค้ดฝั่งเซิร์ฟเวอร์ โดยมีไฟล์หลักที่ `backend/src/server.js` ซึ่งใน Production จะทำหน้าที่ Serve API (พอร์ต 5000) และทำหน้าที่เสิร์ฟไฟล์เว็บของ Frontend ไปพร้อมกัน
 - **`frontend/`**: โค้ดฝั่งไคลเอนต์ เมื่อถึงกระบวนการ Build (Production) จะนำผลลัพธ์ (โฟลเดอร์ `dist/`) ไปวางไว้ใน `backend/public/`
 - **`db/init/`**: โฟลเดอร์เก็บไฟล์โครงสร้างตาราง (Table Schema) และข้อมูลจำลอง (Mock Data) สำหรับรันอัตโนมัติเมื่อสร้าง Database Container ครั้งแรก
 - **`nginx/`**: เก็บการตั้งค่า Reverse Proxy เฉพาะกรณีที่ต้องการนำโปรเจกต์ไป Deploy แบบ On-premise Server
@@ -67,14 +67,14 @@ Gymyamjamsai/
 | Service | Container Port | Host Port (Dev) |
 | :--- | :--- | :--- |
 | **Frontend** | 5173 | `5173` |
-| **Backend** | 5001 | `5001` |
+| **Backend** | 5000 | `5000` |
 | **MySQL** | 3306 | `3307` |
 | **phpMyAdmin**| 80 | `8081` |
 
 ## 5. Network ระหว่าง Containers
 - สร้าง Docker Bridge Network (เช่น `gym_network`) เพื่อให้ Service ภายในคุยกันได้
 - Backend สามารถเชื่อมต่อไปยังฐานข้อมูลได้โดยใช้ชื่อ Service name คือ `mysql:3306`
-- Frontend สามารถเชื่อมต่อ API ของ Backend ผ่านบราวเซอร์ (Localhost) คือ `http://localhost:5001` หรือผ่านการทำ Proxy Configuration ใน Vite
+- Frontend สามารถเชื่อมต่อ API ของ Backend ผ่านบราวเซอร์ (Localhost) คือ `http://localhost:5000` หรือผ่านการทำ Proxy Configuration ใน Vite
 
 ## 6. Volume สำหรับ MySQL
 - สร้าง Named Volume (เช่น `mysql_data:/var/lib/mysql`) เพื่อไม่ให้ข้อมูลสูญหายเมื่อ Container ปิดลง
@@ -82,7 +82,7 @@ Gymyamjamsai/
 
 ## 7. Environment Variables ที่จำเป็น
 **Backend (`backend/.env`):**
-- `PORT=5001`
+- `PORT=5000`
 - `DB_HOST=mysql` (ถ้าอยู่ใน Docker) หรือ `localhost` (ถ้ารันนอก Docker)
 - `DB_PORT=3306` (หรือ 3307 ถ้ารันนอก Docker)
 - `DB_USER=root`
@@ -91,7 +91,7 @@ Gymyamjamsai/
 - `JWT_SECRET=your_secret_key`
 
 **Frontend (`frontend/.env`):**
-- `VITE_API_URL=http://localhost:5001/api`
+- `VITE_API_URL=http://localhost:5000/api`
 
 ---
 

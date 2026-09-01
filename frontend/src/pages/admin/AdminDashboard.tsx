@@ -81,7 +81,7 @@ function AdminDashboard() {
       <div className="admin-dashboard__header">
         <h1>ภาพรวมระบบ</h1>
         <button type="button" className="btn btn--primary" onClick={handleExportCSV} disabled={exporting}>
-          {exporting ? 'กำลังดาวน์โหลด...' : '📊 ส่งออก CSV'}
+          {exporting ? 'กำลังดาวน์โหลด...' : 'Export CSV'}
         </button>
       </div>
 
@@ -114,7 +114,7 @@ function AdminDashboard() {
       </div>
 
       <div className="admin-dashboard__info">
-        <p>💡 ข้อมูลที่แสดงข้างต้นคือสรุปทั้งระบบ รายงาน CSV จะมีรายละเอียดของกิจกรรมแต่ละคลาส</p>
+        <p>ข้อมูลที่แสดงข้างต้นคือสรุปทั้งระบบ รายงาน CSV จะมีรายละเอียดของกิจกรรมแต่ละคลาส</p>
       </div>
 
       {toast.show && (

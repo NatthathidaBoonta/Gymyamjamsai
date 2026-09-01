@@ -62,7 +62,7 @@ async function register(activityId, userId) {
 
     // ล็อกแถว activity (locking read — อ่านค่าล่าสุด และ defer snapshot ของ consistent read)
     const [actRows] = await conn.query(
-      'SELECT id, max_participants, status FROM activities WHERE id = ? FOR UPDATE',
+      'SELECT id, max_participants, status, start_datetime FROM activities WHERE id = ? FOR UPDATE',
       [activityId],
     );
     if (!actRows.length) throw httpError('ไม่พบกิจกรรมที่ระบุ', 404);
@@ -91,6 +91,23 @@ async function register(activityId, userId) {
     );
     if (existing.length && existing[0].status === 'registered') {
       throw httpError('คุณลงทะเบียนกิจกรรมนี้ไว้แล้ว', 409);
+    }
+
+    // ตรวจสอบการจองคลาสซ้อนทับ (ระยะเวลาคลาสสมมติที่ 2 ชั่วโมง / 120 นาที)
+    if (activity.start_datetime) {
+      const [overlap] = await conn.query(
+        `SELECT a.title
+         FROM activity_registrations ar
+         JOIN activities a ON a.id = ar.activity_id
+         WHERE ar.user_id = ? AND ar.status = 'registered'
+           AND a.id != ?
+           AND ABS(TIMESTAMPDIFF(MINUTE, a.start_datetime, ?)) < 120
+         LIMIT 1`,
+        [userId, activityId, activity.start_datetime]
+      );
+      if (overlap.length > 0) {
+        throw httpError(`คุณมีการจองคลาสที่เวลาซ้อนทับกัน: ${overlap[0].title}`, 409);
+      }
     }
 
     let registrationId;

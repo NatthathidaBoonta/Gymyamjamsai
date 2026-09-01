@@ -103,4 +103,21 @@ async function getCurrent(userId) {
   return plan;
 }
 
-module.exports = { generate, getCurrent };
+async function logWorkout(userId, planId, logData) {
+  const { exerciseId, sets, reps, weightKg } = logData;
+  // Basic validation
+  if (!exerciseId || !sets || !reps) {
+    throw new AppError('กรุณาระบุข้อมูลให้ครบถ้วน (ท่า, เซต, ครั้ง)', 400);
+  }
+  
+  // Verify plan belongs to user and is active
+  const plan = await repository.getCurrentPlan(userId);
+  if (!plan || plan.id !== planId) {
+    throw new AppError('ไม่พบตารางออกกำลังกายปัจจุบัน', 404);
+  }
+
+  const logId = await repository.insertWorkoutLog(userId, planId, exerciseId, sets, reps, weightKg || null);
+  return { id: logId };
+}
+
+module.exports = { generate, getCurrent, logWorkout };

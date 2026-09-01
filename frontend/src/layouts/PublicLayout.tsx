@@ -3,33 +3,28 @@
  * โครงสร้าง: Topbar (โลโก้ + ปุ่ม Login/Register) + Main Content เต็มความกว้าง
  */
 
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import PublicNav from '../components/PublicNav';
 import './PublicLayout.css';
 
 function PublicLayout() {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
   return (
     <div className="pub">
-      <header className="pub__topbar">
-        <Link to="/" className="pub__brand">
-          Gymyamjamsai
-        </Link>
-        <nav className="pub__actions">
-          <NavLink to="/login" className="btn btn--ghost">
-            เข้าสู่ระบบ
-          </NavLink>
-          <NavLink to="/register" className="btn btn--primary">
-            สมัครสมาชิก
-          </NavLink>
-        </nav>
-      </header>
+      <PublicNav />
 
       <main className="pub__main">
         <Outlet />
       </main>
 
-      <footer className="pub__footer">
-        © 2026 Gymyamjamsai — ระบบติดตามพัฒนาการการออกกำลังกาย
-      </footer>
+      {/* หน้า Landing มี footer ของตัวเองอยู่แล้ว (landing__footer) ไม่ต้องซ้ำ */}
+      {!isLanding && (
+        <footer className="pub__footer">
+          © 2026 Gymyamjamsai — ระบบติดตามพัฒนาการการออกกำลังกาย
+        </footer>
+      )}
     </div>
   );
 }

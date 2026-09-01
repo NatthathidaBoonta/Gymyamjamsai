@@ -58,15 +58,15 @@
 }
 
 .attendance__table tbody tr:hover {
-  background: var(--color-bg);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .attendance__row--checked {
-  background: #f0fdf4;
+  background: rgba(0, 255, 136, 0.08);
 }
 
 .attendance__row--checked:hover {
-  background: #e7fce4;
+  background: rgba(0, 255, 136, 0.14);
 }
 
 .attendance__checkbox {
@@ -94,15 +94,15 @@
 }
 
 .attendance__badge--attended {
-  background: #dcfce7;
-  border: 1px solid #86efac;
-  color: #166534;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  color: #4ade80;
 }
 
 .attendance__badge--absent {
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #991b1b;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
 }
 
 .attendance__loading {

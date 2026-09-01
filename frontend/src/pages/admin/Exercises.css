@@ -124,15 +124,16 @@
 }
 
 .exercises__btn {
-  background: transparent;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1.1rem;
-  padding: 0.25rem;
-}
-
-.exercises__btn:hover:not(:disabled) {
-  opacity: 0.7;
+  font-size: 1.05rem;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
 .exercises__btn:disabled {
@@ -140,10 +141,32 @@
   cursor: not-allowed;
 }
 
-.exercises__btn--edit:focus,
-.exercises__btn--delete:focus {
+.exercises__btn--edit {
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+}
+
+.exercises__btn--edit:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.22);
+  border-color: #00d4ff;
+}
+
+.exercises__btn--delete {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.exercises__btn--delete:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+}
+
+.exercises__btn--edit:focus-visible,
+.exercises__btn--delete:focus-visible {
   outline: 2px solid var(--color-primary);
-  border-radius: 2px;
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {

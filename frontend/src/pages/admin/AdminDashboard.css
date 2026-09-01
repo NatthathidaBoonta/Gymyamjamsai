@@ -1,7 +1,8 @@
-/* AdminDashboard.css — ภาพรวมระบบ (Responsive) */
+﻿/* AdminDashboard.css — GYMKaK Theme */
 
 .admin-dashboard {
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 .admin-dashboard__header {
@@ -15,6 +16,28 @@
 
 .admin-dashboard__header h1 {
   margin: 0;
+  color: var(--color-primary);
+}
+
+.admin-dashboard__header button {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-dashboard__header button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+}
+
+.admin-dashboard__header button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Summary Cards Grid */
@@ -26,34 +49,28 @@
 }
 
 .admin-dashboard__card {
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-  color: white;
-  border-radius: var(--radius);
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  border-radius: 15px;
   padding: var(--space-lg);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
   text-align: center;
+  transition: all 0.3s ease;
 }
 
-.admin-dashboard__card:nth-child(2) {
-  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
-
-.admin-dashboard__card:nth-child(3) {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
-}
-
-.admin-dashboard__card:nth-child(4) {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+.admin-dashboard__card:hover {
+  background: rgba(26, 26, 26, 0.8);
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  transform: translateY(-3px);
 }
 
 .admin-dashboard__card-label {
   margin: 0 0 var(--space-xs);
   font-size: 0.9rem;
   font-weight: 500;
-  opacity: 0.9;
+  color: var(--color-text-muted);
 }
 
 .admin-dashboard__card-value {
@@ -61,16 +78,19 @@
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1;
+  color: var(--color-primary);
 }
 
 .admin-dashboard__card-sub {
   margin: 0;
   font-size: 0.85rem;
-  opacity: 0.85;
+  color: var(--color-text-muted);
 }
 
 .admin-dashboard__info {
-  background: var(--color-bg);
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-left: 4px solid var(--color-primary);
   border-radius: var(--radius);
   padding: var(--space-md);

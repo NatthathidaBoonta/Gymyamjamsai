@@ -10,5 +10,6 @@ const router = express.Router();
 
 router.post('/generate', authenticate, requireRole('member'), controller.generate);
 router.get('/current', authenticate, requireRole('member'), controller.current);
+router.post('/:planId/log', authenticate, requireRole('member'), controller.logWorkout);
 
 module.exports = router;

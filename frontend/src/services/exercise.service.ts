@@ -9,6 +9,8 @@ export interface Exercise {
   name: string;
   category: string;
   description?: string;
+  media_url?: string;
+  instructions?: string;
   created_at: string;
 }
 

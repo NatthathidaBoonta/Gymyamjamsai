@@ -11,8 +11,8 @@ RUN npm install
 # Copy source code (overridden by bind mount in docker-compose for live-reload)
 COPY . .
 
-# Expose backend API port
-EXPOSE 5001
+# Expose backend API port (matches PORT env var, default 5000)
+EXPOSE 5000
 
 # Run in development mode (nodemon auto-restart)
 CMD ["npm", "run", "dev"]

@@ -20,6 +20,7 @@ import MemberDashboard from '../pages/member/MemberDashboard';
 import Workout from '../pages/member/Workout';
 import Activities from '../pages/member/Activities';
 import Notifications from '../pages/member/Notifications';
+import Profile from '../pages/member/Profile';
 
 import TrainerDashboard from '../pages/trainer/TrainerDashboard';
 import TrainerActivities from '../pages/trainer/TrainerActivities';
@@ -28,6 +29,7 @@ import Attendance from '../pages/trainer/Attendance';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import Users from '../pages/admin/Users';
 import Exercises from '../pages/admin/Exercises';
+import ExerciseLibrary from '../pages/admin/ExerciseLibrary';
 
 import NotFound from '../pages/NotFound';
 
@@ -39,6 +41,8 @@ function AppRouter() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        {/* ไลบรารีท่า — เข้าถึงได้โดยไม่ต้องเข้าสู่ระบบ เพราะ Landing ลิงก์มาที่นี่เป็นตัวอย่างให้ผู้เยี่ยมชม */}
+        <Route path="/exercise-library" element={<ExerciseLibrary />} />
       </Route>
 
       {/* ---------- ต้องเข้าสู่ระบบ (แยกสิทธิ์ตาม Role) ---------- */}
@@ -47,6 +51,7 @@ function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={['member']} />}>
           <Route path="/member" element={<Navigate to="/member/dashboard" replace />} />
           <Route path="/member/dashboard" element={<MemberDashboard />} />
+          <Route path="/member/profile" element={<Profile />} />
           <Route path="/member/workout" element={<Workout />} />
           <Route path="/member/activities" element={<Activities />} />
           <Route path="/member/notifications" element={<Notifications />} />
@@ -66,6 +71,7 @@ function AppRouter() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/exercises" element={<Exercises />} />
+          <Route path="/admin/exercise-library" element={<ExerciseLibrary />} />
         </Route>
       </Route>
 

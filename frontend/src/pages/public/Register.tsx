@@ -8,6 +8,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { HOME_BY_ROLE } from '../../routes/navConfig';
 import { ApiError } from '../../services/api';
+import AuthWrapper from './AuthWrapper';
 import './AuthForm.css';
 
 const MIN_PASSWORD_LENGTH = 6;
@@ -52,17 +53,18 @@ function Register() {
   }
 
   return (
-    <section className="auth">
-      <h1 className="auth__title">สมัครสมาชิก</h1>
-      <p className="auth__subtitle">สร้างบัญชีเพื่อเริ่มติดตามพัฒนาการของคุณ</p>
+    <AuthWrapper>
+      <section className="auth">
+        <h1 className="auth__title">สมัครสมาชิก</h1>
+        <p className="auth__subtitle">สร้างบัญชีเพื่อเริ่มต้นติดตามการออกกำลังกาย</p>
 
-      {error && (
-        <p className="auth__error" role="alert">
-          {error}
-        </p>
-      )}
+        {error && (
+          <p className="auth__error" role="alert">
+            {error}
+          </p>
+        )}
 
-      <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit} noValidate>
         <div className="auth__field">
           <label className="auth__label" htmlFor="email">
             อีเมล
@@ -117,6 +119,7 @@ function Register() {
         มีบัญชีอยู่แล้ว? <Link to="/login">เข้าสู่ระบบ</Link>
       </p>
     </section>
+    </AuthWrapper>
   );
 }
 

@@ -5,7 +5,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import * as notificationService from '../services/notification.service';
-import { ApiError } from '../services/api';
 import './NotificationBell.css';
 
 interface Notification {
@@ -83,7 +82,7 @@ export default function NotificationBell() {
         aria-label="Notifications"
         aria-expanded={isOpen}
       >
-        🔔
+        <i className="ri-notification-3-line" style={{ fontSize: '1.2rem' }}></i>
         {unreadCount > 0 && <span className="notification-bell__badge">{unreadCount}</span>}
       </button>
 

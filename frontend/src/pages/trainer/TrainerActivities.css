@@ -141,16 +141,36 @@
   font-weight: 500;
 }
 
+.trainer-activities__btn--edit,
+.trainer-activities__btn--delete {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  justify-content: center;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+}
+
 .trainer-activities__btn--edit {
-  font-size: 1rem;
-  padding: 0.25rem;
-  border: none;
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+}
+
+.trainer-activities__btn--edit:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.22);
+  border-color: #00d4ff;
 }
 
 .trainer-activities__btn--delete {
-  font-size: 1rem;
-  padding: 0.25rem;
-  border: none;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.trainer-activities__btn--delete:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
 }
 
 @media (max-width: 768px) {
