@@ -31,7 +31,8 @@ app.use('/api', cors((req, callback) => {
   const origin = req.headers.origin;
   const self = `${req.protocol}://${req.get('host')}`;
   if (isOriginAllowed(origin, self)) return callback(null, { origin: true });
-  const err = new Error('Origin นี้ไม่ได้รับอนุญาต (CORS)');
+  // บอก origin ที่โดนปฏิเสธใน log เพื่อให้รู้ว่าต้องเพิ่มค่าอะไรใน FRONTEND_ORIGIN
+  const err = new Error(`Origin นี้ไม่ได้รับอนุญาต (CORS): ${origin} — เพิ่มใน FRONTEND_ORIGIN`);
   err.status = 403;
   return callback(err);
 }));
