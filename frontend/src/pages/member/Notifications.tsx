@@ -116,7 +116,7 @@ function Notifications() {
 
       <div className="notifications-page__list">
         {filtered.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>
+          <p style={{ textAlign: 'center', color: 'var(--text-2)' }}>
             {filter === 'all' ? 'ไม่มีแจ้งเตือน' : 'ไม่มีแจ้งเตือนในหมวดหมู่นี้'}
           </p>
         ) : (

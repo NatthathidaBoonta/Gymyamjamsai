@@ -1,135 +1,106 @@
 /**
- * ExerciseLibrary.tsx — ห้องรวมท่าออกกำลังกาย (Modern Design)
- * Features: Filter by category, Search, Exercise cards, Detail dialog
+ * ExerciseLibrary.tsx — ไลบรารีท่าแยกสาย (Push / Pull / Legs & Core)
+ * แถบเลือกสายด้านบน → หัวข้อสาย → การ์ดขาว: ภาพ · ชื่อ · ชิปกล้ามเนื้อ · ปุ่ม DETAILS
  */
 
-import { useEffect, useState } from 'react';
-import { listExercises } from '../../services/exercise.service';
-import type { Exercise } from '../../services/exercise.service';
+import { useEffect, useMemo, useState } from 'react';
 import ExerciseDetailDialog from '../../components/ExerciseDetailDialog';
-import ExerciseImage from '../../components/ExerciseImage';
+import { getImageUrl } from '../../utils/imageUtils';
+import { SPLITS, muscleChips, splitOf, type Split } from '../../utils/exerciseSplit';
+import * as es from '../../services/exercise.service';
 import './ExerciseLibrary.css';
 
-type CategoryFilter = 'all' | 'strength' | 'cardio' | 'flexibility';
-
 function ExerciseLibrary() {
-  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [all, setAll] = useState<es.Exercise[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [category, setCategory] = useState<CategoryFilter>('all');
-  const [search, setSearch] = useState('');
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
-  const [showDialog, setShowDialog] = useState(false);
+  const [error, setError] = useState('');
+  const [split, setSplit] = useState<Split>('push');
+  const [q, setQ] = useState('');
+  const [selected, setSelected] = useState<es.Exercise | null>(null);
 
   useEffect(() => {
-    loadExercises();
+    es.searchExercises({ limit: 100 })
+      .then((r) => setAll(r.items))
+      .catch(() => setError('โหลดคลังท่าไม่สำเร็จ ลองใหม่อีกครั้ง'))
+      .finally(() => setLoading(false));
   }, []);
 
-  async function loadExercises() {
-    try {
-      setLoading(true);
-      const data = await listExercises(100, 0);
-      setExercises(data.filter((ex: Exercise) => !!ex.media_url));
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load exercises');
-    } finally {
-      setLoading(false);
-    }
-  }
+  const bySplit = useMemo(() => {
+    const map: Record<Split, es.Exercise[]> = { push: [], pull: [], legs: [] };
+    for (const e of all) map[splitOf(e)].push(e);
+    return map;
+  }, [all]);
 
-  function handleExerciseClick(exercise: Exercise) {
-    setSelectedExercise(exercise);
-    setShowDialog(true);
-  }
-
-  function getFilteredExercises() {
-    return exercises.filter((ex) => {
-      const matchCategory = category === 'all' || ex.category === category;
-      const matchSearch = ex.name.toLowerCase().includes(search.toLowerCase());
-      return matchCategory && matchSearch;
-    });
-  }
-
-  const filtered = getFilteredExercises();
-  const categoryIcon: Record<string, string> = {
-    strength: 'Strength',
-    cardio: 'Cardio',
-    flexibility: 'Flexibility',
-  };
+  const meta = SPLITS.find((s) => s.key === split)!;
+  const needle = q.trim().toLowerCase();
+  const items = bySplit[split].filter(
+    (e) => !needle || e.name.toLowerCase().includes(needle) || (e.muscle_group || '').toLowerCase().includes(needle),
+  );
 
   return (
-    <div className="exercise-library">
-      <header className="exercise-header">
-        <div className="exercise-header__content">
-          <h1>Exercise Library</h1>
-          <p>ท่าออกกำลังกาย {exercises.length} ท่า — เลือกท่าที่ต้องการ</p>
-        </div>
-      </header>
-
-      <div className="exercise-controls">
-        <div className="exercise-search">
-          <input
-            type="text"
-            placeholder="ค้นหาท่าออกกำลังกาย..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="exercise-search__input"
-          />
-        </div>
-
-        <div className="exercise-filters">
-          {(['all', 'strength', 'cardio', 'flexibility'] as const).map((cat) => (
+    <div className="lib">
+      {/* ---------- แถบเลือกสาย ---------- */}
+      <div className="lib__bar">
+        <div className="lib__tabs" role="tablist" aria-label="สายการฝึก">
+          {SPLITS.map((s) => (
             <button
-              key={cat}
-              className={`exercise-filter ${category === cat ? 'exercise-filter--active' : ''}`}
-              onClick={() => setCategory(cat)}
+              key={s.key}
+              type="button"
+              role="tab"
+              aria-selected={split === s.key}
+              className={`lib__tab ${split === s.key ? 'on' : ''}`}
+              onClick={() => setSplit(s.key)}
             >
-              {cat === 'all' ? 'ทั้งหมด' : categoryIcon[cat]}
+              <span className="lib__tab-title">{s.tab}</span>
+              <span className="lib__tab-sub">{s.tabSub}</span>
+              <span className="lib__tab-count">{bySplit[s.key].length}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {loading && <p className="exercise-loading">กำลังโหลด...</p>}
+      {/* ---------- หัวข้อสาย ---------- */}
+      <div className="lib__head" key={split}>
+        <h1>{meta.title}</h1>
+        <p>{meta.desc}</p>
+        <label className="lib__search">
+          <i className="ri-search-line"></i>
+          <input type="search" placeholder="ค้นหาในสายนี้…" value={q} onChange={(e) => setQ(e.target.value)} />
+        </label>
+      </div>
 
-      {error && <p className="exercise-error">{error}</p>}
+      {/* ---------- การ์ด ---------- */}
+      <div className="lib__panel">
+        {error ? (
+          <div className="lib__state">{error}</div>
+        ) : loading ? (
+          <div className="lib__grid">
+            {Array.from({ length: 6 }).map((_, i) => <div key={i} className="lib__skeleton" aria-hidden="true"></div>)}
+          </div>
+        ) : items.length === 0 ? (
+          <div className="lib__state">ไม่พบท่าในสายนี้</div>
+        ) : (
+          <div className="lib__grid" key={`${split}-${needle}`}>
+            {items.map((e, i) => (
+              <article key={e.id} className="lib__card" style={{ '--i': i } as React.CSSProperties}>
+                <button type="button" className="lib__thumb" onClick={() => setSelected(e)} aria-label={`ดูรายละเอียด ${e.name}`}>
+                  {e.media_url ? <img src={getImageUrl(e.media_url)} alt="" loading="lazy" /> : <i className="ri-image-line"></i>}
+                </button>
+                <h3 className="lib__name">{e.name}</h3>
+                <div className="lib__chips">
+                  {muscleChips(e).map((m) => <span key={m}>{m}</span>)}
+                  {muscleChips(e).length === 0 && <span>{es.DIFFICULTY_LABEL[e.difficulty]}</span>}
+                </div>
+                <button type="button" className="lib__details" onClick={() => setSelected(e)}>
+                  Details
+                </button>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {!loading && filtered.length === 0 && (
-        <p className="exercise-empty">ไม่พบท่าออกกำลังกายที่ตรงกัน</p>
-      )}
-
-      {!loading && filtered.length > 0 && (
-        <div className="exercise-grid">
-          {filtered.map((exercise) => (
-            <div
-              key={exercise.id}
-              className="exercise-card"
-              onClick={() => handleExerciseClick(exercise)}
-            >
-              <div className="exercise-card__image">
-                <ExerciseImage
-                  mediaUrl={exercise.media_url}
-                  altText={exercise.name}
-                  maxHeight={200}
-                />
-              </div>
-              <div className="exercise-card__content">
-                <h3 className="exercise-card__title">{exercise.name}</h3>
-                <p className="exercise-card__category">{exercise.category}</p>
-                <button className="exercise-card__button">ดูรายละเอียด →</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {showDialog && selectedExercise && (
-        <ExerciseDetailDialog
-          exercise={selectedExercise}
-          onClose={() => setShowDialog(false)}
-        />
-      )}
+      {selected && <ExerciseDetailDialog exercise={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }

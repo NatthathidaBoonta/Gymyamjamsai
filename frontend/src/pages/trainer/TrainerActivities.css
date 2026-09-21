@@ -1,194 +1,67 @@
-/* TrainerActivities.css — จัดการกิจกรรม (Responsive) */
+/* TrainerActivities.css — คอร์สของผู้ฝึกสอน (Ember v2) — แท็บใช้ .sgp__tabs จาก Suggestions.css */
+@import '../admin/Suggestions.css';
 
-.trainer-activities {
-  max-width: 1200px;
-}
-
-/* ฟอร์ม */
-.trainer-activities__form-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-lg);
-  margin-bottom: var(--space-lg);
-}
-
-.trainer-activities__form-section h2 {
-  margin: 0 0 var(--space-md);
-}
-
-.trainer-activities__form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-md);
-}
-
-.trainer-activities__field {
+.tca__state {
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-3);
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-}
-
-.trainer-activities__label {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.trainer-activities__input {
-  width: 100%;
-  padding: 0.6rem;
-  font: inherit;
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-}
-
-.trainer-activities__textarea {
-  resize: vertical;
-  font-family: inherit;
-}
-
-.trainer-activities__input:focus,
-.trainer-activities__textarea:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
-  border-color: var(--color-primary);
-}
-
-.trainer-activities__form-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
-}
-
-/* ตาราง */
-.trainer-activities__list-section {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-lg);
-}
-
-.trainer-activities__list-section h2 {
-  margin: 0 0 var(--space-md);
-}
-
-.trainer-activities__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-}
-
-.trainer-activities__table thead {
-  background: var(--color-primary-soft);
-  border-bottom: 2px solid var(--color-primary);
-}
-
-.trainer-activities__table th {
-  padding: var(--space-sm);
-  text-align: left;
-  font-weight: 600;
-}
-
-.trainer-activities__table td {
-  padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.trainer-activities__table tbody tr:hover {
-  background: var(--color-primary-soft);
-}
-
-.trainer-activities__title {
-  font-weight: 500;
-}
-
-.trainer-activities__actions {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.trainer-activities__btn {
-  font-size: 0.85rem;
-  padding: 0.4rem 0.6rem;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 8px;
 }
+.tca__state i { font-size: 2rem; }
 
-.trainer-activities__btn:hover:not(:disabled) {
-  background: var(--color-primary-soft);
-  border-color: var(--color-primary);
-}
+/* แผงคำขอรออนุมัติ */
+.tca__requests { padding: 1rem 1.25rem; margin-bottom: 1rem; border-color: rgba(255, 209, 102, 0.35); }
+.tca__requests-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.tca__requests-head h2 { font-size: 1.05rem; margin: 0; display: inline-flex; align-items: center; gap: 8px; }
+.tca__requests-head h2 i { color: var(--warn); }
+.tca__requests-head span { font-size: 0.82rem; color: var(--text-3); }
+.tca__requests-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.tca__requests-list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.6rem 0.75rem; border-radius: var(--radius-md); background: var(--bg-2); border: 1px solid var(--line); }
+.tca__req-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tca__req-who .tca__pmail b { color: var(--text-2); font-weight: 500; }
+.tca__req-actions { display: flex; gap: 6px; flex-shrink: 0; }
+@media (max-width: 560px) { .tca__requests-list li { flex-direction: column; align-items: stretch; } .tca__req-actions .btn { flex: 1; } }
 
-.trainer-activities__btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+.tca__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
 
-.trainer-activities__btn--link {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  font-weight: 500;
-}
+.tca__course { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.25rem; }
+.tca__course--closed { opacity: 0.7; }
+.tca__course h3 { font-size: 1.1rem; margin: 0; }
+.tca__course-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tca__when { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--text-3); }
+.tca__desc { font-size: 0.88rem; margin: 0; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-.trainer-activities__btn--edit,
-.trainer-activities__btn--delete {
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  justify-content: center;
-  font-size: 1.05rem;
-  transition: all 0.2s ease;
-}
+.tca__seats { margin-top: 0.25rem; }
+.tca__seats-row { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-2); margin-bottom: 5px; }
+.tca__seats-row b { color: var(--text); font-family: var(--font-display); }
+.tca__bar { height: 6px; border-radius: 3px; background: var(--bg-2); overflow: hidden; }
+.tca__bar > div { height: 100%; background: var(--ember); border-radius: 3px; }
 
-.trainer-activities__btn--edit {
-  background: rgba(0, 212, 255, 0.12);
-  border: 1px solid rgba(0, 212, 255, 0.35);
-  color: #00d4ff;
-}
+.tca__actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--line); }
 
-.trainer-activities__btn--edit:hover:not(:disabled) {
-  background: rgba(0, 212, 255, 0.22);
-  border-color: #00d4ff;
-}
+/* ฟอร์ม */
+.tca__form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+.tca__field { display: flex; flex-direction: column; gap: 4px; }
+.tca__field--full { grid-column: 1 / -1; }
+.tca__field span { font-family: var(--font-display); font-size: 0.8rem; font-weight: 500; color: var(--text-2); }
+.tca__field textarea { resize: vertical; }
 
-.trainer-activities__btn--delete {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #f87171;
-}
+/* รายชื่อ */
+.tca__roster { max-width: 520px; }
+.tca__roster-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+.tca__roster-head h3 { margin: 0; font-size: 1.15rem; }
+.tca__roster-head p { margin: 2px 0 0; font-size: 0.85rem; }
+.tca__roster-head .eyebrow { margin-bottom: 0; }
+.tca__roster-close { width: 34px; height: 34px; border-radius: var(--radius-md); border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--text-2); cursor: pointer; font-size: 1.1rem; }
 
-.trainer-activities__btn--delete:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.22);
-  border-color: #ef4444;
-}
+.tca__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.tca__list li { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 0.55rem 0.6rem; border-radius: var(--radius-md); background: var(--bg-2); }
+.tca__num { width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line-strong); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; }
+.tca__pname { font-family: var(--font-display); font-weight: 500; font-size: 0.95rem; }
+.tca__pmail { font-size: 0.78rem; color: var(--text-3); }
+.tca__pdate { font-size: 0.78rem; color: var(--text-3); }
 
-@media (max-width: 768px) {
-  .trainer-activities__form {
-    grid-template-columns: 1fr;
-  }
-
-  .trainer-activities__table {
-    font-size: 0.85rem;
-  }
-
-  .trainer-activities__table th,
-  .trainer-activities__table td {
-    padding: 0.5rem;
-  }
-
-  .trainer-activities__btn {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.5rem;
-  }
-}
+@media (max-width: 520px) { .tca__form { grid-template-columns: 1fr; } }

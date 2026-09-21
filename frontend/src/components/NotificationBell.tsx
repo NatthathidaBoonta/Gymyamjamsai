@@ -1,147 +1,128 @@
 /**
- * NotificationBell.tsx — Notification badge + dropdown in topbar
- * Shows unread count and recent notifications with polling
+ * NotificationBell.tsx — กระดิ่งแจ้งเตือนบน TopNav (ทุกบทบาท)
+ * - poll ทุก 15 วิ + รีเฟรชเมื่อกลับมาที่แท็บ
+ * - กดรายการ → ทำเครื่องหมายอ่านแล้ว + พาไปหน้าที่เกี่ยวข้อง (ตามชนิด/บทบาท)
  */
 
-import { useEffect, useState, useRef } from 'react';
-import * as notificationService from '../services/notification.service';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import * as ns from '../services/notification.service';
+import { notificationIcon, notificationLink, timeAgo } from '../utils/notificationLink';
 import './NotificationBell.css';
 
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: string;
-  is_read: boolean;
-  created_at: string;
-}
+const POLL_MS = 15_000;
 
 export default function NotificationBell() {
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { role } = useAuth();
+  const [unread, setUnread] = useState(0);
+  const [items, setItems] = useState<ns.Notification[]>([]);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
-  // ดึงข้อมูล notifications
-  async function loadNotifications() {
+  const load = useCallback(async () => {
+    try {
+      const data = await ns.listNotifications(8, 0);
+      setItems(data.notifications);
+      setUnread(data.unread_count);
+    } catch {
+      /* เงียบ — รอบถัดไป */
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+    const timer = window.setInterval(() => { if (!document.hidden) load(); }, POLL_MS);
+    const onVisible = () => { if (!document.hidden) load(); };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', onVisible);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', onVisible);
+    };
+  }, [load]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => { if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false); };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('mousedown', onDoc);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onKey); };
+  }, [open]);
+
+  async function openItem(n: ns.Notification) {
+    if (!n.is_read) {
+      setItems((cur) => cur.map((x) => (x.id === n.id ? { ...x, is_read: true } : x)));
+      setUnread((c) => Math.max(0, c - 1));
+      ns.markAsRead(n.id).catch(() => undefined);
+    }
+    const to = notificationLink(n.type, n.related_id, role);
+    setOpen(false);
+    if (to) navigate(to);
+  }
+
+  async function markAll() {
     setLoading(true);
     try {
-      const data = await notificationService.listNotifications(5, 0);
-      setNotifications(data.notifications);
-      setUnreadCount(data.unread_count);
-    } catch (err) {
-      console.error('Failed to load notifications:', err);
+      await ns.markAllAsRead();
+      await load();
     } finally {
       setLoading(false);
     }
   }
 
-  // Load on mount + polling every 30 seconds
-  useEffect(() => {
-    loadNotifications();
-    const interval = setInterval(loadNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Close dropdown when click outside
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    if (isOpen) document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isOpen]);
-
-  async function handleMarkAsRead(id: string) {
-    try {
-      await notificationService.markAsRead(id);
-      setNotifications(n => n.map(x => x.id === id ? { ...x, is_read: true } : x));
-      setUnreadCount(c => Math.max(0, c - 1));
-    } catch (err) {
-      console.error('Failed to mark as read:', err);
-    }
-  }
-
-  async function handleDelete(id: string) {
-    try {
-      await notificationService.deleteNotification(id);
-      setNotifications(n => n.filter(x => x.id !== id));
-    } catch (err) {
-      console.error('Failed to delete notification:', err);
-    }
+  async function remove(e: React.MouseEvent, id: string) {
+    e.stopPropagation();
+    setItems((cur) => cur.filter((x) => x.id !== id));
+    try { await ns.deleteNotification(id); } finally { load(); }
   }
 
   return (
-    <div className="notification-bell" ref={dropdownRef}>
-      <button
-        className="notification-bell__button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Notifications"
-        aria-expanded={isOpen}
-      >
-        <i className="ri-notification-3-line" style={{ fontSize: '1.2rem' }}></i>
-        {unreadCount > 0 && <span className="notification-bell__badge">{unreadCount}</span>}
+    <div className="nb" ref={boxRef}>
+      <button type="button" className="nb__btn" onClick={() => setOpen((o) => !o)} aria-label={`แจ้งเตือน${unread ? ` ${unread} รายการใหม่` : ''}`} aria-expanded={open}>
+        <i className="ri-notification-3-line"></i>
+        {unread > 0 && <span className="nb__badge">{unread > 99 ? '99+' : unread}</span>}
       </button>
 
-      {isOpen && (
-        <div className="notification-bell__dropdown">
-          <div className="notification-bell__header">
-            <h3>แจ้งเตือน</h3>
-            {unreadCount > 0 && (
-              <button
-                className="notification-bell__mark-all"
-                onClick={() => notificationService.markAllAsRead().then(loadNotifications)}
-              >
-                ทำเครื่องหมายว่าอ่านแล้ว
-              </button>
+      {open && (
+        <div className="nb__panel" role="dialog" aria-label="แจ้งเตือน">
+          <div className="nb__head">
+            <strong>แจ้งเตือน</strong>
+            {unread > 0 && (
+              <button type="button" className="nb__markall" onClick={markAll} disabled={loading}>อ่านทั้งหมด</button>
             )}
           </div>
 
-          {loading ? (
-            <p className="notification-bell__empty">กำลังโหลด...</p>
-          ) : notifications.length === 0 ? (
-            <p className="notification-bell__empty">ไม่มีแจ้งเตือน</p>
+          {items.length === 0 ? (
+            <div className="nb__empty"><i className="ri-notification-off-line"></i>ยังไม่มีแจ้งเตือน</div>
           ) : (
-            <div className="notification-bell__list">
-              {notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className={`notification-bell__item ${n.is_read ? 'notification-bell__item--read' : ''}`}
-                >
-                  <div className="notification-bell__content">
-                    <p className="notification-bell__title">{n.title}</p>
-                    <p className="notification-bell__message">{n.message}</p>
-                    <p className="notification-bell__time">
-                      {new Date(n.created_at).toLocaleDateString('th-TH')}
-                    </p>
-                  </div>
-                  <button
-                    className="notification-bell__delete"
-                    onClick={() => handleDelete(n.id)}
-                    title="ลบ"
-                  >
-                    ✕
-                  </button>
-                  {!n.is_read && (
-                    <button
-                      className="notification-bell__check"
-                      onClick={() => handleMarkAsRead(n.id)}
-                      title="ทำเครื่องหมายว่าอ่านแล้ว"
-                    >
-                      ✓
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
+            <ul className="nb__list">
+              {items.map((n) => {
+                const to = notificationLink(n.type, n.related_id, role);
+                return (
+                  <li key={n.id} className={`nb__item ${n.is_read ? '' : 'nb__item--new'} ${to ? 'nb__item--link' : ''}`} onClick={() => openItem(n)}>
+                    <span className={`nb__icon nb__icon--${n.type}`}><i className={notificationIcon(n.type)}></i></span>
+                    <div className="nb__body">
+                      <div className="nb__title">{n.title}</div>
+                      <div className="nb__msg">{n.message}</div>
+                      <div className="nb__time">{timeAgo(n.created_at)}{to && <span> · เปิด</span>}</div>
+                    </div>
+                    <button type="button" className="nb__del" onClick={(e) => remove(e, n.id)} aria-label="ลบ"><i className="ri-close-line"></i></button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
 
-          <a href="/member/notifications" className="notification-bell__footer">
-            ดูทั้งหมด →
-          </a>
+          {role === 'member' && (
+            <button type="button" className="nb__all" onClick={() => { setOpen(false); navigate('/member/notifications'); }}>
+              ดูทั้งหมด <i className="ri-arrow-right-line"></i>
+            </button>
+          )}
         </div>
       )}
     </div>

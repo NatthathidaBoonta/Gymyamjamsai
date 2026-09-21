@@ -1,0 +1,165 @@
+/* ChatRoom.css — ห้องแชทกลุ่มคอร์ส (Ember v2) */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+  min-height: 480px;
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+}
+
+.chat__state { padding: 3rem; text-align: center; color: var(--text-3); }
+.chat__state--card { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; max-width: 480px; margin: 2rem auto; }
+.chat__state--card i { font-size: 2.2rem; color: var(--warn); }
+.chat__state--card p { margin: 0; color: var(--text-2); }
+
+/* ---------- หัว ---------- */
+.chat__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+.chat__title { flex: 1; min-width: 0; }
+.chat__title .eyebrow { margin-bottom: 0; }
+.chat__title h1 { font-size: 1.05rem; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.chat__members { font-size: 0.75rem; color: var(--text-3); }
+
+.chat__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-3);
+}
+.chat__live span { width: 8px; height: 8px; border-radius: 50%; background: var(--text-3); }
+.chat__live.on { color: var(--ok); }
+.chat__live.on span { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-tint); }
+
+/* ---------- รายการข้อความ ---------- */
+.chat__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overscroll-behavior: contain;
+}
+
+.chat__empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-3); }
+.chat__empty i { font-size: 2rem; }
+
+.chat__day { display: flex; justify-content: center; margin: 0.75rem 0 0.25rem; }
+.chat__day span {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+.chat__row { display: flex; align-items: flex-end; gap: 8px; margin-top: 2px; }
+.chat__row--me + .chat__row--me, .chat__row:not(.chat__row--me) + .chat__row:not(.chat__row--me) { margin-top: 0; }
+.chat__row--me { justify-content: flex-end; }
+
+.chat__avatar {
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 600; font-size: 0.8rem;
+  color: var(--text-2);
+}
+.chat__avatar--trainer { background: var(--ember-tint); border-color: var(--ember-line); color: var(--ember-hi); }
+
+/* ฟองข้อความ — โทนเดียวกันทั้งหมด แยกฝั่งด้วยตำแหน่ง+สีขอบ ไม่ใช้พื้นส้มทึบ (อ่านง่าย ไม่ตีกับปุ่ม) */
+.chat__bubble {
+  max-width: min(72%, 560px);
+  padding: 0.55rem 0.85rem 0.4rem;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  animation: bubbleIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.chat__bubble--trainer { border-left: 3px solid var(--ember); }
+.chat__bubble--me {
+  background: var(--surface-3);
+  border-color: var(--ember-line);
+  border-radius: 14px 14px 4px 14px;
+}
+
+@keyframes bubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.chat__name { display: flex; align-items: center; gap: 6px; font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; color: var(--text-2); margin-bottom: 2px; }
+.chat__tag { padding: 0 6px; border-radius: 4px; background: var(--ember-tint); color: var(--ember-hi); font-size: 0.65rem; font-weight: 500; }
+.chat__text { white-space: pre-wrap; word-break: break-word; font-size: 0.975rem; line-height: 1.6; color: var(--text); }
+.chat__time { font-size: 0.68rem; color: var(--text-3); text-align: right; margin-top: 2px; }
+
+.chat__error {
+  margin: 0 1rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-md);
+  background: var(--danger-tint);
+  border: 1px solid rgba(255, 92, 92, 0.35);
+  color: var(--danger);
+  font-size: 0.85rem;
+}
+
+/* ---------- ช่องพิมพ์ ---------- */
+.chat__compose {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+.chat__input {
+  flex: 1;
+  resize: none;
+  min-height: 42px;
+  max-height: 140px;
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  font-size: 1rem; /* ≥ 16px กัน iOS zoom */
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+.chat__input:focus { outline: none; border-color: var(--ember); box-shadow: 0 0 0 3px var(--ember-tint); }
+.chat__compose .btn { height: 42px; width: 46px; padding: 0; font-size: 1.1rem; }
+
+.chat__closed {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  color: var(--text-3);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .chat { height: calc(100vh - 110px); border-radius: var(--radius-lg); }
+  .chat__head .btn span { display: none; }
+  .chat__bubble { max-width: 85%; }
+}
+
+@media (prefers-reduced-motion: reduce) { .chat__bubble { animation: none; } }

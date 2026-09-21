@@ -1,142 +1,262 @@
-/* Workout.css — ตารางออกกำลังกาย (Responsive) */
+/* Workout.css — ตารางออกกำลังกายรายวัน (Ember v2) */
 
-.workout {
-  max-width: 1200px;
-}
+.wk__loading { padding: 3rem; text-align: center; color: var(--text-2); }
 
-.workout__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
-  gap: var(--space-md);
-}
+.wk__head-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
-.workout__header h1 {
-  margin: 0;
-}
-
-.workout__plan-info {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.workout__plan-info p {
-  margin: 0.5rem 0;
-  color: var(--color-text-muted);
-}
-
-/* ตาราง */
-.workout__exercises {
-  margin-bottom: var(--space-lg);
-  overflow-x: auto;
-}
-
-.workout__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-}
-
-.workout__table thead {
-  background: var(--color-primary-soft);
-  border-bottom: 2px solid var(--color-primary);
-}
-
-.workout__table th {
-  padding: var(--space-sm);
-  text-align: left;
-  font-weight: 600;
-}
-
-.workout__table td {
-  padding: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.workout__table tbody tr:hover {
-  background: var(--color-primary-soft);
-}
-
-.workout__exercise-name {
-  font-weight: 500;
-}
-
-/* ฟอร์มบันทึกผล */
-.workout__log {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-lg);
-}
-
-.workout__log h2 {
-  margin: 0 0 var(--space-md);
-}
-
-.workout__form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.workout__field {
+/* ---------- ว่าง ---------- */
+.wk__empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.workout__label {
-  font-size: 0.9rem;
+.wk__empty i { font-size: 2.5rem; color: var(--ember); }
+.wk__empty h3 { margin: 0.25rem 0 0; }
+.wk__empty p { max-width: 46ch; margin: 0 0 0.75rem; }
+
+/* ---------- แท็บวัน ---------- */
+.wk__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.wk__day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.7rem 0.4rem 0.6rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.wk__day:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
+.wk__day--active { background: var(--ember-tint); border-color: var(--ember-line); color: var(--text); }
+.wk__day--rest { opacity: 0.45; cursor: default; }
+
+.wk__day-name { font-family: var(--font-display); font-weight: 600; font-size: 1rem; }
+.wk__day-count { font-size: 0.72rem; }
+.wk__day--active .wk__day-count { color: var(--ember-hi); }
+
+.wk__day-today {
+  position: absolute;
+  top: -8px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--ember);
+  color: var(--on-ember);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ---------- แผงวัน ---------- */
+.wk__day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+}
+
+.wk__day-head h2 { font-size: 1.3rem; margin: 0; }
+
+.wk__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.wk__ex {
+  position: relative;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.wk__ex:hover { border-color: var(--line-strong); }
+.wk__ex--done { border-color: rgba(61, 214, 140, 0.35); }
+
+.wk__ex-media {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+}
+
+.wk__ex-media img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+.wk__ex-media i { font-size: 2rem; color: var(--text-3); }
+
+.wk__ex-order {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wk__ex-body { padding: 0.8rem 0.9rem 0.9rem; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+.wk__ex-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.72rem; color: var(--text-3); }
+.wk__ex-eq { display: inline-flex; align-items: center; gap: 3px; }
+
+.wk__lvl {
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-family: var(--font-display);
   font-weight: 500;
 }
+.wk__lvl--beginner     { background: var(--ok-tint); color: var(--ok); border-color: rgba(61, 214, 140, 0.3); }
+.wk__lvl--intermediate { background: var(--warn-tint); color: var(--warn); border-color: rgba(255, 209, 102, 0.3); }
+.wk__lvl--advanced     { background: var(--danger-tint); color: var(--danger); border-color: rgba(255, 92, 92, 0.3); }
 
-.workout__input {
-  width: 100%;
-  padding: 0.6rem;
-  font: inherit;
-  color: var(--color-text);
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+.wk__ex h3 { font-size: 1.02rem; margin: 0; line-height: 1.3; }
+.wk__ex h3 button { all: unset; cursor: pointer; color: var(--text); }
+.wk__ex h3 button:hover { color: var(--ember-hi); }
+.wk__ex-muscle { font-size: 0.82rem; color: var(--text-2); margin: 0; }
+
+.wk__ex-target {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 0.5rem 0;
 }
 
-.workout__input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
-  border-color: var(--color-primary);
+.wk__ex-target div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.4rem 0.2rem;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
 }
 
-.workout__submit {
-  grid-column: 1 / -1;
-}
+.wk__ex-target b { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.wk__ex-target span { font-size: 0.68rem; color: var(--text-3); }
 
-.workout__hint {
-  margin: 0;
-  padding: var(--space-sm);
+.wk__ex-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: auto; }
+.wk__ex-actions .btn { padding: 0.4rem 0.4rem; font-size: 0.8rem; min-width: 0; }
+
+.wk__ex-done { margin-top: 6px; font-size: 0.75rem; color: var(--ok); display: flex; align-items: center; gap: 4px; }
+
+/* ---------- Goal picker ---------- */
+.wk__goal-warn {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin: -0.75rem 0 1rem;
   font-size: 0.85rem;
-  color: var(--color-text-muted);
-  background: var(--color-bg);
-  border-left: 3px solid var(--color-primary);
-  padding-left: var(--space-sm);
+  color: var(--text-2);
+}
+.wk__goal-warn i { color: var(--warn); margin-top: 3px; }
+
+.wk__goal-list { display: grid; gap: 8px; }
+
+.wk__goal-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "radio name" "radio desc";
+  column-gap: 10px;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-@media (max-width: 768px) {
-  .workout__header {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.wk__goal-item--on { border-color: var(--ember); background: var(--ember-tint); }
+.wk__goal-item input { grid-area: radio; accent-color: var(--ember); margin-top: 4px; }
+.wk__goal-name { grid-area: name; font-family: var(--font-display); font-weight: 600; }
+.wk__goal-desc { grid-area: desc; font-size: 0.82rem; color: var(--text-2); }
 
-  .workout__header button {
-    width: 100%;
-  }
+/* ---------- Log form ---------- */
+.wk__log-head { display: flex; gap: 1rem; align-items: center; margin-bottom: 1.25rem; }
+.wk__log-head img { width: 88px; height: 88px; object-fit: contain; background: #fff; border-radius: var(--radius-lg); padding: 6px; flex-shrink: 0; }
+.wk__log-head h3 { margin: 0; font-size: 1.15rem; }
+.wk__log-head p { margin: 2px 0 0; font-size: 0.85rem; }
+.wk__log-head .eyebrow { margin-bottom: 0; }
 
-  .workout__form {
-    grid-template-columns: 1fr;
-  }
+.wk__log-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.wk__log-fields label { display: flex; flex-direction: column; gap: 4px; }
+.wk__log-fields label span { font-family: var(--font-display); font-size: 0.8rem; font-weight: 500; color: var(--text-2); }
+.wk__log-fields input {
+  width: 100%;
+  padding: 0.7rem 0.6rem;
+  text-align: center;
+  font: inherit;
+  font-size: 1.15rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--text);
+}
+.wk__log-fields input:focus { outline: none; border-color: var(--ember); box-shadow: 0 0 0 3px var(--ember-tint); }
+
+/* ---------- Export (render จริง แต่อยู่นอกจอ) ---------- */
+.wk__export-host { position: absolute; left: -10000px; top: 0; width: 0; height: 0; overflow: hidden; }
+
+.wk__export {
+  width: 1100px;
+  padding: 36px 40px;
+  background: #0a0e1a;
+  color: #eef0f6;
+  font-family: 'Noto Sans Thai', 'Kanit', 'Leelawadee UI', 'Tahoma', system-ui, sans-serif;
+}
+
+.wk__export-head { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid #2f3b57; }
+.wk__export-brand { font-family: var(--font-display); font-weight: 600; color: #ff9a4d; font-size: 14px; letter-spacing: 0.04em; }
+.wk__export-title { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin-top: 2px; }
+.wk__export-dates { font-size: 13px; color: #9ea8c0; }
+
+.wk__export-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+
+.wk__export-day { background: #131a2b; border: 1px solid #2f3b57; border-radius: 14px; padding: 14px; }
+.wk__export-dayname { font-family: var(--font-display); font-weight: 600; font-size: 16px; color: #ff9a4d; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #202a40; }
+.wk__export-item { display: grid; grid-template-columns: 56px 1fr; gap: 10px; align-items: center; padding: 6px 0; }
+.wk__export-thumb { width: 56px; height: 56px; border-radius: 8px; background: #fff; overflow: hidden; }
+.wk__export-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.wk__export-name { font-family: var(--font-display); font-weight: 500; font-size: 14px; }
+.wk__export-target { font-size: 12px; color: #9ea8c0; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .wk__days { gap: 4px; }
+  .wk__day { padding: 0.55rem 0.2rem 0.5rem; }
+  .wk__day-count { display: none; }
+  .wk__ex { grid-template-columns: 110px 1fr; }
+  .wk__log-fields { grid-template-columns: 1fr; }
 }

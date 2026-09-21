@@ -78,7 +78,7 @@ function Profile() {
       <div className="profile-wrapper">
         <div className="profile-header-section">
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div className="avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--color-primary-soft)', border: '1px solid var(--color-border)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
+            <div className="avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--ember-tint)', border: '1px solid var(--line)', color: 'var(--ember)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
               <i className="ri-user-smile-line"></i>
             </div>
             <div className="profile-info-header">
@@ -88,110 +88,110 @@ function Profile() {
               <p className="profile-email">{profile?.email}</p>
             </div>
           </div>
-          <button className="btn" onClick={() => setIsEditing(!isEditing)} style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button className="btn" onClick={() => setIsEditing(!isEditing)} style={{ background: 'var(--surface)', border: '1px solid var(--line)', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             {isEditing ? <><i className="ri-close-line"></i> ยกเลิก</> : <><i className="ri-edit-line"></i> แก้ไขโปรไฟล์</>}
           </button>
         </div>
 
         {success && (
-          <div className="message success" style={{ padding: '0.8rem', background: 'rgba(93, 184, 114, 0.1)', color: '#5db872', borderRadius: '8px', marginBottom: '1rem' }}>
+          <div className="message success" style={{ padding: '0.8rem', background: 'var(--ok-tint)', color: 'var(--ok)', borderRadius: '8px', marginBottom: '1rem' }}>
             Success
           </div>
         )}
 
         {error && (
-          <div className="message error" style={{ padding: '0.8rem', background: 'rgba(198, 69, 69, 0.1)', color: '#c64545', borderRadius: '8px', marginBottom: '1rem' }}>
+          <div className="message error" style={{ padding: '0.8rem', background: 'var(--danger-tint)', color: 'var(--danger)', borderRadius: '8px', marginBottom: '1rem' }}>
             {error}
           </div>
         )}
 
         {!isEditing ? (
           <>
-            <div className="profile-card" style={{ marginTop: '1.5rem', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius)', padding: '1.5rem' }}>
-              <div className="profile-card-header" style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '1rem' }}>
-                <h3 style={{ margin: 0, color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.2rem' }}>
-                  <i className="ri-information-line" style={{ color: 'var(--color-primary)' }}></i> ข้อมูลส่วนตัว
+            <div className="profile-card" style={{ marginTop: '1.5rem', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '1.5rem' }}>
+              <div className="profile-card-header" style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '1rem' }}>
+                <h3 style={{ margin: 0, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.2rem' }}>
+                  <i className="ri-information-line" style={{ color: 'var(--ember)' }}></i> ข้อมูลส่วนตัว
                 </h3>
               </div>
               <div className="info-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.2rem' }}>
-                <div className="info-item" style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--color-bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                  <div style={{ background: 'var(--color-surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid var(--color-border)' }}>
+                <div className="info-item" style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)' }}>
+                  <div style={{ background: 'var(--surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ember)', border: '1px solid var(--line)' }}>
                     <i className="ri-mail-line" style={{ fontSize: '1.2rem' }}></i>
                   </div>
                   <div>
-                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>อีเมล</span>
-                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--color-text)' }}>{profile?.email || '-'}</span>
+                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-2)' }}>อีเมล</span>
+                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--text)' }}>{profile?.email || '-'}</span>
                   </div>
                 </div>
-                <div className="info-item" style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--color-bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                  <div style={{ background: 'var(--color-surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid var(--color-border)' }}>
+                <div className="info-item" style={{ display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)' }}>
+                  <div style={{ background: 'var(--surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ember)', border: '1px solid var(--line)' }}>
                     <i className="ri-focus-3-line" style={{ fontSize: '1.2rem' }}></i>
                   </div>
                   <div>
-                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>เป้าหมาย</span>
-                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--color-text)' }}>{profile?.fitness_goal || '-'}</span>
+                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-2)' }}>เป้าหมาย</span>
+                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--text)' }}>{profile?.fitness_goal || '-'}</span>
                   </div>
                 </div>
-                <div className="info-item" style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--color-bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
-                  <div style={{ background: 'var(--color-surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', border: '1px solid var(--color-border)' }}>
+                <div className="info-item" style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem', alignItems: 'center', background: 'var(--bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--line)' }}>
+                  <div style={{ background: 'var(--surface)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ember)', border: '1px solid var(--line)' }}>
                     <i className="ri-heart-pulse-line" style={{ fontSize: '1.2rem' }}></i>
                   </div>
                   <div>
-                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>โรคประจำตัว</span>
-                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--color-text)' }}>{profile?.medical_conditions || 'ไม่มี'}</span>
+                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-2)' }}>โรคประจำตัว</span>
+                    <span style={{ fontSize: '1rem', fontWeight: '500', color: 'var(--text)' }}>{profile?.medical_conditions || 'ไม่มี'}</span>
                   </div>
                 </div>
               </div>
             </div>
           </>
         ) : (
-          <div className="profile-card" style={{ marginTop: '1.5rem', background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius)', padding: '1.5rem' }}>
-            <h3 style={{ color: 'var(--color-text)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <i className="ri-edit-box-line" style={{ color: 'var(--color-primary)' }}></i> แก้ไขข้อมูล
+          <div className="profile-card" style={{ marginTop: '1.5rem', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '1.5rem' }}>
+            <h3 style={{ color: 'var(--text)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i className="ri-edit-box-line" style={{ color: 'var(--ember)' }}></i> แก้ไขข้อมูล
             </h3>
             <form onSubmit={handleSave} style={{ display: 'grid', gap: '1rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div className="form-group">
-                  <label style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>ชื่อจริง</label>
+                  <label style={{ color: 'var(--text-2)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>ชื่อจริง</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
+                    style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg)', border: '1px solid var(--line)', color: 'var(--text)' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>นามสกุล</label>
+                  <label style={{ color: 'var(--text-2)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>นามสกุล</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
+                    style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg)', border: '1px solid var(--line)', color: 'var(--text)' }}
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>เป้าหมาย (Fitness Goal)</label>
+                <label style={{ color: 'var(--text-2)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>เป้าหมาย (Fitness Goal)</label>
                 <input
                   type="text"
                   name="fitnessGoal"
                   value={formData.fitnessGoal}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
+                  style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg)', border: '1px solid var(--line)', color: 'var(--text)' }}
                 />
               </div>
 
               <div className="form-group">
-                <label style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>โรคประจำตัว</label>
+                <label style={{ color: 'var(--text-2)', fontSize: '0.9rem', marginBottom: '0.5rem', display: 'block' }}>โรคประจำตัว</label>
                 <textarea
                   name="medicalConditions"
                   value={formData.medicalConditions}
                   onChange={handleInputChange}
                   rows={3}
-                  style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg)', border: '1px solid var(--line)', color: 'var(--text)', resize: 'vertical' }}
                 />
               </div>
 

@@ -1,134 +1,92 @@
-﻿/* AdminDashboard.css — GYMKaK Theme */
+/* AdminDashboard.css — ภาพรวมระบบ (Ember v2) */
 
-.admin-dashboard {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+.adm__state { padding: 3rem; text-align: center; color: var(--text-3); }
+.adm__head-actions { display: flex; gap: 0.5rem; }
 
-.admin-dashboard__header {
+/* ---------- แจ้งงานที่รอ ---------- */
+.adm__alert {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-lg);
-  flex-wrap: wrap;
-  gap: var(--space-md);
+  gap: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--ember-tint);
+  border: 1px solid var(--ember-line);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.95rem;
 }
+.adm__alert > i:first-child { color: var(--ember-hi); font-size: 1.2rem; }
+.adm__alert b { color: var(--ember-hi); }
+.adm__alert-arrow { margin-left: auto; color: var(--text-2); }
+.adm__alert:hover .adm__alert-arrow { color: var(--ember-hi); }
 
-.admin-dashboard__header h1 {
-  margin: 0;
-  color: var(--color-primary);
-}
-
-.admin-dashboard__header button {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: #ffffff;
-  font-weight: bold;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.admin-dashboard__header button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
-}
-
-.admin-dashboard__header button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Summary Cards Grid */
-.admin-dashboard__cards {
+/* ---------- KPI ---------- */
+.adm__kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-lg);
-  margin-bottom: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.admin-dashboard__card {
-  background: rgba(26, 26, 26, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-text);
-  border-radius: 15px;
-  padding: var(--space-lg);
-  text-align: center;
-  transition: all 0.3s ease;
+.adm__kpi { display: flex; flex-direction: column; gap: 2px; padding: 1rem 1.1rem; }
+.adm__kpi-k { font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--text-3); }
+.adm__kpi-v { font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.adm__kpi-v small { font-size: 1rem; color: var(--text-2); font-weight: 400; margin-left: 2px; }
+.adm__kpi--hot .adm__kpi-v { color: var(--ember); }
+.adm__kpi-d { font-size: 0.75rem; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Panels ---------- */
+.adm__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
 }
 
-.admin-dashboard__card:hover {
-  background: rgba(26, 26, 26, 0.8);
-  border-color: rgba(0, 212, 255, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
-  transform: translateY(-3px);
+.adm__panel { padding: 1.1rem 1.25rem 0.9rem; min-width: 0; }
+.adm__panel--wide { grid-column: span 2; }
+
+.adm__panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.75rem; }
+.adm__panel-head h2 { font-size: 1.05rem; margin: 0; }
+.adm__panel-sub { font-size: 0.78rem; color: var(--text-3); }
+
+.adm__empty { height: 160px; display: flex; align-items: center; justify-content: center; color: var(--text-3); font-size: 0.9rem; }
+
+/* ---------- แถบสัดส่วน ---------- */
+.adm__bar { height: 6px; border-radius: 3px; background: var(--bg-2); overflow: hidden; }
+.adm__bar > div { height: 100%; border-radius: 3px; background: var(--ember); transition: width var(--transition-slow); }
+
+.adm__roles { display: grid; gap: 0.9rem; padding-top: 0.25rem; }
+.adm__role-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; }
+.adm__role-row b { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+
+/* ---------- คอร์สยอดนิยม ---------- */
+.adm__popular { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.adm__popular li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; }
+
+.adm__rank {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 0.8rem; font-weight: 600;
 }
+.adm__popular li:first-child .adm__rank { background: var(--ember); border-color: var(--ember); color: var(--on-ember); }
 
-.admin-dashboard__card-label {
-  margin: 0 0 var(--space-xs);
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-text-muted);
+.adm__pop-body { display: grid; gap: 4px; min-width: 0; }
+.adm__pop-row { display: flex; justify-content: space-between; gap: 8px; font-size: 0.925rem; }
+.adm__pop-title { font-family: var(--font-display); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm__pop-num { font-family: var(--font-display); font-variant-numeric: tabular-nums; color: var(--text-2); flex-shrink: 0; }
+.adm__pop-num b { color: var(--text); }
+.adm__pop-meta { font-size: 0.75rem; color: var(--text-3); }
+
+@media (max-width: 1000px) {
+  .adm__grid { grid-template-columns: 1fr 1fr; }
+  .adm__panel--wide { grid-column: span 2; }
 }
-
-.admin-dashboard__card-value {
-  margin: 0 0 0.25rem;
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--color-primary);
-}
-
-.admin-dashboard__card-sub {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-}
-
-.admin-dashboard__info {
-  background: rgba(26, 26, 26, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-left: 4px solid var(--color-primary);
-  border-radius: var(--radius);
-  padding: var(--space-md);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-}
-
-.admin-dashboard__info p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-  .admin-dashboard__header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .admin-dashboard__header button {
-    width: 100%;
-  }
-
-  .admin-dashboard__cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
-  }
-
-  .admin-dashboard__card {
-    padding: var(--space-md);
-  }
-
-  .admin-dashboard__card-value {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .admin-dashboard__cards {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 640px) {
+  .adm__grid { grid-template-columns: 1fr; }
+  .adm__panel--wide { grid-column: span 1; }
 }

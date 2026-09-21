@@ -1,0 +1,38 @@
+/* TrainerDashboard.css — ภาพรวมผู้สอน (Ember v2) */
+
+.trd__state { padding: 3rem; text-align: center; color: var(--text-3); }
+.trd__head-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+.trd__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.trd__kpi { display: flex; flex-direction: column; gap: 4px; padding: 1rem 1.1rem; }
+.trd__kpi-k { font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--text-3); }
+.trd__kpi-v { font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.trd__kpi-v--sm { display: flex; gap: 4px; flex-wrap: wrap; font-size: 1rem; padding-top: 4px; }
+.trd__kpi--hot .trd__kpi-v { color: var(--ember); }
+.trd__kpi--link { text-decoration: none; color: inherit; }
+.trd__kpi--alert { border-color: rgba(255, 209, 102, 0.45); }
+.trd__kpi--alert .trd__kpi-v { color: var(--warn); }
+.trd__kpi--alert .trd__kpi-d { color: var(--warn); }
+.trd__kpi-d { font-size: 0.75rem; color: var(--text-2); }
+
+.trd__panel { padding: 1.1rem 1.25rem; }
+.trd__panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem; }
+.trd__panel-head h2 { font-size: 1.05rem; margin: 0; }
+.trd__link { font-size: 0.85rem; color: var(--ember-hi); text-decoration: none; }
+
+.trd__empty { padding: 2rem; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-3); }
+.trd__empty i { font-size: 2rem; }
+
+.trd__title { font-family: var(--font-display); font-weight: 500; }
+.trd__muted { color: var(--text-2); font-size: 0.9rem; white-space: nowrap; }
+
+.trd__seats { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
+.trd__seats span { font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.trd__bar { height: 5px; border-radius: 3px; background: var(--bg-2); overflow: hidden; }
+.trd__bar > div { height: 100%; background: var(--ember); border-radius: 3px; }

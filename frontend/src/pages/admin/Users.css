@@ -1,0 +1,156 @@
+.users-page {
+  padding: 1.5rem;
+  background-color: var(--bg);
+  min-height: calc(100vh - var(--topbar-height));
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.users-header h2 {
+  color: var(--text);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.users-table th,
+.users-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.users-table th {
+  background-color: var(--surface);
+  color: var(--text-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.users-table td {
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table tr:hover td {
+  background-color: var(--bg);
+}
+
+/* Badges */
+.role-badge, .status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.role-admin { background-color: var(--ember-tint); color: var(--ember-hi); border: 1px solid var(--ember-line); }
+.role-trainer { background-color: var(--surface-2); color: var(--text-2); border: 1px solid var(--line-strong); }
+.role-member { background-color: var(--surface-2); color: var(--text-2); border: 1px solid var(--line-strong); }
+
+.status-active { background-color: var(--ok-tint); color: var(--ok); }
+.status-suspended { background-color: var(--danger-tint); color: var(--danger); }
+
+/* Modals: ใช้ .modal-overlay / .modal-content จาก theme.css */
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  font-size: 1.4rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--ember);
+  box-shadow: 0 0 0 3px var(--ember-tint);
+}
+
+.toggle-group {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.toggle-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--text);
+  margin-bottom: 0;
+}
+
+.toggle-group input[type="radio"] {
+  accent-color: var(--ember);
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .users-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+}

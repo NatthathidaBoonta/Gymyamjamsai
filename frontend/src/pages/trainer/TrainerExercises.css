@@ -1,0 +1,32 @@
+/* TrainerExercises.css — เสนอแก้ไขท่า (trainer) */
+
+.tre__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 0.9rem;
+  margin-bottom: 1rem;
+  max-width: 480px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-3);
+}
+.tre__search:focus-within { border-color: var(--ember); box-shadow: 0 0 0 3px var(--ember-tint); }
+.tre__search input { flex: 1; background: none; border: 0; outline: none; color: var(--text); font: inherit; }
+
+.tre__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; }
+
+.tre__propose { max-width: 640px; }
+.tre__propose h3 { margin: 0 0 0.25rem; }
+.tre__propose .eyebrow { margin-bottom: 0; }
+.tre__hint { font-size: 0.85rem; margin: 0 0 1rem; }
+
+.tre__form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+.tre__field { display: flex; flex-direction: column; gap: 4px; }
+.tre__field--full { grid-column: 1 / -1; }
+.tre__field span { font-family: var(--font-display); font-size: 0.78rem; font-weight: 500; color: var(--text-2); }
+.tre__field textarea { resize: vertical; line-height: 1.6; font-size: 0.92rem; }
+
+@media (max-width: 600px) { .tre__form { grid-template-columns: 1fr; } }

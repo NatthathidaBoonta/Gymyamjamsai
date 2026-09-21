@@ -6,7 +6,7 @@
 
 .activities__subtitle {
   margin: 0 0 var(--space-lg);
-  color: var(--color-text-muted);
+  color: var(--text-2);
 }
 
 /* Grid ของการ์ด */
@@ -17,8 +17,8 @@
 }
 
 .activities__card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: var(--space-md);
@@ -46,13 +46,13 @@
 
 .activities__trainer {
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--text-2);
 }
 
 .activities__description {
   margin: 0 0 var(--space-sm);
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--text-2);
   line-height: 1.4;
 }
 
@@ -72,13 +72,13 @@
 
 .activities__meta-label {
   font-weight: 500;
-  color: var(--color-text-muted);
+  color: var(--text-2);
 }
 
 /* Progress bar */
 .activities__progress {
   height: 6px;
-  background: var(--color-border);
+  background: var(--line);
   border-radius: 3px;
   margin-bottom: var(--space-md);
   overflow: hidden;
@@ -86,7 +86,7 @@
 
 .activities__progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-soft));
+  background: var(--ember);
   transition: width 0.3s ease;
 }
 
@@ -94,14 +94,23 @@
   margin: 0 0 var(--space-sm);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-primary);
+  color: var(--ember);
+}
+
+.activities__registered {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ok);
+  font-weight: 500;
+  margin: 0 0 var(--space-sm);
 }
 
 .activities__full-text {
   margin: 0;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .activities__btn {

@@ -1,268 +1,237 @@
-﻿/* ExerciseLibrary.css — GymKaK Style Black/Cyan-Green Theme */
+/* ExerciseLibrary.css — ไลบรารีแยกสาย: แถบสายด้านบน · หัวข้อใหญ่ · การ์ดขาวบนพื้นเข้ม */
 
-.exercise-library {
-  padding: 2rem 1rem;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-  min-height: 100vh;
+.lib { padding-bottom: 4rem; }
+
+/* ---------- แถบเลือกสาย ---------- */
+.lib__bar {
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  padding: 1.25rem var(--space-md);
 }
 
-/* Header */
-.exercise-header {
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border: 1px solid rgba(0, 212, 255, 0.3);
-}
+/* ในแอป (ภายใน .dash__main) ให้ bar เป็นแผงโค้ง ไม่เต็มจอ */
+.dash__main .lib__bar { border: 1px solid var(--line); border-radius: var(--radius-2xl); }
+.dash__main .lib { padding-bottom: 0; }
 
-.exercise-header__content h1 {
-  font-size: 2.5rem;
-  color: #ffffff;
-  margin: 0;
-  font-weight: 700;
-  background: linear-gradient(135deg, #67e8f9 0%, #00d4ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.exercise-header__content p {
-  color: rgba(255, 255, 255, 0.75);
-  margin: 0.5rem 0 0 0;
-  font-size: 1.1rem;
-}
-
-/* Controls */
-.exercise-controls {
+.lib__tabs {
+  max-width: var(--content-max);
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.exercise-search {
-  display: flex;
-}
-
-.exercise-search__input {
-  flex: 1;
-  padding: 12px 16px;
-  border: 1px solid rgba(0, 212, 255, 0.3);
-  border-radius: 12px;
-  font-size: 1rem;
-  background: rgba(42, 42, 42, 0.8);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-.exercise-search__input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.exercise-search__input:focus {
-  outline: none;
-  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-  border-color: #00d4ff;
-  transform: translateY(-2px);
-}
-
-/* Filters */
-.exercise-filters {
-  display: flex;
-  gap: 0.8rem;
+  justify-content: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-.exercise-filter {
-  padding: 10px 16px;
-  border: 2px solid rgba(0, 212, 255, 0.3);
-  background: transparent;
-  color: #67e8f9;
-  border-radius: 25px;
-  font-size: 0.95rem;
-  font-weight: 500;
+.lib__tab {
+  position: relative;
+  min-width: 250px;
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-strong);
+  background: var(--grad-surface);
+  color: var(--text-2);
+  text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 0 var(--line-hi);
+  transition: background var(--transition-base), color var(--transition-base), border-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
 }
 
-.exercise-filter:hover {
-  background: rgba(0, 212, 255, 0.15);
-  border-color: #00d4ff;
+.lib__tab:hover { color: var(--text); border-color: var(--ember-line); }
+
+/* active = การ์ดขาว (ตามตัวอย่าง) */
+.lib__tab.on {
+  background: #fff;
+  color: #0a0e1a;
+  border-color: #fff;
   transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
-.exercise-filter--active {
-  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
-  color: #0b0d0f;
-  border-color: #00d4ff;
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+.lib__tab-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 
-/* Grid Layout */
-.exercise-grid {
+.lib__tab-sub { display: block; font-size: 0.85rem; margin-top: 2px; opacity: 0.8; }
+
+.lib__tab-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--ember);
+  color: var(--on-ember);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- หัวข้อสาย ---------- */
+.lib__head {
+  text-align: center;
+  padding: 3rem var(--space-md) 1.5rem;
+  animation: libHead 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes libHead { from { opacity: 0.001; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.lib__head h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lib__head p { font-size: 1.15rem; margin: 0 auto 1.25rem; max-width: 60ch; }
+
+.lib__search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: min(420px, 100%);
+  height: 42px;
+  padding: 0 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--text-3);
+  text-align: left;
+}
+.lib__search:focus-within { border-color: var(--ember); box-shadow: 0 0 0 3px var(--ember-tint); }
+.lib__search input { flex: 1; background: none; border: 0; outline: none; color: var(--text); font: inherit; }
+
+/* ---------- แผงการ์ด ---------- */
+.lib__panel {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2xl);
+}
+
+.lib__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-/* Exercise Card */
-.exercise-card {
-  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  transform: translateY(0);
-}
-
-.exercise-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
-  border-color: rgba(0, 212, 255, 0.6);
-  background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
-}
-
-.exercise-card__image {
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
-  overflow: hidden;
+/* การ์ดขาว */
+.lib__card {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem 1.25rem 1.5rem;
+  border-radius: var(--radius-xl);
+  background: #fff;
+  color: #0a0e1a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  animation: libCard 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.lib__card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45); }
+
+@keyframes libCard { from { opacity: 0.001; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.lib__thumb {
+  width: 170px;
+  height: 120px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
 }
 
-.exercise-card__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
-}
+.lib__thumb img { width: 100%; height: 100%; object-fit: contain; }
+.lib__thumb i { font-size: 2rem; color: #6b7590; }
 
-.exercise-card:hover .exercise-card__image img {
-  opacity: 1;
-}
-
-.exercise-card__placeholder {
-  font-size: 3rem;
+.lib__name {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   text-align: center;
-  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.25;
 }
 
-.exercise-card__content {
-  padding: 1.5rem;
-}
+.lib__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 
-.exercise-card__title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0 0 0.5rem 0;
-}
-
-.exercise-card__category {
-  font-size: 0.85rem;
-  color: #67e8f9;
-  margin: 0 0 1rem 0;
-  text-transform: capitalize;
-  display: inline-block;
-  background: rgba(0, 212, 255, 0.15);
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 212, 255, 0.3);
-}
-
-.exercise-card__button {
-  width: 100%;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
-  color: #0b0d0f;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
+.lib__chips span {
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #0a0e1a;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
   font-weight: 500;
+}
+
+.lib__details {
+  margin-top: 0.75rem;
+  padding: 0.65rem 1.8rem;
+  border-radius: 999px;
+  border: 0;
+  background: #0a0e1a;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
-.exercise-card__button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.6);
+.lib__details:hover { background: var(--ember); color: var(--on-ember); transform: translateY(-1px); }
+
+.lib__skeleton {
+  height: 320px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: libShimmer 1.4s infinite;
+}
+@keyframes libShimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.lib__state { padding: 3rem; text-align: center; color: var(--text-3); }
+
+@media (max-width: 860px) {
+  .lib__tab { min-width: 0; flex: 1 1 200px; padding: 0.75rem 1rem; }
+  .lib__tab-title { font-size: 1rem; }
+  .lib__panel { padding: 1rem; border-radius: var(--radius-xl); }
+  .lib__grid { gap: 1rem; }
 }
 
-/* Loading & Empty States */
-.exercise-loading,
-.exercise-empty,
-.exercise-error {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 1.1rem;
-  background: rgba(0, 212, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 212, 255, 0.2);
-}
-
-.exercise-error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .exercise-header__content h1 {
-    font-size: 2rem;
-  }
-
-  .exercise-grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-  }
-
-  .exercise-controls {
-    flex-direction: column;
-  }
-
-  .exercise-filters {
-    gap: 0.5rem;
-  }
-
-  .exercise-filter {
-    font-size: 0.85rem;
-    padding: 8px 12px;
-  }
-}
-
-@media (max-width: 600px) {
-  .exercise-library {
-    padding: 1rem;
-  }
-
-  .exercise-header {
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .exercise-header__content h1 {
-    font-size: 1.5rem;
-  }
-
-  .exercise-header__content p {
-    font-size: 0.95rem;
-  }
-
-  .exercise-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .exercise-card__image {
-    height: 150px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .lib__card, .lib__head { animation: none; }
+  .lib__card:hover, .lib__tab.on { transform: none; }
 }

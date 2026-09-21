@@ -8,26 +8,29 @@ export type Role = 'member' | 'trainer' | 'admin';
 export interface NavItem {
   label: string;
   path: string;
-  icon?: string; // ใช้ emoji แทน icon library (CSS Vanilla ไม่พึ่ง dependency ภายนอก)
+  icon?: string; // ชื่อ class ของ Remix Icon
 }
 
 export const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   member: [
-    { label: 'ภาพรวมสุขภาพ', path: '/member/dashboard', icon: 'ri-dashboard-line' },
-    { label: 'โปรไฟล์ของฉัน', path: '/member/profile', icon: 'ri-user-line' },
+    { label: 'Dashboard', path: '/member/dashboard', icon: 'ri-dashboard-line' },
     { label: 'ตารางออกกำลังกาย', path: '/member/workout', icon: 'ri-calendar-line' },
-    { label: 'กระดานกิจกรรม', path: '/member/activities', icon: 'ri-discuss-line' },
+    { label: 'คลังท่า', path: '/member/exercise-library', icon: 'ri-book-read-line' },
+    { label: 'คอร์ส', path: '/member/activities', icon: 'ri-discuss-line' },
+    { label: 'โปรไฟล์', path: '/member/profile', icon: 'ri-user-line' },
   ],
   trainer: [
-    { label: 'ภาพรวมผู้สอน', path: '/trainer/dashboard', icon: 'ri-dashboard-line' },
-    { label: 'จัดการกิจกรรม', path: '/trainer/activities', icon: 'ri-calendar-event-line' },
-    { label: 'เช็คชื่อ', path: '/trainer/attendance', icon: 'ri-check-double-line' },
+    { label: 'Dashboard', path: '/trainer/dashboard', icon: 'ri-dashboard-line' },
+    { label: 'คอร์สของฉัน', path: '/trainer/activities', icon: 'ri-calendar-event-line' },
+    { label: 'คลังท่า', path: '/trainer/exercise-library', icon: 'ri-book-read-line' },
+    { label: 'เสนอแก้ไขท่า', path: '/trainer/exercises', icon: 'ri-lightbulb-line' },
   ],
   admin: [
-    { label: 'ภาพรวมระบบ', path: '/admin/dashboard', icon: 'ri-dashboard-line' },
+    { label: 'Dashboard', path: '/admin/dashboard', icon: 'ri-dashboard-line' },
     { label: 'จัดการผู้ใช้งาน', path: '/admin/users', icon: 'ri-group-line' },
     { label: 'จัดการท่า', path: '/admin/exercises', icon: 'ri-settings-4-line' },
-    { label: 'ไลบรารีท่า', path: '/admin/exercise-library', icon: 'ri-book-read-line' },
+    { label: 'คลังท่า', path: '/admin/exercise-library', icon: 'ri-book-read-line' },
+    { label: 'อนุมัติข้อเสนอ', path: '/admin/suggestions', icon: 'ri-git-pull-request-line' },
   ],
 };
 

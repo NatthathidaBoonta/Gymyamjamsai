@@ -1,16 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 .profile-container {
-    --primary-color: #0b0d0f;
-    --primary-color-light: #1f2125;
-    --primary-color-extra-light: #35373b;
-    --secondary-color: rgb(0, 0, 0);
-    --secondary-color-white: #ffffff;
-    --text-light: #d1d5db;
-    --white: #ffffff;
     --max-width: 1200px;
-    --accent: #00d4ff;
-    --accent-light: #67e8f9;
 }
 
 * {
@@ -24,9 +14,9 @@ html {
 }
 
 body {
-    font-family: "Poppins", sans-serif;
-    background-color: var(--primary-color);
-    color: var(--text-light);
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text-2);
 }
 
 a {
@@ -42,7 +32,7 @@ img {
 .profile-container {
     min-height: calc(100vh - 90px);
     padding: 0.75rem;
-    background: var(--primary-color);
+    background: var(--bg);
 }
 
 .profile-wrapper {
@@ -55,7 +45,7 @@ img {
 
 /* Profile Header Section */
 .profile-header-section {
-    background-color: var(--primary-color-light);
+    background-color: var(--surface);
     border-radius: 12px;
     padding: 1rem 1.2rem;
     margin: 6px;
@@ -81,21 +71,21 @@ img {
 .profile-name {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--white);
+    color: var(--text);
     margin: 0 0 0.25rem 0;
     line-height: 1.2;
 }
 
 .profile-username {
     font-size: 0.78rem;
-    color: var(--text-light);
+    color: var(--text-2);
     margin: 0 0 0.25rem 0;
     line-height: 1.2;
 }
 
 .profile-email {
     font-size: 0.78rem;
-    color: var(--text-light);
+    color: var(--text-2);
     margin: 0;
     line-height: 1.2;
 }
@@ -117,7 +107,7 @@ img {
 }
 
 .profile-card {
-    background-color: var(--primary-color-light);
+    background-color: var(--surface);
     border-radius: 12px;
     padding: 1.1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -166,7 +156,7 @@ img {
 .section-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--text);
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
@@ -174,7 +164,7 @@ img {
 }
 
 .section-title i {
-    color: var(--accent);
+    color: var(--ember);
     font-size: 1.05rem;
 }
 
@@ -197,8 +187,8 @@ img {
 }
 
 .info-item:hover {
-    background-color: rgba(224, 224, 224, 0.08);
-    border-color: rgba(224, 224, 224, 0.2);
+    background-color: var(--line);
+    border-color: var(--line-strong);
     transform: translateX(4px);
 }
 
@@ -206,12 +196,12 @@ img {
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    background: rgba(224, 224, 224, 0.12);
+    background: var(--line);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.95rem;
-    color: var(--accent);
+    color: var(--ember);
     flex-shrink: 0;
 }
 
@@ -223,14 +213,14 @@ img {
 
 .info-label {
     font-size: 0.68rem;
-    color: var(--text-light);
+    color: var(--text-2);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .info-value {
     font-size: 0.9rem;
-    color: var(--white);
+    color: var(--text);
     font-weight: 500;
 }
 
@@ -247,16 +237,15 @@ img {
     grid-template-columns: 2fr 1fr;
     gap: 1.5rem;
     background-color: rgba(0, 0, 0, 0.04);
-    border: 2px solid rgba(224, 224, 224, 0.2);
+    border: 2px solid var(--line-strong);
     border-radius: 12px;
     padding: 2rem;
     transition: all 0.3s ease;
 }
 
 .membership-grid:hover {
-    border-color: var(--accent);
-    background-color: rgba(224, 224, 224, 0.08);
-    transform: translateY(-2px);
+    border-color: var(--ember);
+    background-color: var(--line);
 }
 
 /* Main Membership Card */
@@ -276,12 +265,12 @@ img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #d0d0d0 0%, #e8e8e8 100%);
+    background: linear-gradient(135deg, var(--text-2) 0%, var(--text) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: #333333;
+    color: var(--line-strong);
     flex-shrink: 0;
 }
 
@@ -294,13 +283,13 @@ img {
 .membership-type-name {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--text);
     margin: 0;
 }
 
 .membership-status-badge {
     font-size: 0.8rem;
-    color: #4ade80;
+    color: var(--ok);
     display: flex;
     align-items: center;
     gap: 0.3rem;
@@ -315,17 +304,17 @@ img {
 .price-display {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--white);
+    color: var(--text);
 }
 
 .price-duration {
     font-size: 0.9rem;
-    color: var(--text-light);
+    color: var(--text-2);
 }
 
 .membership-divider {
     height: 2px;
-    background: linear-gradient(90deg, rgba(224, 224, 224, 0.2) 0%, rgba(224, 224, 224, 0.1) 100%);
+    background: linear-gradient(90deg, var(--line-strong) 0%, var(--line) 100%);
     margin: 0.5rem 0;
 }
 
@@ -337,7 +326,7 @@ img {
 
 .benefits-title {
     font-size: 0.75rem;
-    color: var(--text-light);
+    color: var(--text-2);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
@@ -348,11 +337,11 @@ img {
     align-items: center;
     gap: 0.6rem;
     font-size: 0.9rem;
-    color: var(--white);
+    color: var(--text);
 }
 
 .benefit-row i {
-    color: #4ade80;
+    color: var(--ok);
     font-size: 1rem;
 }
 
@@ -362,7 +351,7 @@ img {
     flex-direction: column;
     justify-content: flex-start;
     padding-left: 1rem;
-    border-left: 2px solid rgba(224, 224, 224, 0.2);
+    border-left: 2px solid var(--line-strong);
 }
 
 .details-grid {
@@ -379,14 +368,14 @@ img {
 
 .detail-box .detail-label {
     font-size: 0.7rem;
-    color: var(--text-light);
+    color: var(--text-2);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .detail-box .detail-value {
     font-size: 1rem;
-    color: var(--white);
+    color: var(--text);
     font-weight: 600;
 }
 
@@ -401,7 +390,7 @@ img {
 
 .membership-main-card {
     background-color: rgba(0, 0, 0, 0.04);
-    border: 2px solid rgba(224, 224, 224, 0.2);
+    border: 2px solid var(--line-strong);
     border-radius: 10px;
     padding: 0.8rem;
     transition: all 0.3s ease;
@@ -413,9 +402,8 @@ img {
 }
 
 .membership-main-card:hover {
-    border-color: var(--accent);
-    background-color: rgba(224, 224, 224, 0.08);
-    transform: translateY(-2px);
+    border-color: var(--ember);
+    background-color: var(--line);
 }
 
 .membership-side-panel {
@@ -430,11 +418,11 @@ img {
 .membership-badge {
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--white);
-    background: linear-gradient(135deg, rgba(224, 224, 224, 0.2), rgba(224, 224, 224, 0.1));
+    color: var(--text);
+    background: linear-gradient(135deg, var(--line-strong), var(--line));
     padding: 0.6rem;
     border-radius: 6px;
-    border-left: 4px solid var(--accent);
+    border-left: 4px solid var(--ember);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -445,7 +433,7 @@ img {
     align-items: center;
     gap: 0.6rem;
     font-size: 0.8rem;
-    color: #4ade80;
+    color: var(--ok);
     font-weight: 500;
 }
 
@@ -462,7 +450,7 @@ img {
 
 .benefits-list h4 {
     font-size: 0.65rem;
-    color: var(--text-light);
+    color: var(--text-2);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
@@ -473,12 +461,12 @@ img {
     align-items: center;
     gap: 0.6rem;
     font-size: 0.76rem;
-    color: var(--white);
+    color: var(--text);
     padding: 0.14rem 0;
 }
 
 .benefit-row i {
-    color: #4ade80;
+    color: var(--ok);
     font-size: 0.9rem;
     flex-shrink: 0;
 }
@@ -502,14 +490,14 @@ img {
 
 .date-label {
     font-size: 0.62rem;
-    color: var(--text-light);
+    color: var(--text-2);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .date-value {
     font-size: 0.76rem;
-    color: var(--white);
+    color: var(--text);
     font-weight: 600;
 }
 
@@ -528,7 +516,7 @@ img {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -537,27 +525,25 @@ img {
 }
 
 .membership-actions .btn-danger {
-    background-color: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
-    border: 1.5px solid #ef4444;
+    background-color: var(--danger-tint);
+    color: var(--danger);
+    border: 1.5px solid var(--danger);
 }
 
 .membership-actions .btn-danger:hover {
-    background-color: rgba(239, 68, 68, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    background-color: rgba(255, 92, 92, 0.25);
+    box-shadow: 0 4px 12px rgba(255, 92, 92, 0.2);
 }
 
 .membership-actions .btn-success {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #4ade80;
-    border: 1.5px solid #4ade80;
+    background-color: var(--ok-tint);
+    color: var(--ok);
+    border: 1.5px solid var(--ok);
 }
 
 .membership-actions .btn-success:hover {
-    background-color: rgba(16, 185, 129, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    background-color: rgba(61, 214, 140, 0.25);
+    box-shadow: 0 4px 12px rgba(61, 214, 140, 0.2);
 }
 
 .membership-actions .btn i {
@@ -572,28 +558,28 @@ img {
 
 .no-membership-icon {
     font-size: 3.5rem;
-    color: var(--text-light);
+    color: var(--text-2);
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
 .no-membership-text {
     font-size: 1.2rem;
-    color: var(--white);
+    color: var(--text);
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
 
 .no-membership-subtext {
     font-size: 0.9rem;
-    color: var(--text-light);
+    color: var(--text-2);
     margin-bottom: 1.5rem;
 }
 
 .no-membership a {
     display: inline-block;
-    background: linear-gradient(135deg, #c0c0c0 0%, #e0e0e0 100%);
-    color: #333333;
+    background: linear-gradient(135deg, var(--text-2) 0%, var(--text-2) 100%);
+    color: var(--line-strong);
     padding: 0.8rem 1.8rem;
     border-radius: 8px;
     font-weight: 500;
@@ -601,8 +587,7 @@ img {
 }
 
 .no-membership a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(224, 224, 224, 0.3);
+    box-shadow: 0 6px 20px var(--line-strong);
 }
 
 /* Action Buttons */
@@ -638,25 +623,23 @@ img {
 }
 
 .btn-action.btn-edit {
-    background: linear-gradient(135deg, #c0c0c0 0%, #e0e0e0 100%);
-    color: #333333;
+    background: linear-gradient(135deg, var(--text-2) 0%, var(--text-2) 100%);
+    color: var(--line-strong);
 }
 
 .btn-action.btn-edit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(224, 224, 224, 0.3);
+    box-shadow: 0 6px 20px var(--line-strong);
 }
 
 .btn-action.btn-membership {
     background-color: rgba(0, 0, 0, 0.08);
-    color: var(--white);
-    border: 1px solid rgba(224, 224, 224, 0.2);
+    color: var(--text);
+    border: 1px solid var(--line-strong);
 }
 
 .btn-action.btn-membership:hover {
-    background-color: rgba(224, 224, 224, 0.12);
-    border-color: var(--accent);
-    transform: translateY(-2px);
+    background-color: var(--line);
+    border-color: var(--ember);
 }
 
 /* Responsive */
@@ -740,7 +723,7 @@ img {
 }
 
 /* Modal Styles */
-.modal-overlay {
+.profile-container .modal-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -748,30 +731,29 @@ img {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 2000;
+    z-index: var(--z-modal);
     align-items: center;
     justify-content: center;
     padding: 1rem;
 }
 
-.modal-overlay.active {
+.profile-container .modal-overlay.active {
     display: flex;
 }
 
-.modal-content {
-    background-color: var(--primary-color-light);
+.profile-container .modal-content {
+    background-color: var(--surface);
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     max-width: 500px;
     width: 100%;
     animation: slideIn 0.3s ease-out;
-    border: 1px solid rgba(224, 224, 224, 0.1);
+    border: 1px solid var(--line);
 }
 
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(-30px);
     }
 
     to {
@@ -780,25 +762,25 @@ img {
     }
 }
 
-.modal-header {
+.profile-container .modal-header {
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(224, 224, 224, 0.1);
+    border-bottom: 1px solid var(--line);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.modal-title {
+.profile-container .modal-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--text);
     margin: 0;
 }
 
-.modal-close {
+.profile-container .modal-close {
     background: none;
     border: none;
-    color: var(--text-light);
+    color: var(--text-2);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0;
@@ -811,12 +793,12 @@ img {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.modal-close:hover {
+.profile-container .modal-close:hover {
     background-color: rgba(0, 0, 0, 0.1);
-    color: var(--white);
+    color: var(--text);
 }
 
-.modal-body {
+.profile-container .modal-body {
     padding: 1.5rem;
 }
 
@@ -834,52 +816,52 @@ img {
     gap: 0.5rem;
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--white);
+    color: var(--text);
     margin-bottom: 0.6rem;
 }
 
 .form-label i {
-    color: var(--accent);
+    color: var(--ember);
 }
 
 .form-input {
     width: 100%;
     padding: 0.75rem 1rem;
-    background-color: var(--primary-color-extra-light);
-    border: 1.5px solid rgba(224, 224, 224, 0.2);
+    background-color: var(--line-strong);
+    border: 1.5px solid var(--line-strong);
     border-radius: 8px;
-    color: var(--white);
+    color: var(--text);
     font-size: 0.95rem;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
     transition: border-color 0.2s, background-color 0.2s;
 }
 
 .form-input::placeholder {
-    color: rgba(209, 213, 219, 0.6);
+    color: var(--text-3);
 }
 
 .form-input:focus {
     outline: none;
-    border-color: var(--accent);
-    background-color: rgba(53, 55, 59, 0.8);
-    box-shadow: 0 0 0 3px rgba(224, 224, 224, 0.1);
+    border-color: var(--ember);
+    background-color: rgba(31, 31, 35, 0.8);
+    box-shadow: 0 0 0 3px var(--line);
 }
 
 .form-input:invalid:not(:placeholder-shown) {
-    border-color: #ef4444;
+    border-color: var(--danger);
 }
 
 .form-error {
     display: block;
-    color: #ef4444;
+    color: var(--danger);
     font-size: 0.8rem;
     margin-top: 0.4rem;
     min-height: 1.2rem;
 }
 
-.modal-footer {
+.profile-container .modal-footer {
     padding: 1.5rem;
-    border-top: 1px solid rgba(224, 224, 224, 0.1);
+    border-top: 1px solid var(--line);
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
@@ -894,30 +876,29 @@ img {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: "Poppins", sans-serif;
+    font-family: var(--font-body);
     min-width: 100px;
 }
 
 .btn-cancel {
-    background-color: var(--primary-color-extra-light);
-    color: var(--text-light);
-    border: 1px solid rgba(224, 224, 224, 0.2);
+    background-color: var(--line-strong);
+    color: var(--text-2);
+    border: 1px solid var(--line-strong);
 }
 
 .btn-cancel:hover {
-    background-color: rgba(53, 55, 59, 0.8);
-    color: var(--white);
+    background-color: rgba(31, 31, 35, 0.8);
+    color: var(--text);
 }
 
 .btn-save {
-    background-color: #10b981;
-    color: var(--white);
+    background-color: var(--ok);
+    color: var(--text);
 }
 
 .btn-save:hover {
-    background-color: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background-color: var(--ok);
+    box-shadow: 0 4px 12px rgba(61, 214, 140, 0.3);
 }
 
 .btn-save:active {
@@ -925,7 +906,7 @@ img {
 }
 
 .btn-save:disabled {
-    background-color: rgba(16, 185, 129, 0.5);
+    background-color: rgba(61, 214, 140, 0.5);
     cursor: not-allowed;
     transform: none;
 }
@@ -934,27 +915,27 @@ img {
     width: 100%;
     padding: 1rem;
     font-size: 0.8rem;
-    color: var(--white);
+    color: var(--text);
     text-align: center;
-    background-color: var(--primary-color);
-    border-top: 1px solid var(--primary-color-extra-light);
+    background-color: var(--bg);
+    border-top: 1px solid var(--line-strong);
 }
 
 /* Responsive Modal */
 @media (max-width: 640px) {
-    .modal-content {
+    .profile-container .modal-content {
         max-width: 90%;
     }
 
-    .modal-header {
+    .profile-container .modal-header {
         padding: 1rem;
     }
 
-    .modal-body {
+    .profile-container .modal-body {
         padding: 1rem;
     }
 
-    .modal-footer {
+    .profile-container .modal-footer {
         padding: 1rem;
         flex-direction: column;
     }

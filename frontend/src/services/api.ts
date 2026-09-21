@@ -8,7 +8,7 @@
  * ใช้ fetch ของเบราว์เซอร์ (ไม่เพิ่ม dependency ภายนอก)
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
+export const BASE_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
 const TOKEN_KEY = 'gym_token';
 
 /** โครงสร้าง response มาตรฐานจาก backend (06-api-contract.md) */

@@ -8,8 +8,8 @@ export interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'activity' | 'workout' | 'system' | 'reminder';
-  related_id?: string;
+  type: 'activity' | 'chat' | 'suggestion' | 'workout' | 'system' | 'reminder' | 'sla_warning' | string;
+  related_id?: string | null;
   is_read: boolean;
   created_at: string;
 }

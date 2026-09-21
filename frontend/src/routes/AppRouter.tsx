@@ -24,14 +24,16 @@ import Profile from '../pages/member/Profile';
 
 import TrainerDashboard from '../pages/trainer/TrainerDashboard';
 import TrainerActivities from '../pages/trainer/TrainerActivities';
-import Attendance from '../pages/trainer/Attendance';
 
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import Users from '../pages/admin/Users';
 import Exercises from '../pages/admin/Exercises';
 import ExerciseLibrary from '../pages/admin/ExerciseLibrary';
+import Suggestions from '../pages/admin/Suggestions';
+import TrainerExercises from '../pages/trainer/TrainerExercises';
 
 import NotFound from '../pages/NotFound';
+import ChatRoom from '../pages/chat/ChatRoom';
 
 function AppRouter() {
   return (
@@ -55,6 +57,7 @@ function AppRouter() {
           <Route path="/member/workout" element={<Workout />} />
           <Route path="/member/activities" element={<Activities />} />
           <Route path="/member/notifications" element={<Notifications />} />
+          <Route path="/member/exercise-library" element={<ExerciseLibrary />} />
         </Route>
 
         {/* Trainer */}
@@ -62,7 +65,8 @@ function AppRouter() {
           <Route path="/trainer" element={<Navigate to="/trainer/dashboard" replace />} />
           <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
           <Route path="/trainer/activities" element={<TrainerActivities />} />
-          <Route path="/trainer/activities/:id/attendance" element={<Attendance />} />
+          <Route path="/trainer/exercises" element={<TrainerExercises />} />
+          <Route path="/trainer/exercise-library" element={<ExerciseLibrary />} />
         </Route>
 
         {/* Admin */}
@@ -71,7 +75,13 @@ function AppRouter() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/exercises" element={<Exercises />} />
+          <Route path="/admin/suggestions" element={<Suggestions />} />
           <Route path="/admin/exercise-library" element={<ExerciseLibrary />} />
+        </Route>
+        
+        {/* Course Chat (Shared) */}
+        <Route element={<ProtectedRoute allowedRoles={['member', 'trainer', 'admin']} />}>
+          <Route path="/activities/:id/chat" element={<ChatRoom />} />
         </Route>
       </Route>
 

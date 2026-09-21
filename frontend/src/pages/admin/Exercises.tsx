@@ -1,107 +1,118 @@
 /**
- * Exercises.tsx — Admin จัดการท่าออกกำลังกาย (CRUD)
- * Phase 10: เชื่อม GET/POST/PUT/DELETE /api/exercises
+ * Exercises.tsx — Admin จัดการคลังท่า
+ * ค้นหา/กรอง · ตารางพร้อมภาพย่อ · เพิ่ม/แก้ไขในแผงด้านข้าง (ฟิลด์ครบ) · ดูรายละเอียดเต็ม · ลบ
  */
 
-import { useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 import Toast from '../../components/Toast';
+import ExerciseDetailDialog from '../../components/ExerciseDetailDialog';
 import { ApiError } from '../../services/api';
-import * as exerciseService from '../../services/exercise.service';
+import { getImageUrl } from '../../utils/imageUtils';
+import * as es from '../../services/exercise.service';
 import './Exercises.css';
 
-interface ToastState {
-  show: boolean;
-  message: string;
-  type: 'success' | 'error';
-}
+interface ToastState { show: boolean; message: string; type: 'success' | 'error' }
 
-interface FormState {
+type FormState = {
   id?: string;
   name: string;
   category: string;
-  description: string;
-}
+  muscle_group: string;
+  equipment: string;
+  difficulty: es.ExerciseDifficulty;
+  media_url: string;
+  instructions: string;
+  tips: string;
+};
 
-const CATEGORIES = ['ขา', 'แขน', 'อก', 'หลัง', 'ท้อง', 'ไหล่', 'อื่นๆ'];
+const EMPTY: FormState = { name: '', category: 'strength', muscle_group: '', equipment: '', difficulty: 'beginner', media_url: '', instructions: '', tips: '' };
+const CATEGORIES = ['strength', 'cardio', 'flexibility'];
+const DIFFS: es.ExerciseDifficulty[] = ['beginner', 'intermediate', 'advanced'];
 
 function Exercises() {
-  const [exercises, setExercises] = useState<exerciseService.Exercise[]>([]);
+  const [items, setItems] = useState<es.Exercise[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+  const [q, setQ] = useState('');
+  const [category, setCategory] = useState('');
+  const [difficulty, setDifficulty] = useState<es.ExerciseDifficulty | ''>('');
+  const [form, setForm] = useState<FormState | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [viewing, setViewing] = useState<es.Exercise | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastState>({ show: false, message: '', type: 'success' });
 
-  const [form, setForm] = useState<FormState>({ name: '', category: '', description: '' });
-  const [isEditMode, setIsEditMode] = useState(false);
+  const showToast = useCallback((message: string, type: 'success' | 'error') => setToast({ show: true, message, type }), []);
 
-  useEffect(() => {
-    loadExercises();
-  }, []);
-
-  async function loadExercises() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await exerciseService.listExercises();
-      setExercises(data);
+      const r = await es.searchExercises({ q, category, difficulty, limit: 100 });
+      setItems(r.items);
     } catch (err) {
-      showToast(err instanceof ApiError ? err.message : 'ไม่สามารถโหลดท่า', 'error');
+      showToast(err instanceof ApiError ? err.message : 'โหลดคลังท่าไม่สำเร็จ', 'error');
     } finally {
       setLoading(false);
     }
-  }
+  }, [q, category, difficulty, showToast]);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!form.name.trim() || !form.category.trim()) {
-      showToast('กรุณากรอกชื่อและหมวดหมู่ท่า', 'error');
-      return;
+  useEffect(() => {
+    const t = setTimeout(load, q ? 250 : 0); // debounce ตอนพิมพ์ค้นหา
+    return () => clearTimeout(t);
+  }, [load, q]);
+
+  const stats = useMemo(() => {
+    const byDiff = { beginner: 0, intermediate: 0, advanced: 0 };
+    let noMedia = 0;
+    let incomplete = 0;
+    for (const e of items) {
+      byDiff[e.difficulty] += 1;
+      if (!e.media_url) noMedia += 1;
+      if (!e.instructions || !e.tips || !e.muscle_group) incomplete += 1;
     }
+    return { byDiff, noMedia, incomplete };
+  }, [items]);
 
-    setSubmitting(true);
-    try {
-      if (isEditMode && form.id) {
-        await exerciseService.updateExercise(form.id, {
-          name: form.name,
-          category: form.category,
-          description: form.description,
-        });
-        showToast('แก้ไขท่าสำเร็จ', 'success');
-      } else {
-        await exerciseService.createExercise({
-          name: form.name,
-          category: form.category,
-          description: form.description,
-        });
-        showToast('เพิ่มท่าใหม่สำเร็จ', 'success');
-      }
-      setForm({ name: '', category: '', description: '' });
-      setIsEditMode(false);
-      await loadExercises();
-    } catch (err) {
-      showToast(err instanceof ApiError ? err.message : 'ไม่สำเร็จ', 'error');
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleEdit(exercise: exerciseService.Exercise) {
+  function openEdit(e: es.Exercise) {
     setForm({
-      id: exercise.id,
-      name: exercise.name,
-      category: exercise.category,
-      description: exercise.description ?? '',
+      id: e.id, name: e.name, category: e.category ?? 'strength', muscle_group: e.muscle_group ?? '',
+      equipment: e.equipment ?? '', difficulty: e.difficulty ?? 'beginner', media_url: e.media_url ?? '',
+      instructions: e.instructions ?? '', tips: e.tips ?? '',
     });
-    setIsEditMode(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('ต้องการลบท่านี้หรือไม่?')) return;
-    setDeleting(id);
+  async function handleSave(ev: FormEvent) {
+    ev.preventDefault();
+    if (!form) return;
+    setSaving(true);
+    const payload: es.ExerciseInput = {
+      name: form.name.trim(), category: form.category || null, muscle_group: form.muscle_group.trim() || null,
+      equipment: form.equipment.trim() || null, difficulty: form.difficulty, media_url: form.media_url.trim() || null,
+      instructions: form.instructions.trim() || null, tips: form.tips.trim() || null,
+    };
     try {
-      await exerciseService.deleteExercise(id);
-      showToast('ลบท่าสำเร็จ', 'success');
-      await loadExercises();
+      if (form.id) {
+        await es.updateExercise(form.id, payload);
+        showToast('บันทึกการแก้ไขแล้ว', 'success');
+      } else {
+        await es.createExercise(payload);
+        showToast('เพิ่มท่าใหม่แล้ว', 'success');
+      }
+      setForm(null);
+      await load();
+    } catch (err) {
+      showToast(err instanceof ApiError ? err.message : 'บันทึกไม่สำเร็จ', 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete(e: es.Exercise) {
+    if (!confirm(`ลบ "${e.name}" ออกจากคลัง?\nท่านี้จะหายจากตารางฝึกของสมาชิกที่ใช้อยู่ด้วย`)) return;
+    setDeleting(e.id);
+    try {
+      await es.deleteExercise(e.id);
+      showToast('ลบท่าแล้ว', 'success');
+      await load();
     } catch (err) {
       showToast(err instanceof ApiError ? err.message : 'ลบไม่สำเร็จ', 'error');
     } finally {
@@ -109,143 +120,177 @@ function Exercises() {
     }
   }
 
-  function showToast(message: string, type: 'success' | 'error') {
-    setToast({ show: true, message, type });
-  }
-
-  if (loading) {
-    return <div style={{ padding: '2rem', textAlign: 'center' }}>กำลังโหลด...</div>;
-  }
-
   return (
-    <div className="exercises">
-      <h1>คลังท่าออกกำลังกาย</h1>
+    <div className="exm">
+      <div className="page-head">
+        <div>
+          <span className="eyebrow">คลังท่า</span>
+          <h1>จัดการท่าออกกำลังกาย</h1>
+          <p>{items.length} ท่า · {stats.incomplete > 0 ? `${stats.incomplete} ท่ายังขาดข้อมูล (กล้ามเนื้อ/ขั้นตอน/เคล็ดลับ)` : 'ข้อมูลครบทุกท่า'}{stats.noMedia > 0 ? ` · ${stats.noMedia} ท่าไม่มีสื่อ` : ''}</p>
+        </div>
+        <button type="button" className="btn btn--primary" onClick={() => setForm({ ...EMPTY })}>
+          <i className="ri-add-line"></i> เพิ่มท่าใหม่
+        </button>
+      </div>
 
-      <section className="exercises__form-section">
-        <h2>{isEditMode ? 'แก้ไขท่า' : 'เพิ่มท่าใหม่'}</h2>
-        <form onSubmit={handleSubmit} className="exercises__form">
-          <div className="exercises__field">
-            <label className="exercises__label" htmlFor="name">
-              ชื่อท่า
-            </label>
-            <input
-              id="name"
-              className="exercises__input"
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="เช่น Barbell Bench Press"
-              required
-            />
-          </div>
-
-          <div className="exercises__field">
-            <label className="exercises__label" htmlFor="category">
-              หมวดหมู่
-            </label>
-            <select
-              id="category"
-              className="exercises__input"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              required
-            >
-              <option value="">-- เลือกหมวดหมู่ --</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="exercises__field">
-            <label className="exercises__label" htmlFor="desc">
-              คำอธิบาย (ไม่บังคับ)
-            </label>
-            <textarea
-              id="desc"
-              className="exercises__input exercises__textarea"
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="เช่น วิธีทำ ข้อควรระวัง ฯลฯ"
-              rows={3}
-            />
-          </div>
-
-          <div className="exercises__form-actions">
-            <button type="submit" className="btn btn--primary" disabled={submitting}>
-              {submitting ? 'กำลังบันทึก...' : isEditMode ? 'บันทึกแก้ไข' : 'เพิ่มท่า'}
-            </button>
-            {isEditMode && (
-              <button
-                type="button"
-                className="btn btn--ghost"
-                onClick={() => {
-                  setForm({ name: '', category: '', description: '' });
-                  setIsEditMode(false);
-                }}
-              >
-                ยกเลิก
+      {/* ---------- Toolbar ---------- */}
+      <div className="exm__toolbar card card--flat">
+        <label className="exm__search">
+          <i className="ri-search-line"></i>
+          <input type="search" placeholder="ค้นหาชื่อท่า กล้ามเนื้อ หรืออุปกรณ์…" value={q} onChange={(e) => setQ(e.target.value)} />
+        </label>
+        <div className="exm__filters">
+          <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="หมวด">
+            <option value="">ทุกหมวด</option>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{es.CATEGORY_LABEL[c] ?? c}</option>)}
+          </select>
+          <div className="exm__seg" role="group" aria-label="ระดับ">
+            <button type="button" className={difficulty === '' ? 'on' : ''} onClick={() => setDifficulty('')}>ทั้งหมด</button>
+            {DIFFS.map((d) => (
+              <button key={d} type="button" className={difficulty === d ? 'on' : ''} onClick={() => setDifficulty(d)}>
+                {es.DIFFICULTY_LABEL[d]} <small>{stats.byDiff[d]}</small>
               </button>
-            )}
+            ))}
           </div>
-        </form>
-      </section>
+        </div>
+      </div>
 
-      <section className="exercises__list-section">
-        <h2>รายการท่าทั้งหมด ({exercises.length})</h2>
-        {exercises.length > 0 ? (
-          <table className="exercises__table">
-            <thead>
-              <tr>
-                <th>ชื่อท่า</th>
-                <th>หมวดหมู่</th>
-                <th>คำอธิบาย</th>
-                <th style={{ textAlign: 'center' }}>ดำเนิน การ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {exercises.map((ex) => (
-                <tr key={ex.id}>
-                  <td className="exercises__name">{ex.name}</td>
-                  <td>{ex.category}</td>
-                  <td className="exercises__desc">{ex.description || '-'}</td>
-                  <td className="exercises__actions">
-                    <button
-                      className="exercises__btn exercises__btn--edit"
-                      onClick={() => handleEdit(ex)}
-                      title="แก้ไข"
-                      aria-label="แก้ไข"
-                    >
-                      <i className="ri-edit-line"></i>
-                    </button>
-                    <button
-                      className="exercises__btn exercises__btn--delete"
-                      onClick={() => handleDelete(ex.id)}
-                      disabled={deleting === ex.id}
-                      title="ลบ"
-                      aria-label="ลบ"
-                    >
-                      {deleting === ex.id ? <i className="ri-loader-4-line ri-spin"></i> : <i className="ri-delete-bin-line"></i>}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* ---------- Table ---------- */}
+      <div className="card card--flat exm__tablewrap">
+        {loading ? (
+          <div className="exm__state">กำลังโหลด...</div>
+        ) : items.length === 0 ? (
+          <div className="exm__state">ไม่พบท่าที่ตรงกับเงื่อนไข</div>
         ) : (
-          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>ยังไม่มีท่า</p>
+          <div className="table-responsive">
+            <table className="table exm__table">
+              <thead>
+                <tr>
+                  <th style={{ width: 72 }}></th>
+                  <th>ท่า</th>
+                  <th>กล้ามเนื้อหลัก</th>
+                  <th>อุปกรณ์</th>
+                  <th>ระดับ</th>
+                  <th>ความครบถ้วน</th>
+                  <th style={{ textAlign: 'right' }}>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((e) => {
+                  const missing = [!e.muscle_group && 'กล้ามเนื้อ', !e.instructions && 'ขั้นตอน', !e.tips && 'เคล็ดลับ', !e.media_url && 'สื่อ'].filter(Boolean) as string[];
+                  return (
+                    <tr key={e.id}>
+                      <td>
+                        <button type="button" className="exm__thumb" onClick={() => setViewing(e)} aria-label={`ดู ${e.name}`}>
+                          {e.media_url ? <img src={getImageUrl(e.media_url)} alt="" loading="lazy" /> : <i className="ri-image-line"></i>}
+                        </button>
+                      </td>
+                      <td>
+                        <button type="button" className="exm__name" onClick={() => setViewing(e)}>{e.name}</button>
+                        <div className="exm__sub">{e.category ? es.CATEGORY_LABEL[e.category] ?? e.category : '—'}</div>
+                      </td>
+                      <td className="exm__muted">{e.muscle_group || '—'}</td>
+                      <td className="exm__muted">{e.equipment || '—'}</td>
+                      <td><span className={`badge exm__lvl--${e.difficulty}`}>{es.DIFFICULTY_LABEL[e.difficulty]}</span></td>
+                      <td>
+                        {missing.length === 0
+                          ? <span className="badge badge-success">ครบ</span>
+                          : <span className="badge badge-warning" title={`ขาด: ${missing.join(', ')}`}>ขาด {missing.length}</span>}
+                      </td>
+                      <td>
+                        <div className="exm__actions">
+                          <button type="button" className="btn btn--ghost btn--sm" onClick={() => setViewing(e)} title="ดูรายละเอียด"><i className="ri-eye-line"></i></button>
+                          <button type="button" className="btn btn--secondary btn--sm" onClick={() => openEdit(e)}><i className="ri-edit-line"></i> แก้ไข</button>
+                          <button type="button" className="btn btn--danger btn--sm" onClick={() => handleDelete(e)} disabled={deleting === e.id} title="ลบ"><i className="ri-delete-bin-line"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
-      </section>
+      </div>
 
-      {toast.show && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onDismiss={() => setToast({ ...toast, show: false })}
+      {/* ---------- Editor drawer ---------- */}
+      {form && (
+        <div className="exm__drawer-backdrop" onClick={() => !saving && setForm(null)}>
+          <form className="exm__drawer" onClick={(e) => e.stopPropagation()} onSubmit={handleSave}>
+            <div className="exm__drawer-head">
+              <div>
+                <span className="eyebrow">{form.id ? 'แก้ไขท่า' : 'ท่าใหม่'}</span>
+                <h2>{form.id ? form.name || 'แก้ไขท่า' : 'เพิ่มท่าออกกำลังกาย'}</h2>
+              </div>
+              <button type="button" className="exm__drawer-close" onClick={() => setForm(null)} aria-label="ปิด"><i className="ri-close-line"></i></button>
+            </div>
+
+            <div className="exm__drawer-body">
+              <div className="exm__preview">
+                {form.media_url ? <img src={getImageUrl(form.media_url)} alt="" /> : <span><i className="ri-image-add-line"></i> ใส่ path สื่อด้านล่างเพื่อดูตัวอย่าง</span>}
+              </div>
+
+              <div className="exm__row2">
+                <label className="exm__field exm__field--full">
+                  <span>ชื่อท่า *</span>
+                  <input className="input" required maxLength={255} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                </label>
+                <label className="exm__field">
+                  <span>หมวด</span>
+                  <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                    {CATEGORIES.map((c) => <option key={c} value={c}>{es.CATEGORY_LABEL[c] ?? c}</option>)}
+                  </select>
+                </label>
+                <label className="exm__field">
+                  <span>ระดับ</span>
+                  <select className="input" value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value as es.ExerciseDifficulty })}>
+                    {DIFFS.map((d) => <option key={d} value={d}>{es.DIFFICULTY_LABEL[d]}</option>)}
+                  </select>
+                </label>
+                <label className="exm__field">
+                  <span>กล้ามเนื้อหลัก</span>
+                  <input className="input" maxLength={100} placeholder="เช่น อก, ไหล่หน้า, หลังแขน" value={form.muscle_group} onChange={(e) => setForm({ ...form, muscle_group: e.target.value })} />
+                </label>
+                <label className="exm__field">
+                  <span>อุปกรณ์</span>
+                  <input className="input" maxLength={100} placeholder="เช่น ดัมเบล + ม้านั่ง" value={form.equipment} onChange={(e) => setForm({ ...form, equipment: e.target.value })} />
+                </label>
+                <label className="exm__field exm__field--full">
+                  <span>สื่อ (path ใน /exercises หรือ URL)</span>
+                  <input className="input" maxLength={500} placeholder="/exercises/Strength/Squats.gif" value={form.media_url} onChange={(e) => setForm({ ...form, media_url: e.target.value })} />
+                </label>
+                <label className="exm__field exm__field--full">
+                  <span>ขั้นตอน — 1 ขั้นต่อบรรทัด</span>
+                  <textarea className="input" rows={5} value={form.instructions} onChange={(e) => setForm({ ...form, instructions: e.target.value })} placeholder={'ยืนเท้ากว้างเท่าไหล่\nย่อตัวลงจนต้นขาขนานพื้น\nดันขึ้นกลับสู่ท่ายืน'} />
+                </label>
+                <label className="exm__field exm__field--full">
+                  <span>ข้อควรระวัง / เคล็ดลับ — คั่นด้วย · หรือขึ้นบรรทัดใหม่</span>
+                  <textarea className="input" rows={3} value={form.tips} onChange={(e) => setForm({ ...form, tips: e.target.value })} placeholder="หลังตรงตลอด · เข่าไปทางเดียวกับปลายเท้า" />
+                </label>
+              </div>
+            </div>
+
+            <div className="exm__drawer-foot">
+              <button type="button" className="btn btn--ghost" onClick={() => setForm(null)} disabled={saving}>ยกเลิก</button>
+              <button type="submit" className="btn btn--primary" disabled={saving}>{saving ? 'กำลังบันทึก...' : form.id ? 'บันทึกการแก้ไข' : 'เพิ่มท่า'}</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {viewing && (
+        <ExerciseDetailDialog
+          exercise={viewing}
+          onClose={() => setViewing(null)}
+          extra={
+            <button type="button" className="btn btn--secondary" onClick={() => { const v = viewing; setViewing(null); openEdit(v); }}>
+              <i className="ri-edit-line"></i> แก้ไขท่านี้
+            </button>
+          }
         />
       )}
+
+      {toast.show && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast({ ...toast, show: false })} />}
     </div>
   );
 }
