@@ -15,6 +15,8 @@ const dashboardRouter = require('./src/modules/dashboard/dashboard.router');
 const reportRouter = require('./src/modules/report/report.router');
 const notificationRouter = require('./src/modules/notification/notification.router');
 const userRouter = require('./src/modules/user/user.router');
+const exerciseSuggestionRouter = require('./src/modules/exercise-suggestion/exercise-suggestion.router');
+const chatRouter = require('./src/modules/chat/chat.router');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -73,6 +75,8 @@ app.use('/api/dashboard', dashboardRouter);
 app.use('/api/reports', reportRouter);
 app.use('/api/notifications', notificationRouter);
 app.use('/api/users', userRouter);
+app.use('/api/exercise-suggestions', exerciseSuggestionRouter);
+app.use('/api/chat', chatRouter);
 
 // Serve Static Frontend Files (Single Container Production)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -90,6 +94,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const cronService = require('./src/services/cron.service');
+const initializeSocket = require('./src/socket');
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
@@ -97,6 +102,10 @@ const server = app.listen(PORT, () => {
   // Initialize Cron Jobs
   cronService.startCronJobs();
 });
+
+// Initialize WebSockets
+const io = initializeSocket(server);
+app.locals.io = io; // ให้ REST fallback ของแชท broadcast ผ่าน socket ได้
 
 /**
  * Graceful shutdown — ปิด HTTP server และ MySQL pool ให้เรียบร้อย

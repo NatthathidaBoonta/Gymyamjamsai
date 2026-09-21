@@ -7,9 +7,17 @@ const service = require('./exercise.service');
 
 async function list(req, res, next) {
   try {
-    const { limit, offset, page } = dto.parsePagination(req.query);
-    const data = await service.list({ limit, offset, page });
+    const data = await service.list(dto.parsePagination(req.query));
     res.status(200).json({ status: 'success', message: 'รายการท่าออกกำลังกาย', data });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function stats(req, res, next) {
+  try {
+    const data = await service.stats();
+    res.status(200).json({ status: 'success', message: 'สถิติคลังท่า', data });
   } catch (err) {
     next(err);
   }
@@ -53,4 +61,4 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { list, getOne, create, update, remove };
+module.exports = { list, getOne, create, update, remove, stats };

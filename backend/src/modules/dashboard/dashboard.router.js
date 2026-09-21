@@ -10,5 +10,7 @@ const router = express.Router();
 
 router.get('/personal', authenticate, requireRole('member'), controller.personal);
 router.get('/admin', authenticate, requireRole('admin'), controller.admin);
+router.get('/admin/charts', authenticate, requireRole('admin'), controller.adminCharts);
+router.get('/trainer', authenticate, requireRole('trainer'), controller.trainer);
 
 module.exports = router;

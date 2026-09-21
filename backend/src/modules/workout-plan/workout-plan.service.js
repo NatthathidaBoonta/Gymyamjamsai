@@ -15,21 +15,42 @@ const PLAN_DURATION_DAYS = 28;
  * แล้ว service จะจับคู่กับท่าจริงในคลัง (round-robin) ตอน generate
  */
 const TEMPLATES = {
+  // ลดน้ำหนัก: 4 วัน/สัปดาห์ คาร์ดิโอนำ + strength เบา reps สูง
   lose_weight: [
-    { category: 'cardio', target_sets: 3, target_reps: 20, day_of_week: 'Monday' },
-    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Monday' },
-    { category: 'cardio', target_sets: 3, target_reps: 20, day_of_week: 'Wednesday' },
-    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Friday' },
+    { category: 'cardio', target_sets: 3, target_reps: 30, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 3, target_reps: 30, day_of_week: 'Tuesday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Tuesday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 4, target_reps: 30, day_of_week: 'Thursday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Thursday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 15, day_of_week: 'Thursday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 3, target_reps: 30, day_of_week: 'Saturday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 20, day_of_week: 'Saturday', difficulty: 'beginner' },
   ],
+  // เพิ่มกล้ามเนื้อ: Push / Pull / Legs สลับ 3 วัน + ท่าเสริม
   build_muscle: [
-    { category: 'strength', target_sets: 4, target_reps: 8, day_of_week: 'Monday' },
-    { category: 'strength', target_sets: 4, target_reps: 10, day_of_week: 'Wednesday' },
-    { category: 'strength', target_sets: 4, target_reps: 12, day_of_week: 'Friday' },
+    { category: 'strength', target_sets: 4, target_reps: 8, day_of_week: 'Monday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 4, target_reps: 10, day_of_week: 'Monday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 4, target_reps: 8, day_of_week: 'Wednesday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 4, target_reps: 10, day_of_week: 'Wednesday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Wednesday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 4, target_reps: 8, day_of_week: 'Friday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 4, target_reps: 10, day_of_week: 'Friday', difficulty: 'intermediate' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Friday', difficulty: 'beginner' },
   ],
+  // ฟิตทั่วไป: 3 วัน ผสม strength + cardio
   general: [
-    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Monday' },
-    { category: 'cardio', target_sets: 3, target_reps: 15, day_of_week: 'Wednesday' },
-    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Friday' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 3, target_reps: 20, day_of_week: 'Monday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Wednesday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Wednesday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 3, target_reps: 20, day_of_week: 'Wednesday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Friday', difficulty: 'beginner' },
+    { category: 'strength', target_sets: 3, target_reps: 12, day_of_week: 'Friday', difficulty: 'beginner' },
+    { category: 'cardio', target_sets: 3, target_reps: 20, day_of_week: 'Friday', difficulty: 'beginner' },
   ],
 };
 
@@ -49,12 +70,28 @@ function buildDetails(template, exercises) {
     (byCategory[key] = byCategory[key] || []).push(ex);
   }
   const counters = {};
+  const usedByDay = {};
 
   return template.map((item) => {
-    const candidates = byCategory[item.category]?.length ? byCategory[item.category] : exercises;
-    const idx = (counters[item.category] || 0) % candidates.length;
-    counters[item.category] = idx + 1;
-    const exercise = candidates[idx];
+    let pool = byCategory[item.category]?.length ? byCategory[item.category] : exercises;
+    // ชอบท่าที่ระดับตรงกับ template ก่อน ถ้าไม่มีค่อยใช้ทั้งหมวด
+    const leveled = pool.filter((e) => e.difficulty === item.difficulty);
+    if (leveled.length >= 3) pool = leveled;
+
+    const key = `${item.category}:${item.difficulty}`;
+    const used = (usedByDay[item.day_of_week] = usedByDay[item.day_of_week] || new Set());
+    let exercise = null;
+    for (let tries = 0; tries < pool.length; tries += 1) {
+      const idx = (counters[key] || 0) % pool.length;
+      counters[key] = idx + 1;
+      if (!used.has(pool[idx].id)) {
+        exercise = pool[idx];
+        break;
+      }
+    }
+    if (!exercise) exercise = pool[(counters[key] || 0) % pool.length];
+    used.add(exercise.id);
+
     return {
       exercise_id: exercise.id,
       target_sets: item.target_sets,
@@ -81,9 +118,10 @@ async function generate(userId, { goal }) {
 
   const start = new Date();
   const end = new Date(start.getTime() + PLAN_DURATION_DAYS * 24 * 60 * 60 * 1000);
+  const resolvedGoal = TEMPLATES[goal] ? goal : 'general';
   const planId = await repo.createPlanWithDetails(
     userId,
-    { start_date: toDateString(start), end_date: toDateString(end) },
+    { goal: resolvedGoal, start_date: toDateString(start), end_date: toDateString(end) },
     details,
   );
 
@@ -105,18 +143,35 @@ async function getCurrent(userId) {
 
 async function logWorkout(userId, planId, logData) {
   const { exerciseId, sets, reps, weightKg } = logData;
-  // Basic validation
-  if (!exerciseId || !sets || !reps) {
-    throw new AppError('กรุณาระบุข้อมูลให้ครบถ้วน (ท่า, เซต, ครั้ง)', 400);
+  const setsN = parseInt(sets, 10);
+  const repsN = parseInt(reps, 10);
+  const weightN = weightKg === undefined || weightKg === null || weightKg === '' ? null : parseFloat(weightKg);
+
+  if (!exerciseId || !Number.isInteger(setsN) || setsN < 1 || !Number.isInteger(repsN) || repsN < 1) {
+    const err = new Error('กรุณาระบุข้อมูลให้ครบถ้วน (ท่า, เซต ≥ 1, ครั้ง ≥ 1)');
+    err.status = 400;
+    throw err;
   }
-  
-  // Verify plan belongs to user and is active
-  const plan = await repository.getCurrentPlan(userId);
-  if (!plan || plan.id !== planId) {
-    throw new AppError('ไม่พบตารางออกกำลังกายปัจจุบัน', 404);
+  if (weightN !== null && (Number.isNaN(weightN) || weightN < 0)) {
+    const err = new Error('น้ำหนักต้องเป็นตัวเลขไม่ติดลบ');
+    err.status = 400;
+    throw err;
   }
 
-  const logId = await repository.insertWorkoutLog(userId, planId, exerciseId, sets, reps, weightKg || null);
+  // ต้องเป็นแผนปัจจุบันของ user คนนี้เท่านั้น
+  const plan = await repo.getCurrentPlan(userId);
+  if (!plan || plan.id !== planId) {
+    const err = new Error('ไม่พบตารางออกกำลังกายปัจจุบัน');
+    err.status = 404;
+    throw err;
+  }
+
+  const logId = await repo.insertWorkoutLog(planId, exerciseId, setsN, repsN, weightN);
+  if (!logId) {
+    const err = new Error('ท่านี้ไม่อยู่ในตารางออกกำลังกายปัจจุบัน');
+    err.status = 400;
+    throw err;
+  }
   return { id: logId };
 }
 

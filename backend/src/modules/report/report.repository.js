@@ -10,7 +10,7 @@ const { pool } = require('../../database');
  * - month/year → กรองตาม start_datetime ของกิจกรรม (ถ้าระบุ)
  */
 async function getAttendanceRows({ trainerId, month, year }) {
-  const where = ["r.status = 'registered'"];
+  const where = ["r.status = 'approved'"];
   const params = [];
 
   if (trainerId) {

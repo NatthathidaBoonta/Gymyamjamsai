@@ -10,6 +10,7 @@ const { authenticate, requireRole } = require('../../middleware/auth.middleware'
 const router = express.Router();
 
 router.get('/', controller.list);
+router.get('/stats', authenticate, requireRole('admin', 'trainer'), controller.stats);
 router.get('/:id', controller.getOne);
 router.post('/', authenticate, requireRole('admin'), controller.create);
 router.put('/:id', authenticate, requireRole('admin'), controller.update);

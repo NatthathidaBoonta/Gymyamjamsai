@@ -10,9 +10,13 @@ function notFound(message) {
   return err;
 }
 
-async function list({ limit, offset, page }) {
-  const { items, total } = await repo.findAll({ limit, offset });
+async function list({ limit, offset, page, q, category, difficulty }) {
+  const { items, total } = await repo.findAll({ limit, offset, q, category, difficulty });
   return { items, total, page, limit };
+}
+
+async function stats() {
+  return { by_category: await repo.countByCategory() };
 }
 
 async function getById(id) {
@@ -36,4 +40,4 @@ async function remove(id) {
   if (affected === 0) throw notFound('ไม่พบท่าออกกำลังกายที่ระบุ');
 }
 
-module.exports = { list, getById, create, update, remove };
+module.exports = { list, getById, create, update, remove, stats };

@@ -54,8 +54,12 @@ async function create({ userId, title, message, type, relatedId }) {
 /**
  * อ่าน notification (mark as read)
  */
-async function markAsRead(notificationId) {
-  await pool.query('UPDATE notifications SET is_read = TRUE WHERE id = ?', [notificationId]);
+async function markAsRead(notificationId, userId) {
+  const [result] = await pool.query(
+    'UPDATE notifications SET is_read = TRUE WHERE id = ? AND user_id = ?',
+    [notificationId, userId],
+  );
+  return result.affectedRows;
 }
 
 /**
@@ -68,8 +72,12 @@ async function markAllAsReadByUser(userId) {
 /**
  * ลบ notification
  */
-async function deleteOne(notificationId) {
-  await pool.query('DELETE FROM notifications WHERE id = ?', [notificationId]);
+async function deleteOne(notificationId, userId) {
+  const [result] = await pool.query('DELETE FROM notifications WHERE id = ? AND user_id = ?', [
+    notificationId,
+    userId,
+  ]);
+  return result.affectedRows;
 }
 
 /**
@@ -81,7 +89,30 @@ async function deleteOldNotifications(daysOld = 30) {
   await pool.query('DELETE FROM notifications WHERE created_at < ? AND is_read = TRUE', [date]);
 }
 
+/**
+ * มีแจ้งเตือนชนิด/รายการเดียวกันที่ยังไม่อ่านภายใน N นาทีหรือไม่ (ใช้กันเด้งรัว เช่น แชท)
+ */
+async function hasRecentUnread(userId, type, relatedId, minutes) {
+  const [rows] = await pool.query(
+    `SELECT id FROM notifications
+     WHERE user_id = ? AND type = ? AND related_id <=> ? AND is_read = FALSE
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? MINUTE) LIMIT 1`,
+    [userId, type, relatedId || null, minutes],
+  );
+  return rows.length > 0;
+}
+
+/** user id ของแอดมินที่ยังใช้งาน (สำหรับแจ้งงานที่รออนุมัติ) */
+async function listAdminIds() {
+  const [rows] = await pool.query(
+    "SELECT id FROM users WHERE role = 'admin' AND is_active = TRUE AND deleted_at IS NULL",
+  );
+  return rows.map((r) => r.id);
+}
+
 module.exports = {
+  hasRecentUnread,
+  listAdminIds,
   listByUser,
   countUnread,
   create,

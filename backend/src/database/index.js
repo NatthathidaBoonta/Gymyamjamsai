@@ -19,7 +19,11 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10, // จำกัดจำนวน connection กัน DB ล้ม
   queueLimit: 0,
-  dateStrings: true, // คืนค่า DATE/DATETIME เป็น string กัน timezone เพี้ยน
+  // MySQL เก็บเวลาเป็น UTC (container ไม่ตั้ง TZ) — ให้ driver ตีความเป็น UTC แล้วส่งออกเป็น Date/ISO 'Z'
+  // frontend จึงแสดงเวลาท้องถิ่นได้ถูก (เดิม dateStrings: true ทำให้ browser ตีความ '16:32' เป็นเวลาไทย → คลาดไป 7 ชม.)
+  // DATE ล้วน (start_date/end_date) ยังคงเป็น 'YYYY-MM-DD' ไม่ให้เลื่อนวัน
+  timezone: 'Z',
+  dateStrings: ['DATE'],
 });
 
 /**

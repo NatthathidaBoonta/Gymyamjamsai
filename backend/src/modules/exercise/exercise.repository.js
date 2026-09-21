@@ -10,30 +10,55 @@ const { pool } = require('../../database');
  * หมายเหตุ: limit/offset ถูก validate เป็น integer มาแล้วจาก DTO จึง interpolate
  * ตรงๆ ได้ (เลี่ยงปัญหา placeholder ของ LIMIT ใน mysql2) — ปลอดภัยจาก injection
  */
-async function findAll({ limit, offset }) {
+async function findAll({ limit, offset, q, category, difficulty }) {
+  const where = [];
+  const params = [];
+  if (q) {
+    where.push('(name LIKE ? OR muscle_group LIKE ? OR equipment LIKE ?)');
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  if (category) {
+    where.push('category = ?');
+    params.push(category);
+  }
+  if (difficulty) {
+    where.push('difficulty = ?');
+    params.push(difficulty);
+  }
+  const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
   const [items] = await pool.query(
-    `SELECT id, name, category, media_url, instructions
-     FROM exercises ORDER BY name LIMIT ${limit} OFFSET ${offset}`,
+    `SELECT id, name, category, muscle_group, equipment, difficulty, media_url, instructions, tips, updated_at
+     FROM exercises ${whereSql} ORDER BY name LIMIT ${limit} OFFSET ${offset}`,
+    params,
   );
-  const [[{ total }]] = await pool.query('SELECT COUNT(*) AS total FROM exercises');
+  const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM exercises ${whereSql}`, params);
   return { items, total };
 }
 
 async function findById(id) {
   const [rows] = await pool.query(
-    'SELECT id, name, category, media_url, instructions FROM exercises WHERE id = ? LIMIT 1',
+    'SELECT id, name, category, muscle_group, equipment, difficulty, media_url, instructions, tips, updated_at FROM exercises WHERE id = ? LIMIT 1',
     [id],
   );
   return rows[0] || null;
 }
 
-async function create({ name, category, media_url, instructions }) {
+async function create({ name, category, muscle_group, equipment, difficulty, media_url, instructions, tips }) {
   const id = crypto.randomUUID();
   await pool.query(
-    'INSERT INTO exercises (id, name, category, media_url, instructions) VALUES (?, ?, ?, ?, ?)',
-    [id, name, category, media_url, instructions],
+    `INSERT INTO exercises (id, name, category, muscle_group, equipment, difficulty, media_url, instructions, tips)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [id, name, category, muscle_group, equipment, difficulty || 'beginner', media_url, instructions, tips],
   );
   return findById(id);
+}
+
+/** นับจำนวนท่าแยกตามหมวด (ใช้ในหน้า admin) */
+async function countByCategory() {
+  const [rows] = await pool.query(
+    'SELECT COALESCE(category, "other") AS category, COUNT(*) AS count FROM exercises GROUP BY category ORDER BY count DESC',
+  );
+  return rows.map((r) => ({ category: r.category, count: Number(r.count) }));
 }
 
 /**
@@ -57,4 +82,4 @@ async function remove(id) {
   return result.affectedRows;
 }
 
-module.exports = { findAll, findById, create, update, remove };
+module.exports = { findAll, findById, create, update, remove, countByCategory };

@@ -9,7 +9,7 @@ const { pool } = require('../../database');
  * ดึงท่าทั้งหมด (ใช้ประกอบ Static Template)
  */
 async function listExercises() {
-  const [rows] = await pool.query('SELECT id, name, category FROM exercises ORDER BY name');
+  const [rows] = await pool.query('SELECT id, name, category, difficulty FROM exercises ORDER BY name');
   return rows;
 }
 
@@ -31,8 +31,8 @@ async function createPlanWithDetails(userId, plan, details) {
 
     const planId = crypto.randomUUID();
     await conn.query(
-      'INSERT INTO workout_plans (id, user_id, status, start_date, end_date) VALUES (?, ?, ?, ?, ?)',
-      [planId, userId, 'active', plan.start_date, plan.end_date],
+      'INSERT INTO workout_plans (id, user_id, goal, status, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?)',
+      [planId, userId, plan.goal || null, 'active', plan.start_date, plan.end_date],
     );
 
     for (const d of details) {
@@ -67,7 +67,7 @@ async function createPlanWithDetails(userId, plan, details) {
  */
 async function getCurrentPlan(userId) {
   const [plans] = await pool.query(
-    `SELECT id, status, start_date, end_date, created_at
+    `SELECT id, goal, status, start_date, end_date, created_at
      FROM workout_plans WHERE user_id = ? AND status = 'active'
      ORDER BY created_at DESC LIMIT 1`,
     [userId],
@@ -76,22 +76,36 @@ async function getCurrentPlan(userId) {
 
   const plan = plans[0];
   const [details] = await pool.query(
-    `SELECT d.id, d.exercise_id, e.name AS exercise_name, e.category,
-            d.target_sets, d.target_reps, d.target_weight, d.day_of_week
+    `SELECT d.id, d.exercise_id, e.name AS exercise_name, e.category, e.muscle_group, e.equipment,
+            e.difficulty, e.media_url, e.instructions, e.tips,
+            d.target_sets, d.target_reps, d.target_weight, d.day_of_week,
+            (SELECT COUNT(*) FROM workout_logs wl WHERE wl.plan_detail_id = d.id) AS log_count,
+            (SELECT MAX(wl.logged_at) FROM workout_logs wl WHERE wl.plan_detail_id = d.id) AS last_logged_at
      FROM workout_plan_details d
      JOIN exercises e ON e.id = d.exercise_id
-     WHERE d.plan_id = ? ORDER BY d.created_at`,
+     WHERE d.plan_id = ?
+     ORDER BY FIELD(d.day_of_week, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'), d.created_at`,
     [plan.id],
   );
   return { ...plan, details };
 }
 
-async function insertWorkoutLog(userId, planId, exerciseId, sets, reps, weightKg) {
+/**
+ * บันทึกผลการฝึก — workout_logs ผูกกับ plan_detail (ท่าในแผน) ไม่ใช่ user/plan ตรงๆ
+ * @returns {string|null} logId หรือ null ถ้าท่านี้ไม่อยู่ในแผน
+ */
+async function insertWorkoutLog(planId, exerciseId, sets, reps, weightKg) {
+  const [details] = await pool.query(
+    'SELECT id FROM workout_plan_details WHERE plan_id = ? AND exercise_id = ? LIMIT 1',
+    [planId, exerciseId],
+  );
+  if (!details.length) return null;
+
   const logId = crypto.randomUUID();
   await pool.query(
-    `INSERT INTO workout_logs (id, user_id, plan_id, exercise_id, sets, reps, weight_kg)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [logId, userId, planId, exerciseId, sets, reps, weightKg]
+    `INSERT INTO workout_logs (id, plan_detail_id, actual_sets, actual_reps, actual_weight)
+     VALUES (?, ?, ?, ?, ?)`,
+    [logId, details[0].id, sets, reps, weightKg],
   );
   return logId;
 }

@@ -49,7 +49,7 @@ async function getUnreadCount(req, res, next) {
 async function markAsRead(req, res, next) {
   try {
     const { id } = req.params;
-    await service.read(id);
+    await service.read(id, req.user.id);
     res.status(200).json({
       status: 'success',
       message: 'Marked as read',
@@ -80,7 +80,7 @@ async function markAllAsRead(req, res, next) {
 async function remove(req, res, next) {
   try {
     const { id } = req.params;
-    await service.remove(id);
+    await service.remove(id, req.user.id);
     res.status(200).json({
       status: 'success',
       message: 'Deleted',

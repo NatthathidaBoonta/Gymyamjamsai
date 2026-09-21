@@ -30,4 +30,12 @@ async function admin() {
   return repo.getAdminSummary();
 }
 
-module.exports = { personal, admin };
+async function adminCharts() {
+  return repo.getAdminCharts();
+}
+
+async function trainer(trainerId) {
+  return repo.getTrainerSummary(trainerId);
+}
+
+module.exports = { personal, admin, adminCharts, trainer };

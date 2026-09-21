@@ -1,5 +1,17 @@
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const userRepository = require('./user.repository');
+const authRepo = require('../auth/auth.repository');
+const { validateRegister } = require('../auth/auth.dto');
+
+const SALT_ROUNDS = 12;
+const VALID_ROLES = ['admin', 'trainer', 'member'];
+
+function httpError(message, status) {
+  const err = new Error(message);
+  err.status = status;
+  return err;
+}
 
 async function getUserProfile(userId) {
   const profile = await userRepository.getProfileByUserId(userId);
@@ -45,7 +57,64 @@ async function updateUserProfile(userId, data) {
   return { success: true };
 }
 
+async function getAllUsers() {
+  return await userRepository.getAllUsers();
+}
+
+/**
+ * ตรวจ role ที่ admin ส่งมา — ต้องเป็นค่าที่ระบบรู้จักเท่านั้น
+ */
+function validateRole(role) {
+  if (!VALID_ROLES.includes(role)) {
+    throw httpError(`บทบาทต้องเป็นหนึ่งใน: ${VALID_ROLES.join(', ')}`, 400);
+  }
+  return role;
+}
+
+/**
+ * Admin สร้างผู้ใช้ใหม่ — ใช้กฎ email/password เดียวกับหน้า register
+ */
+async function createUser(data) {
+  const { email, password } = validateRegister(data);
+  const role = validateRole(data && data.role);
+
+  if (await authRepo.existsByEmail(email)) {
+    throw httpError('อีเมลนี้ถูกใช้งานแล้ว', 409);
+  }
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+  const newUser = await authRepo.createUser({
+    id: crypto.randomUUID(),
+    email,
+    passwordHash,
+    role,
+  });
+  return newUser;
+}
+
+/**
+ * Admin แก้ role / สถานะบัญชี — ห้ามแก้บัญชีตัวเอง (กันล็อคตัวเองออกจากระบบ)
+ */
+async function updateUser(actorId, id, data) {
+  if (actorId === id) {
+    throw httpError('ไม่สามารถแก้ไขบทบาทหรือสถานะบัญชีของตัวเองได้', 400);
+  }
+  const role = validateRole(data && data.role);
+  if (data.is_active === undefined || data.is_active === null) {
+    throw httpError('ข้อมูลไม่ครบถ้วน', 400);
+  }
+  const isActive = data.is_active === true || data.is_active === 1 || data.is_active === '1' ? 1 : 0;
+
+  const affected = await userRepository.updateUser(id, { role, is_active: isActive });
+  if (affected === 0) {
+    throw httpError('ไม่พบผู้ใช้งาน', 404);
+  }
+  return { success: true };
+}
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
+  getAllUsers,
+  createUser,
+  updateUser,
 };

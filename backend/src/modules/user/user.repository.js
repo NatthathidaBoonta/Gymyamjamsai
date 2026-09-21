@@ -50,8 +50,40 @@ async function insertMetric(metricData) {
   await pool.query(query, [id, userId, weightKg, heightCm, bmi]);
 }
 
+async function getAllUsers() {
+  const query = `
+    SELECT 
+      u.id, 
+      u.email, 
+      u.role, 
+      u.is_active, 
+      u.created_at,
+      p.first_name,
+      p.last_name
+    FROM users u
+    LEFT JOIN user_profiles p ON u.id = p.user_id
+    WHERE u.deleted_at IS NULL
+    ORDER BY u.created_at DESC
+  `;
+  const [rows] = await pool.query(query);
+  return rows;
+}
+
+async function updateUser(id, data) {
+  const { role, is_active } = data;
+  const query = `
+    UPDATE users 
+    SET role = ?, is_active = ?
+    WHERE id = ? AND deleted_at IS NULL
+  `;
+  const [result] = await pool.query(query, [role, is_active, id]);
+  return result.affectedRows;
+}
+
 module.exports = {
   getProfileByUserId,
   upsertProfile,
   insertMetric,
+  getAllUsers,
+  updateUser,
 };

@@ -26,4 +26,22 @@ async function admin(req, res, next) {
   }
 }
 
-module.exports = { personal, admin };
+async function adminCharts(req, res, next) {
+  try {
+    const data = await service.adminCharts();
+    res.status(200).json({ status: 'success', message: 'ข้อมูลกราฟภาพรวมระบบ', data });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function trainer(req, res, next) {
+  try {
+    const data = await service.trainer(req.user.id);
+    res.status(200).json({ status: 'success', message: 'ภาพรวมผู้ฝึกสอน', data });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { personal, admin, adminCharts, trainer };

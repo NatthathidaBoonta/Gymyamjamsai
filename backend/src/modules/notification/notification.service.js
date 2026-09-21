@@ -32,10 +32,39 @@ async function notify(userId, title, message, type, relatedId) {
 }
 
 /**
+ * แจ้งหลายคนพร้อมกัน — คนใดล้มไม่ทำให้คนอื่นล้ม
+ */
+async function notifyMany(userIds, title, message, type, relatedId) {
+  const results = await Promise.allSettled(userIds.map((uid) => notify(uid, title, message, type, relatedId)));
+  return results.filter((r) => r.status === 'fulfilled').length;
+}
+
+/**
+ * แจ้งแบบกันซ้ำ: ถ้ามีแจ้งเตือนชนิด/รายการเดียวกันที่ยังไม่อ่านภายใน `minutes` ให้ข้าม
+ * ใช้กับแชท (ข้อความรัวๆ ในห้องเดียว = แจ้งครั้งเดียวจนกว่าจะอ่าน)
+ */
+async function notifyDebounced(userId, title, message, type, relatedId, minutes = 10) {
+  if (await repo.hasRecentUnread(userId, type, relatedId, minutes)) return false;
+  await notify(userId, title, message, type, relatedId);
+  return true;
+}
+
+/** แจ้งแอดมินทุกคน (งานที่รออนุมัติ) */
+async function notifyAdmins(title, message, type, relatedId) {
+  const ids = await repo.listAdminIds();
+  return notifyMany(ids, title, message, type, relatedId);
+}
+
+/**
  * Mark notification as read
  */
-async function read(notificationId) {
-  await repo.markAsRead(notificationId);
+async function read(notificationId, userId) {
+  const affected = await repo.markAsRead(notificationId, userId);
+  if (affected === 0) {
+    const err = new Error('ไม่พบการแจ้งเตือนนี้');
+    err.status = 404;
+    throw err;
+  }
 }
 
 /**
@@ -48,8 +77,13 @@ async function readAll(userId) {
 /**
  * ลบ notification
  */
-async function remove(notificationId) {
-  await repo.deleteOne(notificationId);
+async function remove(notificationId, userId) {
+  const affected = await repo.deleteOne(notificationId, userId);
+  if (affected === 0) {
+    const err = new Error('ไม่พบการแจ้งเตือนนี้');
+    err.status = 404;
+    throw err;
+  }
 }
 
 /**
@@ -82,6 +116,9 @@ async function notifyRegistration(memberName, trainerId, activityTitle) {
 }
 
 module.exports = {
+  notifyMany,
+  notifyDebounced,
+  notifyAdmins,
   list,
   getUnreadCount,
   notify,

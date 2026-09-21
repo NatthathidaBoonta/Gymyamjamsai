@@ -21,7 +21,9 @@ async function findByEmail(email) {
  * ตรวจว่ามี email นี้อยู่แล้วหรือไม่ (ใช้ตอน register)
  */
 async function existsByEmail(email) {
-  const [rows] = await pool.query('SELECT id FROM users WHERE email = ? LIMIT 1', [email]);
+  const [rows] = await pool.query('SELECT id FROM users WHERE email = ? AND deleted_at IS NULL LIMIT 1', [
+    email,
+  ]);
   return rows.length > 0;
 }
 
