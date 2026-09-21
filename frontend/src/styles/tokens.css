@@ -1,0 +1,110 @@
+/* ============================================================
+   tokens.css — แหล่งความจริงเดียวของสี / ฟอนต์ / ระยะ / ชั้นซ้อน (z-index)
+   Ember v2: พื้นน้ำเงินดำเย็น (แนว Cruip Open) + ส้มเอมเบอร์เป็น accent เดียว
+   ห้ามประกาศ :root สีที่อื่น — ไฟล์ CSS หน้าอื่นให้อ้าง var(--…) จากที่นี่เท่านั้น
+   ============================================================ */
+
+:root {
+  /* ---------- พื้น (neutral เย็น อมน้ำเงิน — ตัดกับส้มแบบคู่ตรงข้าม) ---------- */
+  --bg: #0a0e1a;
+  --bg-2: #0e1322; /* section สลับ / glow base */
+  --surface: #131a2b;
+  --surface-2: #1b2336;
+  --surface-3: #232d44; /* hover ของ surface-2 */
+  --line: #202a40;
+  --line-strong: #2f3b57;
+  --line-hi: rgba(255, 255, 255, 0.08); /* hairline บนสุดของ card/ปุ่ม (highlight) */
+
+  /* ---------- ตัวอักษร (อมน้ำเงินเล็กน้อยให้เข้ากับพื้น) ---------- */
+  --text: #eef0f6;
+  --text-2: #9ea8c0;
+  --text-3: #6b7590; /* ≥ 14px เท่านั้น */
+
+  /* ---------- ส้มเอมเบอร์ (accent เดียว — ใช้ ≤ ~10% ของหน้า) ---------- */
+  --ember: #ff7a1a;
+  --ember-hi: #ff9a4d;
+  --ember-deep: #e8650f;
+  --ember-tint: rgba(255, 122, 26, 0.12);
+  --ember-line: rgba(255, 122, 26, 0.35);
+  --ember-glow: rgba(255, 122, 26, 0.22);
+  --on-ember: #1a0f05; /* ตัวอักษรบนพื้นส้ม — ขาวบนส้มได้แค่ 2.6:1 */
+  --amber: #ffb347;
+
+  /* gradient สำเร็จรูป (แนว Cruip: ปุ่ม to-top, หัวข้อ to-right) */
+  --grad-ember: linear-gradient(to top, var(--ember-deep) 0%, var(--ember) 100%);
+  --grad-text: linear-gradient(to right, #eef0f6 0%, #ffd2ad 30%, #ffffff 55%, #ffb072 80%, #eef0f6 100%);
+  --grad-text-accent: linear-gradient(to right, var(--ember) 0%, var(--amber) 100%);
+  --grad-surface: linear-gradient(to bottom, var(--surface-2) 0%, rgba(27, 35, 54, 0.6) 100%);
+  --grad-hairline: linear-gradient(to bottom, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+
+  /* ---------- สถานะ ---------- */
+  --ok: #3dd68c;
+  --warn: #ffd166;
+  --danger: #ff5c5c;
+  --info: #8fb8ff;
+  --ok-tint: rgba(61, 214, 140, 0.12);
+  --warn-tint: rgba(255, 209, 102, 0.12);
+  --danger-tint: rgba(255, 92, 92, 0.12);
+  --info-tint: rgba(143, 184, 255, 0.12);
+
+  /* ---------- ฟอนต์ ---------- */
+  --font-display: 'Kanit', 'Prompt', 'Noto Sans Thai', system-ui, sans-serif;
+  --font-body: 'Noto Sans Thai', 'Sarabun', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --lh-body: 1.75;
+  --lh-heading: 1.2;
+
+  /* ---------- ระยะ / โครง ---------- */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --sidebar-width: 248px;
+  --topbar-height: 64px;
+  --content-max: 1200px;
+
+  /* radius: ปุ่ม/ฟอร์ม 8 · การ์ด 16 · pill 999 */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 999px;
+  --radius: 12px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.5);
+  --shadow: var(--shadow-lg);
+
+  --transition-fast: 120ms ease;
+  --transition-base: 180ms ease;
+  --transition-slow: 260ms ease;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+
+  /* ---------- ชั้นซ้อน (z-index) — สเกลเดียวทั้งแอป ห้ามใส่เลขลอยๆ ----------
+     ต่ำ → สูง: เนื้อหา < sticky/dropdown ในหน้า < sidebar < topbar < backdrop < modal < toast */
+  --z-raised: 1;
+  --z-dropdown: 40;
+  --z-sidebar: 50;
+  --z-topbar: 60;
+  --z-backdrop: 70;
+  --z-modal: 80;
+  --z-toast: 90;
+}

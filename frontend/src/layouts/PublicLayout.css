@@ -18,7 +18,7 @@
 
 /* หน้า Landing และไลบรารีท่าเต็มความกว้างจอ (ไม่ถูกจำกัดเหมือนหน้า Login/Register) */
 .pub__main:has(.landing),
-.pub__main:has(.exercise-library) {
+.pub__main:has(.lib) {
   max-width: none;
   margin: 0;
   padding: 0;
@@ -28,8 +28,8 @@
   padding: var(--space-md);
   text-align: center;
   font-size: 0.85rem;
-  color: var(--color-text-muted);
-  border-top: 1px solid var(--color-border);
+  color: var(--text-2);
+  border-top: 1px solid var(--line);
 }
 
 @media (min-width: 900px) {

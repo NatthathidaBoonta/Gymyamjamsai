@@ -1,22 +1,19 @@
-/* AuthForm.css — ฟอร์ม Login/Register (Responsive) */
+/* AuthForm.css — ฟอร์ม Login/Register (Ember v2) */
 
 .auth {
   width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  background: transparent;
-  padding: var(--space-lg) 0;
 }
 
 .auth__title {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   text-align: center;
+  margin-bottom: 0.25rem;
 }
 
 .auth__subtitle {
-  margin: 0 0 var(--space-lg);
+  margin: 0 0 1.5rem;
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--text-2);
   font-size: 0.92rem;
 }
 
@@ -28,71 +25,69 @@
 }
 
 .auth__label {
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
   font-weight: 500;
+  color: var(--text-2);
 }
 
 .auth__input {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.65rem 0.85rem;
   font: inherit;
-  font-size: 1rem; /* >= 16px กัน iOS zoom ตอนโฟกัส */
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  font-size: 1rem; /* ≥ 16px กัน iOS zoom ตอนโฟกัส */
+  color: var(--text);
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .auth__input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
-  border-color: var(--color-primary);
+  outline: none;
+  border-color: var(--ember);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--ember-tint);
 }
 
 .auth__submit {
   width: 100%;
-  margin-top: var(--space-xs);
+  margin-top: 0.5rem;
 }
 
 .auth__error {
   margin: 0 0 var(--space-md);
-  padding: var(--space-sm);
-  border-radius: var(--radius);
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #fca5a5;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  background: var(--danger-tint);
+  border: 1px solid rgba(255, 92, 92, 0.35);
+  color: var(--danger);
   font-size: 0.9rem;
 }
 
 .auth__switch {
-  margin: var(--space-md) 0 0;
+  margin: 1.25rem 0 0;
   text-align: center;
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  color: var(--text-2);
 }
 
 .auth__switch a {
-  color: var(--color-primary);
+  color: var(--ember-hi);
   font-weight: 500;
 }
 
 .auth__hint {
   margin-top: var(--space-lg);
   padding-top: var(--space-md);
-  border-top: 1px dashed var(--color-border);
+  border-top: 1px dashed var(--line-strong);
   font-size: 0.82rem;
-  color: var(--color-text-muted);
+  color: var(--text-3);
 }
 
 .auth__hint code {
-  background: var(--color-primary-soft);
+  background: var(--ember-tint);
+  color: var(--ember-hi);
   padding: 0.1rem 0.3rem;
   border-radius: 4px;
-}
-
-@media (min-width: 768px) {
-  .auth {
-    padding: var(--space-xl) 0;
-    margin-top: 0;
-  }
 }

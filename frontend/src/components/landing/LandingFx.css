@@ -1,0 +1,194 @@
+/* LandingFx.css — ลูกเล่นหน้าแรก */
+
+/* ---------- Intro reveal (ม่านโลโก้) ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: var(--bg);
+  animation: introOut 500ms cubic-bezier(0.7, 0, 0.3, 1) 950ms forwards;
+  pointer-events: none;
+}
+
+.intro__mark { display: flex; align-items: center; gap: 12px; animation: introIn 600ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.intro__dot { width: 18px; height: 18px; border-radius: 6px; background: var(--grad-ember); box-shadow: 0 0 0 6px var(--ember-tint), 0 0 40px var(--ember-glow); animation: introPulse 900ms ease-in-out infinite alternate; }
+.intro__word { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: 0.04em; color: var(--text); }
+.intro__bar { width: 160px; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.intro__bar span { display: block; height: 100%; width: 100%; background: var(--grad-text-accent); transform-origin: left; animation: introBar 900ms cubic-bezier(0.4, 0, 0.2, 1) 100ms both; }
+
+@keyframes introIn { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes introPulse { from { transform: scale(1); } to { transform: scale(1.18); } }
+@keyframes introBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes introOut { to { opacity: 0; transform: translateY(-4%); visibility: hidden; } }
+
+/* ---------- Particle canvas ---------- */
+.particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+/* ---------- Rotating word ---------- */
+.rot {
+  position: relative;
+  display: inline-grid;
+  vertical-align: bottom;
+  text-align: left;
+}
+
+.rot__w {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  background: var(--grad-text-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  transform: translateY(0.6em) rotateX(-40deg);
+  transform-origin: 50% 100%;
+  transition: opacity 500ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.rot__w.on { opacity: 1; transform: none; }
+
+/* ---------- Marquee ---------- */
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-2);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  padding: 0.7rem 0;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee__track { animation-play-state: paused; }
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.marquee__item i { color: var(--ember); }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ---------- Tilt (3D) ---------- */
+.tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 180ms ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt:hover { transition: transform 60ms ease; }
+.tilt > * { height: 100%; }
+
+/* ---------- Cursor glow ---------- */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 122, 26, 0.10), rgba(255, 122, 26, 0.03) 40%, transparent 70%);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+/* ---------- Scroll progress ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: calc(var(--z-topbar) + 1);
+  background: var(--grad-text-accent);
+  transform-origin: left;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* ---------- Reveal (เข้าจอ) — เริ่มจากมองเห็นอยู่แล้ว ขยับขึ้นเล็กน้อยและชัดขึ้น ---------- */
+.reveal {
+  opacity: 0.35;
+  transform: translateY(26px);
+  filter: blur(2px);
+  transition: opacity 700ms ease var(--rd, 0ms), transform 800ms cubic-bezier(0.22, 1, 0.36, 1) var(--rd, 0ms), filter 700ms ease var(--rd, 0ms);
+}
+
+.reveal--on { opacity: 1; transform: none; filter: none; }
+
+/* ---------- Animated conic border (CTA) ---------- */
+.conic {
+  position: relative;
+  isolation: isolate;
+}
+
+.conic::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--angle, 0deg), transparent 0 60%, var(--ember-hi) 75%, var(--amber) 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin 4s linear infinite;
+  z-index: -1;
+}
+
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes spin { to { --angle: 360deg; } }
+
+/* ---------- ปุ่มหลักมีแสงวิ่งผ่าน ---------- */
+.btn--shine { position: relative; overflow: hidden; }
+.btn--shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  animation: shine 3.2s ease-in-out infinite;
+}
+@keyframes shine { 0%, 60% { left: -60%; } 100% { left: 130%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro, .marquee__track, .conic::before, .btn--shine::after { animation: none !important; }
+  .reveal { opacity: 1; transform: none; filter: none; transition: none; }
+  .tilt { transform: none !important; }
+  .rot__w { transition: none; }
+}

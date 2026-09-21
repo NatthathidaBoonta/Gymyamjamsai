@@ -1,0 +1,115 @@
+/* AppFx.css — ลูกเล่นร่วมหน้าหลัง login (ทุกบทบาท) */
+
+/* ---------- เปลี่ยนหน้า: เนื้อหาชัดขึ้น ----------
+   ห้ามใส่ transform บน wrapper — Chrome จะถือว่า wrapper เป็น containing block ของ position: fixed
+   ทำให้ modal/dialog ที่อยู่ข้างในไปโผล่กลางความสูงของหน้า (นอกจอ) แทนกลางจอ */
+.page-enter { animation: pageIn 420ms ease both; }
+@keyframes pageIn { from { opacity: 0.001; } to { opacity: 1; } }
+
+/* การ์ด/แผงในหน้า ทยอยโผล่ทีละใบ (ตามลำดับใน DOM) */
+.page-enter .card,
+.page-enter .adm__kpi,
+.page-enter .trd__kpi,
+.page-enter .member-dashboard__card,
+.page-enter .member-dashboard__chart-section,
+.page-enter .wk__ex,
+.page-enter .wk__day,
+.page-enter .exc,
+.page-enter .tca__course,
+.page-enter .sug,
+.page-enter .activities__card,
+.page-enter .table tbody tr {
+  animation: cardIn 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(60ms + var(--stagger, 0) * 45ms);
+}
+
+@keyframes cardIn { from { opacity: 0.001; transform: translateY(16px) scale(0.985); } to { opacity: 1; transform: none; } }
+
+/* ลำดับ stagger จาก nth-child (ครอบคลุม 12 ใบแรก พอสำหรับทุกหน้า) */
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(1)  { --stagger: 0; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(2)  { --stagger: 1; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(3)  { --stagger: 2; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(4)  { --stagger: 3; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(5)  { --stagger: 4; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(6)  { --stagger: 5; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(7)  { --stagger: 6; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(8)  { --stagger: 7; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(9)  { --stagger: 8; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(10) { --stagger: 9; }
+.page-enter :is(.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .member-dashboard__chart-section, .wk__ex, .wk__day, .exc, .tca__course, .sug, .activities__card, .table tbody tr):nth-child(n + 11) { --stagger: 10; }
+
+/* ---------- spotlight ตามเมาส์บนการ์ดทุกใบ (เหมือนการ์ดฟีเจอร์หน้าแรก) ---------- */
+.card, .adm__kpi, .trd__kpi, .member-dashboard__card, .wk__ex, .exc, .tca__course, .sug, .activities__card {
+  position: relative;
+}
+
+.card::after, .adm__kpi::after, .trd__kpi::after, .member-dashboard__card::after,
+.wk__ex::after, .exc::after, .tca__course::after, .sug::after, .activities__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(280px circle at var(--mx, -300px) var(--my, -300px), rgba(255, 122, 26, 0.10), transparent 45%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card:hover::after, .adm__kpi:hover::after, .trd__kpi:hover::after, .member-dashboard__card:hover::after,
+.wk__ex:hover::after, .exc:hover::after, .tca__course:hover::after, .sug:hover::after, .activities__card:hover::after {
+  opacity: 1;
+}
+
+/* ขอบ hairline ของ .card สว่างตรงเมาส์ */
+.card:hover::before {
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 154, 77, 0.6), rgba(255, 255, 255, 0.06) 60%);
+}
+
+/* ---------- KPI: ตัวเลขเด่นมี glow หายใจเบาๆ ---------- */
+.adm__kpi--hot .adm__kpi-v,
+.trd__kpi--hot .trd__kpi-v,
+.hero__stat-v--hot {
+  text-shadow: 0 0 18px var(--ember-glow);
+  animation: kpiBreathe 3.2s ease-in-out infinite;
+}
+@keyframes kpiBreathe { 0%, 100% { text-shadow: 0 0 12px rgba(255, 122, 26, 0.18); } 50% { text-shadow: 0 0 26px rgba(255, 122, 26, 0.38); } }
+
+/* ---------- ปุ่มหลักในแอป: แสงวิ่งผ่านตอน hover เท่านั้น (ไม่รบกวนตอนทำงาน) ---------- */
+.btn--primary, .btn-primary { position: relative; overflow: hidden; }
+.btn--primary::after, .btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  opacity: 0;
+  pointer-events: none;
+}
+.btn--primary:hover::after, .btn-primary:hover::after { animation: btnShine 700ms ease-out; }
+@keyframes btnShine { from { left: -60%; opacity: 1; } to { left: 130%; opacity: 1; } }
+
+/* ---------- แถบ progress / bar ในการ์ด: ยืดออกตอนโหลด ---------- */
+.adm__bar > div, .trd__bar > div, .tca__bar > div, .activities__progress-bar {
+  animation: barGrow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 200ms;
+  transform-origin: left;
+}
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- Modal: เด้งเข้ามา ---------- */
+.modal-overlay { animation: fadeIn 180ms ease both; }
+.modal-content, .exd__panel, .exm__drawer { animation: popIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+/* ---------- Toast: สไลด์ขึ้น ---------- */
+.toast { animation: toastIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter, .page-enter *, .adm__kpi--hot .adm__kpi-v, .trd__kpi--hot .trd__kpi-v,
+  .modal-overlay, .modal-content, .exd__panel, .exm__drawer, .toast,
+  .adm__bar > div, .trd__bar > div, .tca__bar > div, .activities__progress-bar { animation: none !important; }
+}

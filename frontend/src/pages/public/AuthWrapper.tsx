@@ -1,3 +1,7 @@
+/**
+ * AuthWrapper.tsx — กรอบหน้า Login/Register (แนว Cruip sign-in: การ์ดเดียวกลางจอ + glow)
+ */
+
 import type { ReactNode } from 'react';
 import './AuthWrapper.css';
 
@@ -8,39 +12,13 @@ interface Props {
 function AuthWrapper({ children }: Props) {
   return (
     <div className="auth-wrapper">
-      <div className="auth-wrapper__info">
-        <div className="auth-wrapper__info-content">
-          <h1>เริ่มต้นสุขภาพดีไปกับเรา</h1>
-          <p>Gymyamjamsai ระบบติดตามพัฒนาการการออกกำลังกายที่ออกแบบมาเพื่อคุณ</p>
-          
-          <div className="auth-wrapper__features">
-            <div className="feature-item">
-              <div className="feature-icon"><i className="ri-edit-circle-line" style={{ fontSize: '1.5rem' }}></i></div>
-              <div className="feature-text">
-                <h3>บันทึกง่าย</h3>
-                <p>บันทึกการออกกำลังกายได้สะดวกรวดเร็ว</p>
-              </div>
-            </div>
-            <div className="feature-item">
-              <div className="feature-icon"><i className="ri-bar-chart-line" style={{ fontSize: '1.5rem' }}></i></div>
-              <div className="feature-text">
-                <h3>สถิติชัดเจน</h3>
-                <p>ดูกราฟพัฒนาการของตัวเองได้ทุกที่</p>
-              </div>
-            </div>
-            <div className="feature-item">
-              <div className="feature-icon"><i className="ri-play-circle-line" style={{ fontSize: '1.5rem' }}></i></div>
-              <div className="feature-text">
-                <h3>มีรูปและวิดีโอสอน</h3>
-                <p>ดูท่าที่ถูกต้อง ป้องกันอาการบาดเจ็บ</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="auth-wrapper__form">
-        {children}
-      </div>
+      <div className="auth-wrapper__glow" aria-hidden="true"></div>
+      <div className="auth-wrapper__card card">{children}</div>
+      <ul className="auth-wrapper__points" aria-label="จุดเด่นของระบบ">
+        <li><i className="ri-edit-circle-line"></i>บันทึกผลใน 2 คลิก</li>
+        <li><i className="ri-line-chart-line"></i>กราฟพัฒนาการรายสัปดาห์</li>
+        <li><i className="ri-shield-check-line"></i>ข้อมูลสุขภาพเป็นส่วนตัว</li>
+      </ul>
     </div>
   );
 }

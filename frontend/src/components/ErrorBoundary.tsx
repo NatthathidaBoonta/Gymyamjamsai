@@ -27,8 +27,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div style={{ padding: '2rem', textAlign: 'center' }}>
-          <h2 style={{ color: 'var(--color-error)' }}>⚠️ เกิดข้อผิดพลาด</h2>
-          <p style={{ color: 'var(--color-text-muted)' }}>
+          <h2 style={{ color: 'var(--danger)' }}>⚠️ เกิดข้อผิดพลาด</h2>
+          <p style={{ color: 'var(--text-2)' }}>
             {this.state.error?.message || 'ไม่ทราบสาเหตุ'}
           </p>
           <button
@@ -36,7 +36,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
             style={{
               marginTop: '1rem',
               padding: '0.5rem 1rem',
-              backgroundColor: 'var(--color-primary)',
+              backgroundColor: 'var(--ember)',
               color: 'white',
               border: 'none',
               borderRadius: '4px',

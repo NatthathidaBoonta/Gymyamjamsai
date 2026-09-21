@@ -1,36 +1,34 @@
 /**
- * PublicNav.tsx — แถบนำทางเดียวสำหรับหน้า Guest ทั้งหมด (Landing/Login/Register)
- * ใช้ดีไซน์ GymKaK (โลโก้ + เมนู + ปุ่มเข้าสู่ระบบ/สมัครสมาชิก) แทนที่แถบเรียบเดิมของ PublicLayout
+ * PublicNav.tsx — แถบนำทางหน้าสาธารณะ
+ * Guest: โลโก้ + เข้าสู่ระบบ/สมัคร · ล็อกอินอยู่: แสดง TopNav ตามบทบาท (จนกว่าจะออกจากระบบ)
  */
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import TopNav from './TopNav';
 import './PublicNav.css';
 
 function PublicNav() {
-  const location = useLocation();
-  const isLanding = location.pathname === '/';
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // ระหว่างตรวจ token ตอนเปิดแอป ยังไม่รู้สถานะ → แสดงแบบ guest ไว้ก่อน (ไม่กระพริบเมนู)
+  if (!isLoading && isAuthenticated) return <TopNav />;
 
   return (
-    <nav className="public-nav">
-      <Link to="/" className="public-nav__logo">
-        <h1>Gymyamjamsai</h1>
-      </Link>
-
-      {isLanding && (
-        <ul className="public-nav__links">
-          <li><a href="#exercises">ท่าออกกำลัง</a></li>
-          <li><a href="#programs">โปรแกรม</a></li>
-          <li><a href="#features">ฟีเจอร์</a></li>
-        </ul>
-      )}
-
-      <div className="public-nav__cta">
-        <Link to="/login" className="public-nav__btn public-nav__btn--ghost">
-          เข้าสู่ระบบ
+    <nav className="public-nav" aria-label="เมนูหลัก">
+      <div className="public-nav__inner">
+        <Link to="/" className="public-nav__logo">
+          <h1>Gymyamjamsai</h1>
         </Link>
-        <Link to="/register" className="public-nav__btn public-nav__btn--primary">
-          สมัครสมาชิก
-        </Link>
+
+        <div className="public-nav__cta">
+          <Link to="/login" className="btn btn--secondary btn--sm">
+            เข้าสู่ระบบ
+          </Link>
+          <Link to="/register" className="btn btn--primary btn--sm">
+            สมัครสมาชิก
+          </Link>
+        </div>
       </div>
     </nav>
   );
