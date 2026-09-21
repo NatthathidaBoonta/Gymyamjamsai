@@ -24,6 +24,8 @@ const pool = mysql.createPool({
   // DATE ล้วน (start_date/end_date) ยังคงเป็น 'YYYY-MM-DD' ไม่ให้เลื่อนวัน
   timezone: 'Z',
   dateStrings: ['DATE'],
+  // TiDB Cloud / managed MySQL บังคับ TLS — ตั้ง DB_SSL=true (ใช้ CA ของระบบ ตรวจ cert จริง)
+  ...(process.env.DB_SSL === 'true' ? { ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true } } : {}),
 });
 
 /**

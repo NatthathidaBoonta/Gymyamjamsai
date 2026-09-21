@@ -46,7 +46,9 @@ export function sendMessageRest(activityId: string, message: string): Promise<Ch
 
 /** เปิด socket ด้วย token ปัจจุบัน (ผู้เรียกรับผิดชอบ disconnect) */
 export function connectChat(): Socket {
-  return io(BASE_URL, {
+  // production เสิร์ฟจาก origin เดียวกัน (VITE_API_URL='/api') → ต้องต่อ socket ที่ origin ไม่ใช่ path
+  const origin = /^https?:\/\//.test(BASE_URL) ? new URL(BASE_URL).origin : window.location.origin;
+  return io(origin, {
     auth: { token: getToken() ?? '' },
     transports: ['websocket', 'polling'],
     reconnectionAttempts: 5,
