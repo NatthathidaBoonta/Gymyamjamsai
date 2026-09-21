@@ -11,15 +11,14 @@ SET NAMES utf8mb4;
 -- ------------------------------------------------------------
 -- exercises: ฟิลด์รายละเอียดเพิ่มเติม
 -- ------------------------------------------------------------
-ALTER TABLE exercises
-  ADD COLUMN muscle_group VARCHAR(100) NULL AFTER category,
-  ADD COLUMN equipment    VARCHAR(100) NULL AFTER muscle_group,
-  ADD COLUMN difficulty   ENUM('beginner', 'intermediate', 'advanced') NOT NULL DEFAULT 'beginner' AFTER equipment,
-  ADD COLUMN tips         TEXT NULL AFTER instructions;
+-- แยกคำสั่งละ column (TiDB ไม่รับหลาย ADD COLUMN ที่ AFTER อ้าง column ในคำสั่งเดียวกัน)
+ALTER TABLE exercises ADD COLUMN muscle_group VARCHAR(100) NULL AFTER category;
+ALTER TABLE exercises ADD COLUMN equipment    VARCHAR(100) NULL AFTER muscle_group;
+ALTER TABLE exercises ADD COLUMN difficulty   ENUM('beginner', 'intermediate', 'advanced') NOT NULL DEFAULT 'beginner' AFTER equipment;
+ALTER TABLE exercises ADD COLUMN tips         TEXT NULL AFTER instructions;
 
 -- workout_plans: จำเป้าหมายที่ใช้สร้างแผน (เดิม frontend เดาเป็น general ทุกครั้งที่โหลด)
-ALTER TABLE workout_plans
-  ADD COLUMN goal VARCHAR(50) NULL AFTER user_id;
+ALTER TABLE workout_plans ADD COLUMN goal VARCHAR(50) NULL AFTER user_id;
 
 -- ------------------------------------------------------------
 -- exercise_suggestions — Trainer เสนอแก้ไขรายละเอียดท่า, Admin อนุมัติ/ปฏิเสธ
