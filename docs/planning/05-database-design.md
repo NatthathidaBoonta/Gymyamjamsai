@@ -80,7 +80,7 @@
 
 ### 9. `activity_registrations`
 - **วัตถุประสงค์:** เก็บข้อมูลว่านักศึกษาคนไหน กดลงทะเบียนเข้าร่วมคลาสใด และมาร่วมจริงหรือไม่
-- **Field สำคัญ:** `id`, `activity_id`, `user_id`, `status` (registered, cancelled), `is_attended` (boolean)
+- **Field สำคัญ:** `id`, `activity_id`, `user_id`, `status` (pending, approved, rejected, cancelled), `is_attended` (boolean)
 - **Primary Key:** `id`
 - **Foreign Key:** `activity_id` อ้างอิง `activities.id`, `user_id` อ้างอิง `users.id`
 
@@ -89,6 +89,12 @@
 - **Field สำคัญ:** `id`, `entity_type` (เช่น 'workout_plan', 'activity'), `entity_id`, `old_status`, `new_status`, `changed_by_user_id`, `created_at`
 - **Primary Key:** `id`
 - **Foreign Key:** `changed_by_user_id` อ้างอิง `users.id`
+
+### 11. `chat_messages`
+- **วัตถุประสงค์:** เก็บประวัติข้อความการสนทนาในแบบกลุ่มตามคลาส/กิจกรรม
+- **Field สำคัญ:** `id`, `activity_id`, `sender_id`, `message`, `created_at`
+- **Primary Key:** `id`
+- **Foreign Key:** `activity_id` อ้างอิง `activities.id`, `sender_id` อ้างอิง `users.id`
 
 ---
 

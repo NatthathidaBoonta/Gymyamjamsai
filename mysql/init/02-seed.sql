@@ -98,7 +98,7 @@ INSERT INTO workout_logs (id, plan_detail_id, actual_sets, actual_reps, actual_w
 -- activities + activity_registrations (คลาสของ trainer + member ลงทะเบียน)
 -- ------------------------------------------------------------
 INSERT INTO activities (id, trainer_id, title, description, max_participants, start_datetime, status) VALUES
-  ('a0000001-0000-0000-0000-000000000001', '22222222-2222-2222-2222-222222222222', 'คลาสคาร์ดิโอเช้าวันเสาร์', 'คลาสคาร์ดิโอสำหรับผู้เริ่มต้น เผาผลาญไขมัน 45 นาที', 20, '2026-07-25 07:00:00', 'open');
+  ('a0000001-0000-0000-0000-000000000001', '22222222-2222-2222-2222-222222222222', 'คลาสคาร์ดิโอเช้าวันเสาร์', 'คลาสคาร์ดิโอสำหรับผู้เริ่มต้น เผาผลาญไขมัน 45 นาที', 20, '2026-07-25 00:00:00', 'open');
 
 INSERT INTO activity_registrations (id, activity_id, user_id, status, is_attended) VALUES
   ('r0000001-0000-0000-0000-000000000001', 'a0000001-0000-0000-0000-000000000001', '33333333-3333-3333-3333-333333333333', 'registered', FALSE);
