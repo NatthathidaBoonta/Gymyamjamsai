@@ -21,16 +21,19 @@ const chatRouter = require('./src/modules/chat/chat.router');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS: อนุญาต origin ของ frontend (อ่านจาก env) + localhost ทุกพอร์ตตอน dev
-// (Vite เปลี่ยนพอร์ตอัตโนมัติเมื่อพอร์ตเดิมชนกัน ทำให้ origin ไม่ตรง .env ได้บ่อย)
-const configuredOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-    if (origin === configuredOrigin) return callback(null, true);
-    if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
-    callback(new Error('Not allowed by CORS'));
-  },
+// อยู่หลัง reverse proxy (Render/Railway) — ให้ req.protocol เป็น https ตาม X-Forwarded-Proto
+app.set('trust proxy', 1);
+
+// CORS (เฉพาะ /api): อนุญาต same-origin เสมอ (production เสิร์ฟ frontend จาก origin เดียวกัน),
+// origin ที่ตั้งใน FRONTEND_ORIGIN, URL ที่ Render ตั้งให้ (RENDER_EXTERNAL_URL) และ localhost ทุกพอร์ตตอน dev
+const { isOriginAllowed } = require('./src/cors');
+app.use('/api', cors((req, callback) => {
+  const origin = req.headers.origin;
+  const self = `${req.protocol}://${req.get('host')}`;
+  if (isOriginAllowed(origin, self)) return callback(null, { origin: true });
+  const err = new Error('Origin นี้ไม่ได้รับอนุญาต (CORS)');
+  err.status = 403;
+  return callback(err);
 }));
 
 // Security Middleware

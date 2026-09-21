@@ -11,14 +11,10 @@
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const chatService = require('./modules/chat/chat.service');
+const { isOriginAllowed } = require('./cors');
 
 const THROTTLE_WINDOW_MS = 10_000;
 const THROTTLE_MAX = 20;
-
-function originAllowed(origin) {
-  const configured = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
-  return !origin || origin === configured || /^http:\/\/localhost:\d+$/.test(origin);
-}
 
 function roomOf(activityId) {
   return `activity_${activityId}`;
@@ -27,7 +23,8 @@ function roomOf(activityId) {
 function initializeSocket(server) {
   const io = new Server(server, {
     cors: {
-      origin: (origin, cb) => (originAllowed(origin) ? cb(null, true) : cb(new Error('Not allowed by CORS'))),
+      // socket.io ไม่มี req ให้เทียบ same-origin — ใช้ FRONTEND_ORIGIN / RENDER_EXTERNAL_URL / localhost
+      origin: (origin, cb) => (isOriginAllowed(origin) ? cb(null, true) : cb(new Error('Not allowed by CORS'))),
       methods: ['GET', 'POST'],
     },
   });
