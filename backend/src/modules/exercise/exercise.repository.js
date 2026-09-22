@@ -56,7 +56,9 @@ async function create({ name, category, muscle_group, equipment, difficulty, med
 /** นับจำนวนท่าแยกตามหมวด (ใช้ในหน้า admin) */
 async function countByCategory() {
   const [rows] = await pool.query(
-    'SELECT COALESCE(category, "other") AS category, COUNT(*) AS count FROM exercises GROUP BY category ORDER BY count DESC',
+    // ห่อ COALESCE ไว้ใน subquery ให้ GROUP BY ตรงกับคอลัมน์ที่ select (only_full_group_by บน TiDB)
+    `SELECT category, COUNT(*) AS count FROM (SELECT COALESCE(category, 'other') AS category FROM exercises) t
+     GROUP BY category ORDER BY count DESC`,
   );
   return rows.map((r) => ({ category: r.category, count: Number(r.count) }));
 }

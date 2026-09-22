@@ -24,13 +24,13 @@ async function getWeightTrend(userId, start, end) {
  */
 async function getWorkoutFrequency(userId, start, end) {
   const [rows] = await pool.query(
-    `SELECT DATE(wl.logged_at) AS date, COUNT(*) AS count
-     FROM workout_logs wl
-     JOIN workout_plan_details d ON d.id = wl.plan_detail_id
-     JOIN workout_plans p ON p.id = d.plan_id
-     WHERE p.user_id = ? AND wl.logged_at BETWEEN ? AND ?
-     GROUP BY DATE(wl.logged_at)
-     ORDER BY date`,
+    `SELECT date, COUNT(*) AS count FROM (
+       SELECT DATE(wl.logged_at) AS date
+       FROM workout_logs wl
+       JOIN workout_plan_details d ON d.id = wl.plan_detail_id
+       JOIN workout_plans p ON p.id = d.plan_id
+       WHERE p.user_id = ? AND wl.logged_at BETWEEN ? AND ?
+     ) t GROUP BY date ORDER BY date`,
     [userId, start, end],
   );
   return rows.map((r) => ({ date: r.date, count: Number(r.count) }));
@@ -74,30 +74,34 @@ async function getAdminSummary() {
 
 /** ข้อมูลกราฟสำหรับ admin: กิจกรรมยอดนิยม, ผู้ใช้ใหม่รายสัปดาห์, สัดส่วน role, การจองรายวัน */
 async function getAdminCharts() {
+  // นับผู้สมัครเป็น subquery แทน GROUP BY — TiDB (only_full_group_by) ไม่ยอมให้ select คอลัมน์จาก LEFT JOIN
+  // ที่ไม่ได้อยู่ใน GROUP BY แม้จะขึ้นกับ PK ก็ตาม
   const [popular] = await pool.query(
     `SELECT a.id, a.title, a.max_participants, a.start_datetime, a.status,
-            COUNT(r.id) AS registrations,
+            (SELECT COUNT(*) FROM activity_registrations r WHERE r.activity_id = a.id AND r.status = 'approved') AS registrations,
             TRIM(CONCAT(COALESCE(p.first_name, ''), ' ', COALESCE(p.last_name, ''))) AS trainer_name
      FROM activities a
-     LEFT JOIN activity_registrations r ON r.activity_id = a.id AND r.status = 'approved'
      LEFT JOIN user_profiles p ON p.user_id = a.trainer_id
-     GROUP BY a.id ORDER BY registrations DESC, a.start_datetime DESC LIMIT 5`,
+     ORDER BY registrations DESC, a.start_datetime DESC LIMIT 5`,
   );
   const [newUsers] = await pool.query(
-    `SELECT DATE_FORMAT(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY), '%Y-%m-%d') AS week, COUNT(*) AS count
-     FROM users WHERE deleted_at IS NULL AND created_at >= DATE_SUB(CURDATE(), INTERVAL 8 WEEK)
-     GROUP BY week ORDER BY week`,
+    `SELECT week, COUNT(*) AS count FROM (
+       SELECT DATE_FORMAT(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY), '%Y-%m-%d') AS week
+       FROM users WHERE deleted_at IS NULL AND created_at >= DATE_SUB(CURDATE(), INTERVAL 8 WEEK)
+     ) t GROUP BY week ORDER BY week`,
   );
   const [roles] = await pool.query(
     'SELECT role, COUNT(*) AS count FROM users WHERE deleted_at IS NULL GROUP BY role',
   );
   const [regsPerDay] = await pool.query(
-    `SELECT DATE(created_at) AS date, COUNT(*) AS count
-     FROM activity_registrations WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
-     GROUP BY DATE(created_at) ORDER BY date`,
+    `SELECT date, COUNT(*) AS count FROM (
+       SELECT DATE(created_at) AS date FROM activity_registrations WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+     ) t GROUP BY date ORDER BY date`,
   );
   const [exByCat] = await pool.query(
-    'SELECT COALESCE(category, "other") AS category, COUNT(*) AS count FROM exercises GROUP BY category',
+    `SELECT category, COUNT(*) AS count FROM (
+       SELECT COALESCE(category, 'other') AS category FROM exercises
+     ) t GROUP BY category`,
   );
   const [[pending]] = await pool.query("SELECT COUNT(*) AS c FROM exercise_suggestions WHERE status = 'pending'");
   const [[activeMembers]] = await pool.query(
@@ -132,10 +136,10 @@ async function getTrainerSummary(trainerId) {
   );
   const [upcoming] = await pool.query(
     `SELECT a.id, a.title, a.start_datetime, a.max_participants, a.status,
-            COUNT(r.id) AS registrations
-     FROM activities a LEFT JOIN activity_registrations r ON r.activity_id = a.id AND r.status = 'approved'
+            (SELECT COUNT(*) FROM activity_registrations r WHERE r.activity_id = a.id AND r.status = 'approved') AS registrations
+     FROM activities a
      WHERE a.trainer_id = ? AND a.status <> 'closed' AND (a.start_datetime IS NULL OR a.start_datetime >= NOW())
-     GROUP BY a.id ORDER BY a.start_datetime LIMIT 5`,
+     ORDER BY a.start_datetime LIMIT 5`,
     [trainerId],
   );
   const [suggestions] = await pool.query(
